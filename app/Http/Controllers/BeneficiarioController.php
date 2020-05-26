@@ -58,7 +58,6 @@ class BeneficiarioController extends Controller
     	$telefono = $request->input('telefono');
     	$direccion = $request->input('direccion');
     	$localidad = $request->input('localidad');
-    	$codigo_postal = $request->input('codigoPostal');
     	$dni = $request->input('dni');
     	$cuit = $request->input('cuit');
     	$prestacion = $request->input('prestacion');
@@ -73,13 +72,13 @@ class BeneficiarioController extends Controller
 
     	// Asigno inputs a objeto beneficiario
     	$beneficiario->prestador_id = $prestador;
+        $beneficiario->sesion_id = 1;
         $beneficiario->nombre = $nombre;
         $beneficiario->apellido = $apellido;
         $beneficiario->email = $correo;
         $beneficiario->telefono = $telefono;
         $beneficiario->direccion = $direccion;
         $beneficiario->localidad = $localidad;
-        $beneficiario->cp = $codigo_postal;
         $beneficiario->dni = $dni;
         $beneficiario->cuit = $cuit;
         $beneficiario->direccion_prestacion = $direccion_prestacion;

@@ -23,7 +23,6 @@ class CreateBeneficiarioTable extends Migration
             $table->string('telefono', 75);
             $table->string('direccion', 75);
             $table->string('localidad', 75);
-            $table->integer('cp');
             $table->string('dni', 15);
             $table->string('cuit', 45);
             $table->string('direccion_prestacion', 50);

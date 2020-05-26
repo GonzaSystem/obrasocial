@@ -174,6 +174,8 @@ MODAL AGREGAR CLIENTE
 
                     <select type="text" class="form-control input-lg" name="prestacion">
 
+                      <option value="">Seleccionar...</option>
+
                       @foreach ($prestacion as $presta)
                         <option value="{{ $presta->id }}">{{ $presta->prestacion }}</option>
                       @endforeach
