@@ -26,8 +26,10 @@ class BeneficiarioController extends Controller
     	// Objeto Menu prestador
         $prestador_menu = \DB::select("SELECT obrasocial.nombre, obrasocial.id FROM obrasocial LEFT JOIN prestador on prestador.os_id = obrasocial.id WHERE prestador.user_id = " . $user . " GROUP BY obrasocial.id, obrasocial.nombre");
 
-        //Objeto prestador
-        $prestador = Prestador::where('id', $prest_id)->with('user')->get();
+        // Objeto prestaciones
+        $prestacion = Prestador::where('user_id', $user)
+        ->where('os_id', $os_id)
+        ->get();
 
         $beneficiario = Beneficiario::where('prestador_id', $prest_id)->get();
 
@@ -35,10 +37,10 @@ class BeneficiarioController extends Controller
     	$obraSocial = ObraSocial::where('id', $os_id)->get();
 
     	return view('beneficiario',[
-    		"prestador" => $prestador,
     		"beneficiarios" => $beneficiario,
     		"obrasocial" => $obraSocial,
             "prestador_menu" => $prestador_menu,
+            "prestacion" => $prestacion,
     	]);
     }
 
@@ -49,7 +51,7 @@ class BeneficiarioController extends Controller
 
     	// Obtengo datos de inputs
         $obra_social = $request->input('obraSocial');
-        $prestador = $request->input('prestador_id');
+        $prestador = $request->input('prestacion');
     	$nombre = $request->input('nombre');
     	$apellido = $request->input('apellido');
     	$correo = $request->input('correo');
@@ -60,7 +62,7 @@ class BeneficiarioController extends Controller
     	$dni = $request->input('dni');
     	$cuit = $request->input('cuit');
     	$prestacion = $request->input('prestacion');
-        $direccion_prestacion = 'Direccion Prueba';
+        $direccion_prestacion = $request->input('direccionPrestacion');
     	$km_ida = $request->input('kmIda');
     	$km_vuelta = $request->input('kmVuelta');
     	$viajes_ida = $request->input('viajesIda');
@@ -80,7 +82,6 @@ class BeneficiarioController extends Controller
         $beneficiario->cp = $codigo_postal;
         $beneficiario->dni = $dni;
         $beneficiario->cuit = $cuit;
-        $beneficiario->prestacion = $prestacion;
         $beneficiario->direccion_prestacion = $direccion_prestacion;
         $beneficiario->km_ida = $km_ida;
         $beneficiario->km_vuelta = $km_vuelta;
@@ -93,7 +94,7 @@ class BeneficiarioController extends Controller
     	// Guardo en DB        
         $beneficiario->save();
 
-        return redirect()->route('beneficiarios', ['prestador_id' => $prestador, 'obrasocial_id' => $obra_social])
+        return redirect()->route('beneficiarios', ['prestador_id' => \Auth::user()->id, 'obrasocial_id' => $obra_social])
             ->with(['message' => 'Los datos de beneficiario han sido guardados correctamente']);
     }
 }

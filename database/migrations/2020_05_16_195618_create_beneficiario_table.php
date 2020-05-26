@@ -26,7 +26,6 @@ class CreateBeneficiarioTable extends Migration
             $table->integer('cp');
             $table->string('dni', 15);
             $table->string('cuit', 45);
-            $table->string('prestacion', 50);
             $table->string('direccion_prestacion', 50);
             $table->integer('km_ida');
             $table->integer('km_vuelta');

@@ -7,12 +7,11 @@
     
     <h1>
       
-       @foreach($prestador as $key => $prestacion)
           Módulo de beneficiarios. <br> 
           <h4>
-            Prestador: {{ $prestacion->user['name'] . ' ' . $prestacion->user['surname'] . ' - ' . $prestacion->prestacion}}
+            Prestador: {{ Auth::user()->name . ' ' . Auth::user()->surname }}
           </h4>
-       @endforeach
+
     
     </h1>
 
@@ -164,6 +163,29 @@ MODAL AGREGAR CLIENTE
 
             </div>
 
+            <!-- Entrada para Prestación -->
+            <div class="form-group col-lg-12">
+              
+              <div class="input-group col-lg-12">
+                
+                <div class="col-lg-12">
+                  
+                    <label for="obraSocial">Prestación</label>
+
+                    <select type="text" class="form-control input-lg" name="prestacion">
+
+                      @foreach ($prestacion as $presta)
+                        <option value="{{ $presta->id }}">{{ $presta->prestacion }}</option>
+                      @endforeach
+
+                    </select>
+
+                </div>  
+
+              </div>
+
+            </div>
+
            <!-- ENTRADA PARA NOMBRE Y APELLIDO -->
 
                 <div class="form-group col-lg-12">
@@ -225,7 +247,7 @@ MODAL AGREGAR CLIENTE
 
                   <div class="col-lg-6">
 
-                        <label for="direccion">Dirección</label>
+                        <label for="direccion">Dirección del Beneficiario</label>
 
                         <input type="text" class="form-control input-lg" name="direccion" placeholder="Ingresar Dirección">
                           
@@ -251,9 +273,9 @@ MODAL AGREGAR CLIENTE
 
                   <div class="col-lg-6">
 
-                        <label for="codigoPostal">Codigo Postal</label>
+                        <label for="codigoPostal">Dirección de Prestación</label>
 
-                        <input type="text" class="form-control input-lg" name="codigoPostal" placeholder="Ingresar Codigo Postal">
+                        <input type="text" class="form-control input-lg" name="direccionPrestacion" placeholder="Ingresar Dirección de Prestación">
 
                   </div>
                 
@@ -275,7 +297,7 @@ MODAL AGREGAR CLIENTE
                 
                 <div class="input-group col-lg-12">
 
-                  <div class="col-lg-6">
+                  <div class="col-lg-12">
 
                         <label for="cuit">CUIT</label>
 
@@ -283,13 +305,6 @@ MODAL AGREGAR CLIENTE
 
                   </div>
                 
-                  <div class="col-lg-6">
-
-                        <label for="prestacion">Prestacion</label>
-
-                        <input type="text" class="form-control input-lg" name="prestacion" placeholder="Ingresar Prestacion">
-
-                  </div>
 
                 </div>
 
@@ -369,7 +384,11 @@ MODAL AGREGAR CLIENTE
 
                         <label for="dependencia">Dependencia</label>
 
-                        <input type="text" class="form-control input-lg" name="dependencia" placeholder="Ingresar Dependencia">
+                        <select type="text" class="form-control input-lg" name="dependencia" placeholder="Ingresar Dependencia">
+                            <option>Seleccionar...</option>
+                            <option value="Si">Si</option>
+                            <option value="No">No</option>
+                        </select>
 
                   </div>
 
@@ -405,8 +424,6 @@ MODAL AGREGAR CLIENTE
           <button type="submit" class="btn btn-primary">Guardar cliente</button>
 
         </div>
-
-        <input type="hidden" name="prestador_id" value="{{ $prestador[0]->id }}">
 
       </form>
 
