@@ -173,7 +173,7 @@
                                     <li>
                                         <a href="{{ route('beneficiarios', ['prestador_id' => Auth::user()->id, 'obrasocial_id' => $prest->id]) }}">
                                             <i class="fa fa-circle-o"></i>
-                                            <span>Beneficiarios - {{ $prest->nombre }}</span>
+                                            <span>{{ $prest->nombre }}</span>
                                         </a>
                                     </li>
                                 @endforeach

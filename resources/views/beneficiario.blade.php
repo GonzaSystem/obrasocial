@@ -15,6 +15,10 @@
     
     </h1>
 
+     <div style="padding-top: 15px">
+        @include('includes.message')
+     </div>
+
     <ol class="breadcrumb">
       
       <li><a href="inicio"><i class="fa fa-dashboard"></i> Inicio</a></li>
@@ -50,11 +54,11 @@
            <th style="width:10px">#</th>
            <th>Nombre</th>
            <th>Apellido</th>
+           <th>Prestacion</th>
            <th>Email</th>
            <th>Teléfono</th>
            <th>Direccion</th>
            <th>Localidad</th>
-           <th>Codigo Postal</th>
            <th>DNI</th>
            <th>CUIT</th>
            <th>Acciones</th>
@@ -65,23 +69,28 @@
 
         <tbody>
 
-        @foreach($beneficiarios as $key=>$beneficiario)
+
+        @foreach($beneficiarios as $beneficiario)
+
+          <?php $prestacionprof = $beneficiario->prestacion ?>
+
+          @foreach($beneficiario->beneficiario as $key => $benefval)
 
           <tr>
-            <td>{{ $key+1 }}</td>
-            <td>{{ $beneficiario->nombre }}</td>
-            <td>{{ $beneficiario->apellido }}</td>
-            <td>{{ $beneficiario->email }}</td>
-            <td>{{ $beneficiario->telefono }}</td>
-            <td>{{ $beneficiario->direccion }}</td>
-            <td>{{ $beneficiario->localidad }}</td>
-            <td>{{ $beneficiario->cp }}</td>
-            <td>{{ $beneficiario->dni }}</td>
-            <td>{{ $beneficiario->cuit }}</td>
+            <td>{{ 1 }}</td>
+            <td>{{ $benefval->nombre }}</td>
+            <td>{{ $benefval->apellido }}</td>
+            <td>{{ $prestacionprof }}</td>
+            <td>{{ $benefval->email }}</td>
+            <td>{{ $benefval->telefono }}</td>
+            <td>{{ $benefval->direccion }}</td>
+            <td>{{ $benefval->localidad }}</td>
+            <td>{{ $benefval->dni }}</td>
+            <td>{{ $benefval->cuit }}</td>
             <td>
               <div class="btn-group">
                   
-                <button class="btn btn-warning btnEditarBeneficiario" idBenef="{{ $beneficiario->id }}"><i class="fa fa-pencil"></i></button>
+                <button class="btn btn-warning btnEditarBeneficiario" idBenef="{{ $benefval->id }}"><i class="fa fa-pencil"></i></button>
 
                 <button class="btn btn-danger"><i class="fa fa-times"></i></button>
 
@@ -90,6 +99,8 @@
             </td>
 
           </tr>
+
+          @endforeach
 
         @endforeach
 
@@ -423,7 +434,7 @@ MODAL AGREGAR CLIENTE
 
           <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Salir</button>
 
-          <button type="submit" class="btn btn-primary">Guardar cliente</button>
+          <button type="submit" class="btn btn-primary">Guardar beneficiario</button>
 
         </div>
 

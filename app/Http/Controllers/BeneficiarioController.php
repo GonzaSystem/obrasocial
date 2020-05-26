@@ -31,7 +31,12 @@ class BeneficiarioController extends Controller
         ->where('os_id', $os_id)
         ->get();
 
-        $beneficiario = Beneficiario::where('prestador_id', $prest_id)->get();
+        //$beneficiario = Beneficiario::where('prestador_id', $prest_id)->with('prestador')->get();
+
+        // Traigo beneficiarios segun prestador y obra social
+        $beneficiario = Prestador::where('user_id', $user)
+         ->where('os_id', $os_id)
+         ->with('beneficiario')->get();
 
     	// Objeto Obra Social
     	$obraSocial = ObraSocial::where('id', $os_id)->get();

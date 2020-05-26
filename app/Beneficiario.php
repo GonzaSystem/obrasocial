@@ -10,6 +10,6 @@ class Beneficiario extends Model
 	
     public function prestador()
     {
-    	return $this->belongsTo('App\Prestador', 'prestador_id', 'user_id');
+    	return $this->belongsTo('App\Prestador', 'prestador_id', 'id');
     }
 }
