@@ -96,4 +96,11 @@ class BeneficiarioController extends Controller
         return redirect()->route('beneficiarios', ['prestador_id' => \Auth::user()->id, 'obrasocial_id' => $obra_social])
             ->with(['message' => 'Los datos de beneficiario han sido guardados correctamente']);
     }
+
+    public function list(Request $request)
+    {
+        // Busco objeto segun ID
+        $beneficiario = Beneficiario::find($request->id);
+        return $beneficiario;
+    }
 }

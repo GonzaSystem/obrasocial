@@ -81,7 +81,7 @@
             <td>
               <div class="btn-group">
                   
-                <button class="btn btn-warning"><i class="fa fa-pencil"></i></button>
+                <button class="btn btn-warning btnEditarBeneficiario" idBenef="{{ $beneficiario->id }}"><i class="fa fa-pencil"></i></button>
 
                 <button class="btn btn-danger"><i class="fa fa-times"></i></button>
 
