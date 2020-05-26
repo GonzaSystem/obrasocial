@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app', ['prestador' => $prestador_menu])
 
 @section('content')
 <div class="content-wrapper">

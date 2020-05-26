@@ -23,6 +23,9 @@ class PrestadorController extends Controller
     	// Obtengo datos de prestador si existen
         $prestador = Prestador::where('user_id', $userId)->with('user', 'obrasocial')->get();
 
+        //Prestador_menu 
+        $prestador_menu = \DB::select("SELECT obrasocial.nombre, obrasocial.id FROM obrasocial LEFT JOIN prestador on prestador.os_id = obrasocial.id WHERE prestador.user_id = " . $userId . " GROUP BY obrasocial.id, obrasocial.nombre");
+
     	$os = DB::table('obrasocial')->select('id', 'nombre')->get();
 
     		// $os = DB::select(DB::raw('SELECT os.id, os.nombre FROM `obrasocial` os LEFT JOIN prestador pr on os.id = pr.os_id WHERE os.id NOT IN (SELECT pr.os_id from prestador pr WHERE pr.user_id = '.$userId.')'));					
@@ -32,6 +35,7 @@ class PrestadorController extends Controller
         return view('datos-prestador', [
         	"prestador" => $prestador,
         	"obrasocial" => $os,
+            "prestador_menu" => $prestador_menu,
         ]);
     }
 
