@@ -24,7 +24,7 @@ class BeneficiarioController extends Controller
     	$user = \Auth::user()->id;
 
     	// Objeto Menu prestador
-        $prestador_menu = \DB::select("SELECT obrasocial.nombre, obrasocial.id FROM obrasocial LEFT JOIN prestador on prestador.os_id = obrasocial.id WHERE prestador.user_id = " . $user_id . " GROUP BY obrasocial.id, obrasocial.nombre");
+        $prestador_menu = \DB::select("SELECT obrasocial.nombre, obrasocial.id FROM obrasocial LEFT JOIN prestador on prestador.os_id = obrasocial.id WHERE prestador.user_id = " . $user . " GROUP BY obrasocial.id, obrasocial.nombre");
 
         //Objeto prestador
         $prestador = Prestador::where('id', $prest_id)->with('user')->get();
