@@ -1,0 +1,99 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use App\Prestador;
+use App\User;
+use App\Beneficiario;
+use App\ObraSocial;
+
+class BeneficiarioController extends Controller
+{
+	public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    public function index($prest_id, $os_id)
+    {
+        // Muestro beneficiarios
+        
+    	// Declaro objeto de usuario
+    	$user = \Auth::user()->id;
+
+    	// Objeto Menu prestador
+        $prestador_menu = Prestador::where('user_id', '=', $user)->with('obrasocial')->get();
+
+        //Objeto prestador
+        $prestador = Prestador::where('id', $prest_id)->with('user')->get();
+
+        $beneficiario = Beneficiario::where('prestador_id', $prest_id)->get();
+
+    	// Objeto Obra Social
+    	$obraSocial = ObraSocial::where('id', $os_id)->get();
+
+    	return view('beneficiario',[
+    		"prestador" => $prestador,
+    		"beneficiarios" => $beneficiario,
+    		"obrasocial" => $obraSocial,
+            "prestador_menu" => $prestador_menu,
+    	]);
+    }
+
+    public function create(Request $request)
+    {
+    	// Objeto de beneficiario
+    	$beneficiario = new Beneficiario;
+
+    	// Obtengo datos de inputs
+        $obra_social = $request->input('obraSocial');
+        $prestador = $request->input('prestador_id');
+    	$nombre = $request->input('nombre');
+    	$apellido = $request->input('apellido');
+    	$correo = $request->input('correo');
+    	$telefono = $request->input('telefono');
+    	$direccion = $request->input('direccion');
+    	$localidad = $request->input('localidad');
+    	$codigo_postal = $request->input('codigoPostal');
+    	$dni = $request->input('dni');
+    	$cuit = $request->input('cuit');
+    	$prestacion = $request->input('prestacion');
+        $direccion_prestacion = 'Direccion Prueba';
+    	$km_ida = $request->input('kmIda');
+    	$km_vuelta = $request->input('kmVuelta');
+    	$viajes_ida = $request->input('viajesIda');
+    	$viajes_vuelta = $request->input('viajesVuelta');
+    	$turno = $request->input('turno');
+    	$dependencia = $request->input('dependencia');
+    	$notas = $request->input('notas');
+
+    	// Asigno inputs a objeto beneficiario
+    	$beneficiario->prestador_id = $prestador;
+        $beneficiario->nombre = $nombre;
+        $beneficiario->apellido = $apellido;
+        $beneficiario->email = $correo;
+        $beneficiario->telefono = $telefono;
+        $beneficiario->direccion = $direccion;
+        $beneficiario->localidad = $localidad;
+        $beneficiario->cp = $codigo_postal;
+        $beneficiario->dni = $dni;
+        $beneficiario->cuit = $cuit;
+        $beneficiario->prestacion = $prestacion;
+        $beneficiario->direccion_prestacion = $direccion_prestacion;
+        $beneficiario->km_ida = $km_ida;
+        $beneficiario->km_vuelta = $km_vuelta;
+        $beneficiario->viajes_ida = $viajes_ida;
+        $beneficiario->viajes_vuelta = $viajes_vuelta;
+        $beneficiario->turno = $turno;
+        $beneficiario->dependencia = $dependencia;
+        $beneficiario->notas = $notas;
+
+    	// Guardo en DB        
+        $beneficiario->save();
+
+        return redirect()->route('beneficiarios', ['prestador_id' => $prestador, 'obrasocial_id' => $obra_social])
+            ->with(['message' => 'Los datos de beneficiario han sido guardados correctamente']);
+    }
+}
