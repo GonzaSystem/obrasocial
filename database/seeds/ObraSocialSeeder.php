@@ -3,7 +3,6 @@
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use Illuminate\Support\Int;
 
 class ObraSocialSeeder extends Seeder
 {
@@ -14,7 +13,7 @@ class ObraSocialSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('users')->insert([
+        DB::table('obrasocial')->insert([
         	'nombre' => 'OS '.Str::random(10),
         	'cuit' => 1122334455,
         	'telefono' => 1167455471,
