@@ -15,17 +15,17 @@ class CreateObrasocialTable extends Migration
     {
         Schema::create('obrasocial', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', 75);
-            $table->string('cuit', 45);
-            $table->string('telefono', 45);
-            $table->string('ciudad', 65);
-            $table->string('direccion', 75);
-            $table->string('email', 45);
-            $table->string('condicion_iva', 50);
-            $table->decimal('valor_sesion', 10, 2);
-            $table->decimal('valor_km', 10, 2);
-            $table->decimal('valor_modulo', 10, 2);
-            $table->string('valor_mes', 50);
+            $table->string('nombre', 75)->nullable();
+            $table->string('cuit', 45)->nullable();
+            $table->string('telefono', 45)->nullable();
+            $table->string('ciudad', 65)->nullable();
+            $table->string('direccion', 75)->nullable();
+            $table->string('email', 45)->nullable();
+            $table->string('condicion_iva', 50)->nullable();
+            $table->decimal('valor_sesion', 10, 2)->nullable();
+            $table->decimal('valor_km', 10, 2)->nullable();
+            $table->decimal('valor_modulo', 10, 2)->nullable();
+            $table->string('valor_mes', 50)->nullable();
             $table->timestamps();
         });
     }

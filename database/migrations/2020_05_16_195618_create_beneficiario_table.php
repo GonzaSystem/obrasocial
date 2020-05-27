@@ -15,24 +15,24 @@ class CreateBeneficiarioTable extends Migration
     {
         Schema::create('beneficiario', function (Blueprint $table) {
             $table->id();
-            $table->integer('prestador_id');
-            $table->integer('sesion_id');
-            $table->string('nombre', 75);
-            $table->string('apellido', 75);
-            $table->string('email', 45);
-            $table->string('telefono', 75);
-            $table->string('direccion', 75);
-            $table->string('localidad', 75);
-            $table->string('dni', 15);
-            $table->string('cuit', 45);
-            $table->string('direccion_prestacion', 50);
-            $table->integer('km_ida');
-            $table->integer('km_vuelta');
-            $table->integer('viajes_ida');
-            $table->integer('viajes_vuelta');
-            $table->string('turno', 20);
-            $table->string('dependencia', 50);
-            $table->string('notas');
+            $table->integer('prestador_id')->nullable();
+            $table->integer('sesion_id')->nullable();
+            $table->string('nombre', 75)->nullable();
+            $table->string('apellido', 75)->nullable();
+            $table->string('email', 45)->nullable();
+            $table->string('telefono', 75)->nullable();
+            $table->string('direccion', 75)->nullable();
+            $table->string('localidad', 75)->nullable();
+            $table->string('dni', 15)->nullable();
+            $table->string('cuit', 45)->nullable();
+            $table->string('direccion_prestacion', 50)->nullable();
+            $table->integer('km_ida')->nullable();
+            $table->integer('km_vuelta')->nullable();
+            $table->integer('viajes_ida')->nullable();
+            $table->integer('viajes_vuelta')->nullable();
+            $table->string('turno', 20)->nullable();
+            $table->string('dependencia', 50)->nullable();
+            $table->string('notas')->nullable();
             $table->timestamps();
         });
     }
