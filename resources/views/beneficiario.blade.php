@@ -7,7 +7,7 @@
     
     <h1>
       
-          Módulo de beneficiarios. <br> 
+          Módulo de beneficiarios - {{ $obrasocial[0]->nombre }} <br> 
           <h4>
             Prestador: {{ Auth::user()->name . ' ' . Auth::user()->surname }}
           </h4>
@@ -77,7 +77,7 @@
           @foreach($beneficiario->beneficiario as $key => $benefval)
 
           <tr>
-            <td>{{ 1 }}</td>
+            <td>{{ $key+1 }}</td>
             <td>{{ $benefval->nombre }}</td>
             <td>{{ $benefval->apellido }}</td>
             <td>{{ $prestacionprof }}</td>
@@ -268,7 +268,7 @@ MODAL AGREGAR CLIENTE
                 
                   <div class="col-lg-6">
 
-                        <label for="localidad">Localidad</label>
+                        <label for="localidad">Localidad del Beneficiario</label>
 
                         <input type="text" class="form-control input-lg" name="localidad" placeholder="Ingresar Localidad">
 
@@ -291,14 +291,15 @@ MODAL AGREGAR CLIENTE
                         <input type="text" class="form-control input-lg" name="direccionPrestacion" placeholder="Ingresar Dirección de Prestación">
 
                   </div>
-                
+
                   <div class="col-lg-6">
 
-                        <label for="dni">DNI</label>
+                        <label for="codigoPostal">Localidad de Prestación</label>
 
-                        <input type="text" class="form-control input-lg" name="dni" placeholder="Ingresar DNI">
+                        <input type="text" class="form-control input-lg" name="localidadPrestacion" placeholder="Ingresar Localidad de Prestación">
 
                   </div>
+                
 
                 </div>
 
@@ -310,14 +311,21 @@ MODAL AGREGAR CLIENTE
                 
                 <div class="input-group col-lg-12">
 
-                  <div class="col-lg-12">
+                  <div class="col-lg-6">
 
                         <label for="cuit">CUIT</label>
 
                         <input type="text" class="form-control input-lg" name="cuit" placeholder="Ingresar CUIT">
 
                   </div>
-                
+
+                  <div class="col-lg-6">
+
+                        <label for="dni">DNI</label>
+
+                        <input type="text" class="form-control input-lg" name="dni" placeholder="Ingresar DNI">
+
+                  </div>         
 
                 </div>
 

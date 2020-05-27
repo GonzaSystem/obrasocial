@@ -63,10 +63,10 @@ class BeneficiarioController extends Controller
     	$telefono = $request->input('telefono');
     	$direccion = $request->input('direccion');
     	$localidad = $request->input('localidad');
+        $direccion_prestacion = $request->input('direccionPrestacion');
+        $localidad_prestacion = $request->input('localidadPrestacion');
     	$dni = $request->input('dni');
     	$cuit = $request->input('cuit');
-    	$prestacion = $request->input('prestacion');
-        $direccion_prestacion = $request->input('direccionPrestacion');
     	$km_ida = $request->input('kmIda');
     	$km_vuelta = $request->input('kmVuelta');
     	$viajes_ida = $request->input('viajesIda');
@@ -87,6 +87,7 @@ class BeneficiarioController extends Controller
         $beneficiario->dni = $dni;
         $beneficiario->cuit = $cuit;
         $beneficiario->direccion_prestacion = $direccion_prestacion;
+        $beneficiario->localidad_prestacion = $localidad_prestacion;
         $beneficiario->km_ida = $km_ida;
         $beneficiario->km_vuelta = $km_vuelta;
         $beneficiario->viajes_ida = $viajes_ida;

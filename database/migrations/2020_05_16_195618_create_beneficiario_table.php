@@ -26,6 +26,7 @@ class CreateBeneficiarioTable extends Migration
             $table->string('dni', 15)->nullable();
             $table->string('cuit', 45)->nullable();
             $table->string('direccion_prestacion', 50)->nullable();
+            $table->string('localidad_prestacion', 50)->nullable();
             $table->integer('km_ida')->nullable();
             $table->integer('km_vuelta')->nullable();
             $table->integer('viajes_ida')->nullable();
