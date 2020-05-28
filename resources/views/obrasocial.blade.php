@@ -49,6 +49,7 @@
            
            <th style="width:10px">#</th>
            <th>Nombre / Razón social</th>
+           <th>Tipo</th>
            <th>CUIT</th>
            <th>Telefono</th>
            <th>Ciudad</th>
@@ -71,6 +72,7 @@
           <tr>
             <td>{{ $key+1 }}</td>
             <td>{{ $obra->nombre }}</td>
+            <td>{{ $obra->tipo_obra }}</td>
             <td>{{ $obra->cuit }}</td>
             <td>{{ $obra->telefono }}</td>
             <td>{{ $obra->ciudad }}</td>

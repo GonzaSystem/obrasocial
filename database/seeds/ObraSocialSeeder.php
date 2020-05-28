@@ -15,6 +15,7 @@ class ObraSocialSeeder extends Seeder
     {
         DB::table('obrasocial')->insert([
         	'nombre' => 'OS '.Str::random(10),
+            'tipo_obra' => 'Nacional',
         	'cuit' => 1122334455,
         	'telefono' => 1167455471,
         	'ciudad' => 'Ciudad '.Str::random(20),
