@@ -109,4 +109,14 @@ class BeneficiarioController extends Controller
         $beneficiario = Beneficiario::find($request->id);
         return $beneficiario;
     }
+
+    public function presupuesto($prestador_id, $beneficiario_id)
+    {
+        $prestador = Prestador::where('id', '=', $prestador_id)->with('user')->get();
+        $beneficiario = Beneficiario::find($beneficiario_id);
+        return view('forms.8_4', [
+            'prestador' => $prestador,
+            'beneficiario' => $beneficiario,
+        ]);
+    }
 }

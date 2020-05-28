@@ -41,3 +41,4 @@ Route::post('/obrasocial/list', 'ObraSocialController@list')->name('os-list');
 Route::get('/beneficiarios/{prestador_id}/{obrasocial_id}', 'BeneficiarioController@index')->name('beneficiarios');
 Route::post('/beneficiarios/create', 'BeneficiarioController@create')->name('beneficiario-create');
 Route::post('beneficiario/list', 'BeneficiarioController@list')->name('beneficiario-list');
+Route::get('beneficiario/presupuesto/{prestador_id}/{beneficiario_id}', 'BeneficiarioController@presupuesto')->name('beneficiario-presupuesto');

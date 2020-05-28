@@ -52,6 +52,11 @@
          <tr>
            
            <th style="width:10px">#</th>
+
+            @if($obrasocial[0]->nombre == "OSECAC")
+              <th style="width: 20px">Presupuesto</th>
+            @endif
+
            <th>Nombre</th>
            <th>Apellido</th>
            <th>Prestacion</th>
@@ -77,7 +82,13 @@
           @foreach($beneficiario->beneficiario as $key => $benefval)
 
           <tr>
+
             <td>{{ $key+1 }}</td>
+
+            @if($obrasocial[0]->nombre == "OSECAC")
+              <td style="text-align: center"><a href="{{ route('beneficiario-presupuesto', ['prestador_id' => $benefval->prestador_id, 'beneficiario_id' => $benefval->id]) }}" target="_BLANK"><button class="btn btn-success">8.4</button></a></td>
+            @endif
+
             <td>{{ $benefval->nombre }}</td>
             <td>{{ $benefval->apellido }}</td>
             <td>{{ $prestacionprof }}</td>
