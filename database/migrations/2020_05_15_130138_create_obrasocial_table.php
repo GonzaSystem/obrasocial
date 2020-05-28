@@ -16,6 +16,7 @@ class CreateObrasocialTable extends Migration
         Schema::create('obrasocial', function (Blueprint $table) {
             $table->id();
             $table->string('nombre', 75)->nullable();
+            $table->string('tipo_obra', 50)->nullable();
             $table->string('cuit', 45)->nullable();
             $table->string('telefono', 45)->nullable();
             $table->string('ciudad', 65)->nullable();

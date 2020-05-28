@@ -169,7 +169,7 @@ MODAL AGREGAR PRESTACION
                                 <option value="Psicopedagogia">Psicopedagogia</option>
                                 <option value="Profesor en Educacion de ciegos">Profesor en Educacion de ciegos</option>
                                 <option value="Acompañante Terapeutico">Acompañante Terapeutico</option>
-                                <option value="Maestra de Apoyo">Maestra de Apoyo</option>
+                                <option value="Maestro de Apoyo">Maestro de Apoyo</option>
                                 <option value="Terapia ocupacional">Terapia ocupacional</option>
                                 <option value="Profesor en educacion de sordos">Profesor en educacion de sordos</option>
                             </select>

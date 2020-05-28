@@ -41,6 +41,7 @@ class ObraSocialController extends Controller
 
    		// Datos de input
    		$nombre = $request->input('nombre');
+         $tipo = $request->input('tipoObra');
    		$cuit = $request->input('cuit');
    		$ciudad = $request->input('ciudad');
    		$direccion = $request->input('direccion');
@@ -53,6 +54,7 @@ class ObraSocialController extends Controller
 
    		// Asigno objeto relacionado a inputs
    		$os->nombre = $nombre;
+         $os->tipo_obra = $tipo;
    		$os->cuit = $cuit;
    		$os->telefono = $telefono;
    		$os->ciudad = $ciudad;
