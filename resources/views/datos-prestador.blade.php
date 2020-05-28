@@ -198,6 +198,24 @@ MODAL AGREGAR PRESTACION
                             </span>
                         @enderror
                   </div>
+
+                @elseif(Auth::user()->role == "Traslado")
+                  <div class="col-lg-12 mt-2">
+                    <label for="role_traslado">{{ __('Traslado') }}</label>
+
+                        <select id="role_traslado" type="text" class="form-control @error('role_traslado') is-invalid @enderror" name="profesion" value="{{ old('role_traslado') }}" autocomplete="profesion" autofocus>
+                            <option value="">Seleccionar Tipo de Traslado</option>
+                            <option value="Traslado a rehabilitacion">Traslado a rehabilitacion</option>
+                            <option value="Traslado a Institutos Educativo">Traslado a Institutos Educativo</option>
+                            <option value="Traslado a Instituto de Rehabilitacion">Traslado a Instituto de Rehabilitacion</option>
+                        </select>
+
+                        @error('role_institucion')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                  </div>
                 @endif
 
 

@@ -29,6 +29,7 @@ $.ajax({
 	success: function(respuesta){
 		$("#id").val(respuesta["id"]);
 		$("#editarNombre").val(respuesta["nombre"]);
+		$("#editarTipoObra").val(respuesta["tipo_obra"]);
 		$("#editarCuit").val(respuesta["cuit"]);
 		$("#editarTelefono").val(respuesta["telefono"]);
 		$("#editarCiudad").val(respuesta["ciudad"]);

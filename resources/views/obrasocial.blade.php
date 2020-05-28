@@ -158,7 +158,7 @@ MODAL AGREGAR OBRA SOCIAL
 
             </div>
 
-            <!-- ENTRADA PARA EL NOMBRE -->
+            <!-- ENTRADA PARA EL TIPO DE OBRA SOCIAL -->
             
             <div class="form-group">
 
@@ -413,6 +413,26 @@ MODAL AGREGAR OBRA SOCIAL
                   <span class="input-group-addon"><i class="fa fa-user"></i></span> 
 
                   <input type="text" class="form-control input-lg" id="editarNombre" name="editarNombre" placeholder="Ingresar nombre / Razón Social">
+
+                </div>
+
+              </div>
+
+             <!-- ENTRADA PARA EL TIPO DE OBRA SOCIAL -->
+            
+              <div class="form-group">
+
+                <label for="tipoObra">Tipo de Obra Social</label>
+                
+                <div class="input-group">
+                
+                  <span class="input-group-addon"><i class="fa fa-user"></i></span> 
+
+                  <select type="text" class="form-control input-lg" id="editarTipoObra" name="editarTipoObra">
+                      <option value="">Seleccionar..</option>
+                      <option value="Nacional">Nacional</option>
+                      <option value="Provincial">Provincial</option>
+                  </select>
 
                 </div>
 

@@ -91,6 +91,7 @@ class ObraSocialController extends Controller
 
    		// Datos de input
    		$nombre = $request->input('editarNombre');
+         $tipo = $request->input('editarTipoObra');
    		$cuit = $request->input('editarCuit');
    		$ciudad = $request->input('editarCiudad');
    		$direccion = $request->input('editarDireccion');
@@ -103,6 +104,7 @@ class ObraSocialController extends Controller
 
    		// Asigno objeto relacionado a inputs
    		$os->nombre = $nombre;
+         $os->tipo_obra = $tipo;
    		$os->cuit = $cuit;
    		$os->telefono = $telefono;
    		$os->ciudad = $ciudad;
