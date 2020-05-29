@@ -106,7 +106,7 @@ class BeneficiarioController extends Controller
     public function list(Request $request)
     {
         // Busco objeto segun ID
-        $beneficiario = Beneficiario::find($request->id);
+        $beneficiario = Beneficiario::where('id', '=', $request->id)->with('prestador')->get();
         return $beneficiario;
     }
 
@@ -118,5 +118,56 @@ class BeneficiarioController extends Controller
             'prestador' => $prestador,
             'beneficiario' => $beneficiario,
         ]);
+    }
+
+    public function update(Request $request)
+    {
+        // Objeto de beneficiario
+        $beneficiario = Beneficiario::find($request->id);
+
+        // Obtengo datos de inputs
+        $obra_social = $request->input('editarObraSocial');
+        $nombre = $request->input('editarNombre');
+        $apellido = $request->input('editarApellido');
+        $correo = $request->input('editarCorreo');
+        $telefono = $request->input('editarTelefono');
+        $direccion = $request->input('editarDireccion');
+        $localidad = $request->input('editarLocalidad');
+        $direccion_prestacion = $request->input('editarDireccionPrestacion');
+        $localidad_prestacion = $request->input('editarLocalidadPrestacion');
+        $dni = $request->input('editarDni');
+        $cuit = $request->input('editarCuit');
+        $km_ida = $request->input('editarKmIda');
+        $km_vuelta = $request->input('editarKmVuelta');
+        $viajes_ida = $request->input('editarViajesIda');
+        $viajes_vuelta = $request->input('editarViajesVuelta');
+        $turno = $request->input('editarTurno');
+        $dependencia = $request->input('editarDependencia');
+        $notas = $request->input('editarNotas');
+
+        // Asigno inputs a objeto beneficiario
+        $beneficiario->nombre = $nombre;
+        $beneficiario->apellido = $apellido;
+        $beneficiario->email = $correo;
+        $beneficiario->telefono = $telefono;
+        $beneficiario->direccion = $direccion;
+        $beneficiario->localidad = $localidad;
+        $beneficiario->dni = $dni;
+        $beneficiario->cuit = $cuit;
+        $beneficiario->direccion_prestacion = $direccion_prestacion;
+        $beneficiario->localidad_prestacion = $localidad_prestacion;
+        $beneficiario->km_ida = $km_ida;
+        $beneficiario->km_vuelta = $km_vuelta;
+        $beneficiario->viajes_ida = $viajes_ida;
+        $beneficiario->viajes_vuelta = $viajes_vuelta;
+        $beneficiario->turno = $turno;
+        $beneficiario->dependencia = $dependencia;
+        $beneficiario->notas = $notas;
+
+        // Guardo en DB        
+        $beneficiario->save();
+
+        return redirect()->route('beneficiarios', ['prestador_id' => \Auth::user()->id, 'obrasocial_id' => $obra_social])
+            ->with(['message' => 'Los datos de beneficiario han sido actualizados correctamente']);
     }
 }

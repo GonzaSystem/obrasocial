@@ -101,7 +101,7 @@
             <td>
               <div class="btn-group">
                   
-                <button class="btn btn-warning btnEditarBeneficiario" idBenef="{{ $benefval->id }}"><i class="fa fa-pencil"></i></button>
+                <button class="btn btn-warning btnEditarBeneficiario" data-toggle="modal" data-target="#modalEditarBeneficiario" idBenef="{{ $benefval->id }}"><i class="fa fa-pencil"></i></button>
 
                 <button class="btn btn-danger"><i class="fa fa-times"></i></button>
 
@@ -128,7 +128,7 @@
 </div>
 
 <!--=====================================
-MODAL AGREGAR CLIENTE
+MODAL AGREGAR BENEFICIARIO
 ======================================-->
 
 <div id="modalAgregarBeneficiario" class="modal fade" role="dialog">
@@ -456,6 +456,321 @@ MODAL AGREGAR CLIENTE
           <button type="submit" class="btn btn-primary">Guardar beneficiario</button>
 
         </div>
+
+      </form>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!--=====================================
+MODAL EDITAR BENEFICIARIO
+======================================-->
+
+<div id="modalEditarBeneficiario" class="modal fade" role="dialog">
+  
+  <div class="modal-dialog modal-lg">
+
+    <div class="modal-content">
+
+      <form role="form" method="POST" action="{{ route('beneficiario-update') }}">
+        @csrf
+
+        <!--=====================================
+        CABEZA DEL MODAL
+        ======================================-->
+
+        <div class="modal-header" style="background:#3c8dbc; color:white">
+
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+          <h4 class="modal-title">Editar beneficiario</h4>
+
+        </div>
+
+        <!--=====================================
+        CUERPO DEL MODAL
+        ======================================-->
+
+        <div class="modal-body">
+
+          <div class="box-body">
+          
+            <!-- Entrada para Obra Social-->
+            <div class="form-group col-lg-12">
+              
+              <div class="input-group col-lg-12">
+                
+                <div class="col-lg-12">
+                  
+                    <label for="editarObraSocial">Obra Social</label>
+
+                    <select type="text" class="form-control input-lg" id="editarObraSocial" name="editarObraSocial" readonly>
+
+                      @foreach($obrasocial as $key=>$os)
+
+                          <option value="{{ $os->id }}">{{ $os->nombre }}</option>
+                          
+                      @endforeach
+
+                    </select>
+
+                </div>  
+
+              </div>
+
+            </div>
+
+           <!-- ENTRADA PARA NOMBRE Y APELLIDO -->
+
+                <div class="form-group col-lg-12">
+                
+                <div class="input-group col-lg-12">
+
+                  <div class="col-lg-6">
+
+                        <label for="editarNombre">Editar Nombre</label>
+
+                        <input type="text" class="form-control input-lg" id="editarNombre" name="editarNombre" placeholder="Ingresar nombre">
+
+                  </div>
+                
+                  <div class="col-lg-6">
+
+                        <label for="editarApellido">Editar Apellido</label>
+
+                        <input type="text" class="form-control input-lg" id="editarApellido" name="editarApellido" placeholder="Ingresar apellido">
+
+                  </div>
+
+                </div>
+
+              </div>            
+
+
+              <!--Entrada para correo y telefono -->
+
+                <div class="form-group col-lg-12">
+                
+                <div class="input-group col-lg-12">
+
+                  <div class="col-lg-6">
+
+                        <label for="editarCorreo">Editar Correo</label>
+
+                        <input type="email" class="form-control input-lg" id="editarCorreo" name="editarCorreo" placeholder="Ingresar correo">
+
+                  </div>
+                
+                  <div class="col-lg-6">
+
+                        <label for="editarTelefono">Editar Telefono</label>
+
+                        <input type="text" class="form-control input-lg" id="editarTelefono" name="editarTelefono" placeholder="Ingresar Telefono">
+
+                  </div>
+
+                </div>
+
+              </div>
+
+              <!--Entrada para direccion y localidad -->
+
+              <div class="form-group col-lg-12">
+                
+                <div class="input-group col-lg-12">
+
+                  <div class="col-lg-6">
+
+                        <label for="editarDireccion">Editar Dirección del Beneficiario</label>
+
+                        <input type="text" class="form-control input-lg" id="editarDireccion" name="editarDireccion" placeholder="Ingresar Dirección">
+                          
+                  </div>
+                
+                  <div class="col-lg-6">
+
+                        <label for="editarLocalidad">Editar Localidad del Beneficiario</label>
+
+                        <input type="text" class="form-control input-lg" id="editarLocalidad" name="editarLocalidad" placeholder="Ingresar Localidad">
+
+                  </div>
+
+                </div>
+
+              </div>
+
+               <!--Entrada para Codigo Postal y DNI -->
+
+              <div class="form-group col-lg-12">
+                
+                <div class="input-group col-lg-12">
+
+                  <div class="col-lg-6">
+
+                        <label for="editarDireccionPrestacion">Editar Dirección de Prestación</label>
+
+                        <input type="text" class="form-control input-lg" id="editarDireccionPrestacion" name="editarDireccionPrestacion" placeholder="Ingresar Dirección de Prestación">
+
+                  </div>
+
+                  <div class="col-lg-6">
+
+                        <label for="editarLocalidadPrestacion">Editar Localidad de Prestación</label>
+
+                        <input type="text" class="form-control input-lg" id="editarLocalidadPrestacion" name="editarLocalidadPrestacion" placeholder="Ingresar Localidad de Prestación">
+
+                  </div>
+                
+
+                </div>
+
+              </div>
+
+              <!--Entrada para CUIT y Prestacion -->
+
+              <div class="form-group col-lg-12">
+                
+                <div class="input-group col-lg-12">
+
+                  <div class="col-lg-6">
+
+                        <label for="editarCuit">Editar CUIT</label>
+
+                        <input type="text" class="form-control input-lg" id="editarCuit" name="editarCuit" placeholder="Ingresar CUIT">
+
+                  </div>
+
+                  <div class="col-lg-6">
+
+                        <label for="editarDni">Editar DNI</label>
+
+                        <input type="text" class="form-control input-lg" id="editarDni" name="editarDni" placeholder="Ingresar DNI">
+
+                  </div>         
+
+                </div>
+
+              </div>
+
+              <!--Entrada para KM ida y vuelta -->
+
+              <div class="form-group col-lg-12">
+                
+                <div class="input-group col-lg-12">
+
+                  <div class="col-lg-6">
+
+                        <label for="editarKmIda">Editar KM de ida</label>
+
+                        <input type="text" class="form-control input-lg" id="editarKmIda" name="editarKmIda" placeholder="Ingresar KM de ida">
+
+                  </div>
+                
+                  <div class="col-lg-6">
+
+                        <label for="editarKmVuelta">Editar KM de vuelta</label>
+
+                        <input type="text" class="form-control input-lg" id="editarKmVuelta" name="editarKmVuelta" placeholder="Ingresar KM de Vuelta">
+
+                  </div>
+
+                </div>
+
+              </div>
+
+              <!--Entrada para Viajes de ida y vuelta -->
+
+              <div class="form-group col-lg-12">
+                
+                <div class="input-group col-lg-12">
+
+                  <div class="col-lg-6">
+
+                        <label for="editarViajesIda">Editar Viajes de ida</label>
+
+                        <input type="text" class="form-control input-lg" id="editarViajesIda" name="editarViajesIda" placeholder="Ingresar Viajes de ida">
+
+                  </div>
+                
+                  <div class="col-lg-6">
+
+                        <label for="editarViajesVuelta">Editar Viajes de vuelta</label>
+
+                        <input type="text" class="form-control input-lg" id="editarViajesVuelta" name="editarViajesVuelta" placeholder="Ingresar Viajes de vuelta">
+
+                  </div>
+
+                </div>
+
+              </div>
+
+              <!-- Entrada para Turno y Dependencia -->
+
+              <div class="form-group col-lg-12">
+                
+                <div class="input-group col-lg-12">
+
+                  <div class="col-lg-6">
+
+                        <label for="editarTurno">Turno</label>
+
+                        <select type="text" class="form-control input-lg" id="editarTurno" name="editarTurno">
+                              <option value="Mañana">Mañana</option>
+                              <option value="Tarde">Tarde</option>
+                              <option value="Noche">Noche</option>
+                        </select>
+
+                  </div>
+                
+                  <div class="col-lg-6">
+
+                        <label for="editarDependencia">Dependencia</label>
+
+                        <select type="text" class="form-control input-lg" id="editarDependencia" name="editarDependencia" placeholder="Ingresar Dependencia">
+                            <option>Seleccionar...</option>
+                            <option value="Si">Si</option>
+                            <option value="No">No</option>
+                        </select>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+              <!-- Entrada para notas -->
+               <div class="form-group col-lg-12">
+                
+                <div class="input-group col-lg-12">
+                    
+                    <textarea type="text" id="editarNotas" name="editarNotas" maxlength="255" rows="5" cols="130" placeholder="Notas..">
+
+                    </textarea>
+
+                </div>
+
+              </div>
+
+          </div>
+
+        </div>
+
+        <!--=====================================
+        PIE DEL MODAL
+        ======================================-->
+
+        <div class="modal-footer">
+
+          <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Salir</button>
+
+          <button type="submit" class="btn btn-primary">Guardar beneficiario</button>
+
+        </div>
+
+        <input type="hidden" name="id" id="id">
 
       </form>
 

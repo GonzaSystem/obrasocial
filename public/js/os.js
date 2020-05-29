@@ -84,6 +84,24 @@ $.ajax({
 	type: "POST",
 	success: function(respuesta){
 		console.log("respuesta", respuesta);
+		$("#id").val(respuesta[0]["id"]);
+		$("#editarNombre").val(respuesta[0]["nombre"]);
+		$("#editarApellido").val(respuesta[0]["apellido"]);
+		$("#editarCorreo").val(respuesta[0]["email"]);
+		$("#editarTelefono").val(respuesta[0]["telefono"]);
+		$("#editarDireccion").val(respuesta[0]["direccion"]);
+		$("#editarLocalidad").val(respuesta[0]["localidad"]);
+		$("#editarDireccionPrestacion").val(respuesta[0]["direccion_prestacion"]);
+		$("#editarLocalidadPrestacion").val(respuesta[0]["localidad_prestacion"]);
+		$("#editarCuit").val(respuesta[0]["cuit"]);
+		$("#editarDni").val(respuesta[0]["dni"]);
+		$("#editarKmIda").val(respuesta[0]["km_ida"]);
+		$("#editarKmVuelta").val(respuesta[0]["km_vuelta"]);
+		$("#editarViajesIda").val(respuesta[0]["viajes_ida"]);
+		$("#editarViajesVuelta").val(respuesta[0]["viajes_vuelta"]);
+		$("#editarTurno").val(respuesta[0]["turno"]);
+		$("#editarDependencia").val(respuesta[0]["dependencia"]);
+		$("#editarNotas").val(respuesta[0]["notas"]);
 		}
 	});
 });
