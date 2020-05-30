@@ -122,24 +122,24 @@
 							<div
 								style="width: 20px; height: 20px; margin-left: 0.4rem; border: 1px solid #212121; text-align: center; font-size: 1.1rem; cursor: pointer;"
 								onclick="AppClass.bindInputCheck(event)"
-								data-checked="0"
-							></div>
+								data-checked="{{ $prestador[0]->user->condicion_iva == 'Responsable Inscripto' ? 1 : 0 }}"
+							>{{ $prestador[0]->user->condicion_iva == 'Responsable Inscripto' ? 'X' : '' }}</div>
 						</div>
 						<div class="form-group" style="margin-top: 0;">
 							<span class="text">Monotributo</span>
 							<div
 								style="width: 20px; height: 20px; margin-left: 1.5rem; border: 1px solid #212121; text-align: center; font-size: 1.1rem; cursor: pointer;"
 								onclick="AppClass.bindInputCheck(event)"
-								data-checked="0"
-							></div>
+								data-checked="{{ $prestador[0]->user->condicion_iva == 'Monotributo' ? 1 : 0 }}"
+							>{{ $prestador[0]->user->condicion_iva == 'Monotributo' ? 'X' : '' }}</div>
 						</div>
 						<div class="form-group" style="margin-top: 0;">
 							<span class="text">Exento</span>
 							<div
 								style="width: 20px; height: 20px; margin-left: 0.6rem; border: 1px solid #212121; text-align: center; font-size: 1.1rem; cursor: pointer;"
 								onclick="AppClass.bindInputCheck(event)"
-								data-checked="0"
-							></div>
+								data-checked="{{ $prestador[0]->user->condicion_iva == 'Exento' ? 1 : 0 }}"
+							>{{ $prestador[0]->user->condicion_iva == 'Exento' ? 'X' : '' }}</div>
 						</div>
 					</div>
 				</div>
@@ -158,24 +158,24 @@
 							<div
 								style="width: 20px; height: 20px; margin-left: 0.4rem; border: 1px solid #212121; text-align: center; font-size: 1.1rem; cursor: pointer;"
 								onclick="AppClass.bindInputCheck(event)"
-								data-checked="0"
-							></div>
+								data-checked="{{ $prestador[0]->user->condicion_iibb == 'Inscripto' ? 1 : 0}}"
+							>{{ $prestador[0]->user->condicion_iibb == 'Inscripto' ? 'X' : '' }}</div>
 						</div>
 						<div class="form-group" style="margin-top: 0;">
 							<span class="text">Conv. Multilat</span>
 							<div
 								style="width: 20px; height: 20px; margin-left: 1rem; border: 1px solid #212121; text-align: center; font-size: 1.1rem; cursor: pointer;"
 								onclick="AppClass.bindInputCheck(event)"
-								data-checked="0"
-							></div>
+								data-checked="{{ $prestador[0]->user->condicion_iibb == 'Convenio Multilateral' ? 1 : 0 }}"
+							>{{ $prestador[0]->user->condicion_iibb == 'Convenio Multilateral' ? 'X' : '' }}</div>
 						</div>
 						<div class="form-group" style="margin-top: 0;">
 							<span class="text">Exento</span>
 							<div
 								style="width: 20px; height: 20px; margin-left: 0.6rem; border: 1px solid #212121; text-align: center; font-size: 1.1rem; cursor: pointer;"
 								onclick="AppClass.bindInputCheck(event)"
-								data-checked="0"
-							></div>
+								data-checked="{{ $prestador[0]->user->condicion_iibb == 'Exento' ? 1 : 0 }}"
+							>{{ $prestador[0]->user->condicion_iibb == 'Exento' ? 'X' : '' }}</div>
 						</div>
 					</div>
 				</div>
@@ -189,6 +189,7 @@
 						type="text"
 						class="form-input"
 						style="flex-basis: 40%; width: 40%;"
+						value="{{ $prestador[0]->user->iibb }}"
 					/>
 				</div>
 				<div class="form-group" style="margin-top: 0.8rem;">
@@ -204,7 +205,7 @@
 				<div class="row">
 					<div class="form-group" style="margin-top: 0">
 						<span class="form-prepend text">Beneficiario Causante:</span>
-						<input id="beneficiary" type="text" class="form-input" />
+						<input id="beneficiary" type="text" class="form-input" value="{{ $beneficiario->nombre . ' ' . $beneficiario->apellido }}"/>
 					</div>
 					<div
 						class="form-group"
@@ -216,12 +217,13 @@
 							type="text"
 							class="form-input"
 							style="margin-left: 0.5rem;"
+							value="{{ $beneficiario->dni }}"
 						/>
 					</div>
 				</div>
 				<div class="form-group" style="width: 70%; margin-top: 0.5rem;">
 					<span class="form-prepend text">Prestación / Especialidad:</span>
-					<input id="specialty" type="text" class="form-input" />
+					<input id="specialty" type="text" class="form-input" value="{{ $prestador[0]->prestacion }}" />
 				</div>
 				<div class="row">
 					<div class="form-group" style="margin-top: 0.5rem;">
@@ -507,14 +509,14 @@
 						<span class="form-prepend text"
 							>precedentemente al beneficiario:</span
 						>
-						<input id="previously" type="text" class="form-input" />
+						<input id="previously" type="text" class="form-input" value="{{ $beneficiario->nombre . ' ' . $beneficiario->apellido }}" />
 					</div>
 					<div
 						class="form-group"
 						style="margin-top: 0.5rem; padding-left: 0.5rem; width: 50%;"
 					>
 						<span class="form-prepend text">DNI:</span>
-						<input id="dni" type="text" class="form-input" />
+						<input id="dni" type="text" class="form-input" value="{{ $beneficiario->dni }}" />
 					</div>
 				</div>
 				<div
