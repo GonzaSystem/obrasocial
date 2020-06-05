@@ -15,6 +15,7 @@ class CreatePrestacionTable extends Migration
     {
         Schema::create('prestacion', function (Blueprint $table) {
             $table->id();
+            $table->string('nombre');
             $table->timestamps();
         });
     }

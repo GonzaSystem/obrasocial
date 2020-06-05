@@ -11,6 +11,15 @@ class PrestacionSeeder extends Seeder
      */
     public function run()
     {
-        //
+        DB::table('prestacion')->insert([
+	        	'nombre' => 'Psicomotricidad'
+	        ],
+	    	[
+	        	'nombre' => 'Psicologia'
+	        ],
+	        [
+	        	'nombre' => 'Maestra de Apoyo'
+	        ]
+    	);
     }
 }

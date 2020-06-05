@@ -30,12 +30,15 @@ class PrestadorController extends Controller
 
     		// $os = DB::select(DB::raw('SELECT os.id, os.nombre FROM `obrasocial` os LEFT JOIN prestador pr on os.id = pr.os_id WHERE os.id NOT IN (SELECT pr.os_id from prestador pr WHERE pr.user_id = '.$userId.')'));					
     	
+        // Obtengo Prestaciones
+        $prestaciones = \DB::table('prestacion')->get();
 
     	// Devuelvo vista con parametros
         return view('datos-prestador', [
         	"prestador" => $prestador,
         	"obrasocial" => $os,
             "prestador_menu" => $prestador_menu,
+            "prestaciones" => $prestaciones,
         ]);
     }
 

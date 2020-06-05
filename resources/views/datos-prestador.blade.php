@@ -161,17 +161,10 @@ MODAL AGREGAR PRESTACION
                         <label for="role_profesion">{{ __('Profesion') }}</label>
 
                             <select id="role_profesion" type="text" class="form-control @error('role_profesion') is-invalid @enderror" name="profesion" value="{{ old('role_profesion') }}" autocomplete="profesion" autofocus>
-                                <option value="">Seleccionar Profesion</option>
-                                <option value="Psicomotricidad">Psicomotricidad</option>
-                                <option value="Kinesiologia">Kinesiologia</option>
-                                <option value="Psicologia">Psicologia</option>
-                                <option value="Fonoaudiologia">Fonoaudiologia</option>
-                                <option value="Psicopedagogia">Psicopedagogia</option>
-                                <option value="Profesor en Educacion de ciegos">Profesor en Educacion de ciegos</option>
-                                <option value="Acompañante Terapeutico">Acompañante Terapeutico</option>
-                                <option value="Maestro de Apoyo">Maestro de Apoyo</option>
-                                <option value="Terapia ocupacional">Terapia ocupacional</option>
-                                <option value="Profesor en educacion de sordos">Profesor en educacion de sordos</option>
+                              <option value="">Seleccionar...</option>
+                               @foreach($prestaciones as $prestacion)
+                                  <option value="{{ $prestacion->nombre }}">{{ $prestacion->nombre }}</option>
+                               @endforeach
                             </select>
 
                             @error('role_profesion')
