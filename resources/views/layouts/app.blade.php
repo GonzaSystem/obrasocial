@@ -188,6 +188,13 @@
                                 <span>Obra Social</span>
                             </a>
                         </li>
+
+                        <li>
+                            <a href="{{ route('prestaciones') }}">
+                                <i class="fa fa-wrench"></i>
+                                <span>Prestaciones</span>
+                            </a>
+                        </li>
                     @endif
                     
                     </ul>
