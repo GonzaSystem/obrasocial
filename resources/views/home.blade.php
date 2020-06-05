@@ -118,11 +118,44 @@
                 
                 <div class="input-group col-lg-12">
 
-                  <div class="col-lg-12">
+                  <div class="col-lg-6">
 
                         <label for="direccion">Dirección</label>
 
                         <input type="text" value="{{ Auth::user()->direccion }}" class="form-control input-lg" name="direccion" placeholder="Ingresar direccion">
+
+                  </div>
+
+                  <div class="col-lg-6">
+
+                        <label for="provincia">Provincia</label>
+
+                        <select type="text" class="form-control input-lg" name="provincia" placeholder="Ingresar Provincia">
+                          <option value="{{ Auth::user()->provincia ?? '' }}">{{ Auth::user()->provincia ?? 'Seleccionar...'}}</option>
+                          <option value="Buenos Aires">Buenos Aires</option>
+                          <option value="Catamarca">Catamarca</option>
+                          <option value="Chaco">Chaco</option>
+                          <option value="Chubut">Chubut</option>
+                          <option value="Cordoba">Cordoba</option>
+                          <option value="Corrientes">Corrientes</option>
+                          <option value="Entre Rios">Entre Rios</option>
+                          <option value="Formosa">Formosa</option>
+                          <option value="Jujuy">Jujuy</option>
+                          <option value="La Pampa">La Pampa</option>
+                          <option value="La Rioja">La Rioja</option>
+                          <option value="Mendoza">Mendoza</option>
+                          <option value="Misiones">Misiones</option>
+                          <option value="Neuquen">Neuquen</option>
+                          <option value="Rio Negro">Rio Negro</option>
+                          <option value="Salta">Salta</option>
+                          <option value="San Juan">San Juan</option>
+                          <option value="San Luis">San Luis</option>
+                          <option value="Santa Cruz">Santa Cruz</option>
+                          <option value="Santa Fe">Santa Fe</option>
+                          <option value="Santiago del Estero">Santiago del Estero</option>
+                          <option value="Tierra del Fuego">Tierra del Fuego</option>
+                          <option value="Tucuman">Tucuman</option>
+                        </select>
 
                   </div>
 

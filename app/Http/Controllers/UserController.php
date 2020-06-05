@@ -29,6 +29,7 @@ class UserController extends Controller
 
         // Datos de inputs
         $direccion = $request->input('direccion');
+        $provincia = $request->input('provincia');
         $telefono = $request->input('telefono');
         $cuit = $request->input('cuit');
         $condicion_iva = $request->input('condicionIva');
@@ -44,6 +45,7 @@ class UserController extends Controller
 
         // Asigno valores al objeto usuario
         $user->direccion = $direccion;
+        $user->provincia = $provincia;
         $user->telefono = $telefono;
         $user->cuit = $cuit;
         $user->condicion_iva = $condicion_iva;
