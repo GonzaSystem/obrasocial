@@ -36,7 +36,8 @@ class BeneficiarioController extends Controller
         // Traigo beneficiarios segun prestador y obra social
         $beneficiario = Prestador::where('user_id', $user)
          ->where('os_id', $os_id)
-         ->with('beneficiario')->get();
+         ->with('beneficiario')
+         ->get();
 
     	// Objeto Obra Social
     	$obraSocial = ObraSocial::where('id', $os_id)->get();
