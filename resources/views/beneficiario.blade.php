@@ -44,80 +44,161 @@
       </div>
 
       <div class="box-body">
+
+      @if($obrasocial[0]->nombre == "APROSS")
         
-       <table class="table table-bordered table-striped dt-responsive tablas">
-         
-        <thead>
-         
-         <tr>
+         <table class="table table-bordered table-striped dt-responsive tablas">
            
-           <th style="width:10px">#</th>
+          <thead>
+           
+           <tr>
+             
+             <th style="width:10px">#</th>
 
-            @if($obrasocial[0]->nombre == "OSECAC")
-              <th style="width: 20px">Presupuesto</th>
-            @endif
+              @if($obrasocial[0]->nombre == "OSECAC")
+                <th style="width: 20px">Presupuesto</th>
+              @endif
 
-           <th>Nombre</th>
-           <th>Apellido</th>
-           <th>Prestacion</th>
-           <th>Email</th>
-           <th>Teléfono</th>
-           <th>Direccion</th>
-           <th>Localidad</th>
-           <th>DNI</th>
-           <th>CUIT</th>
-           <th>Acciones</th>
+             <th>Nombre</th>
+             <th>Apellido</th>
+             <th>Prestacion</th>
+             <th>Email</th>
+             <th>Teléfono</th>
+             <th>Direccion</th>
+             <th>Localidad</th>
+             <th>DNI</th>
+             <th>CUIT</th>
+             <th>Acciones</th>
 
-         </tr> 
+           </tr> 
 
-        </thead>
+          </thead>
 
-        <tbody>
+          <tbody>
 
 
-        @foreach($beneficiarios as $beneficiario)
+          @foreach($beneficiarios as $beneficiario)
 
-          <?php $prestacionprof = $beneficiario->prestacion ?>
+            <?php $prestacionprof = $beneficiario->prestacion ?>
 
-          @foreach($beneficiario->beneficiario as $key => $benefval)
+            @foreach($beneficiario->beneficiario as $key => $benefval)
 
-          <tr>
+            <tr>
 
-            <td>{{ $key+1 }}</td>
+              <td>{{ $key+1 }}</td>
 
-            @if($obrasocial[0]->nombre == "OSECAC")
-              <td style="text-align: center"><a href="{{ route('beneficiario-presupuesto', ['prestador_id' => $benefval->prestador_id, 'beneficiario_id' => $benefval->id]) }}" target="_BLANK"><button class="btn btn-success">8.4</button></a></td>
-            @endif
+              @if($obrasocial[0]->nombre == "OSECAC")
+                <td style="text-align: center"><a href="{{ route('beneficiario-presupuesto', ['prestador_id' => $benefval->prestador_id, 'beneficiario_id' => $benefval->id]) }}" target="_BLANK"><button class="btn btn-success">8.4</button></a></td>
+              @endif
 
-            <td>{{ $benefval->nombre }}</td>
-            <td>{{ $benefval->apellido }}</td>
-            <td>{{ $prestacionprof }}</td>
-            <td>{{ $benefval->email }}</td>
-            <td>{{ $benefval->telefono }}</td>
-            <td>{{ $benefval->direccion }}</td>
-            <td>{{ $benefval->localidad }}</td>
-            <td>{{ $benefval->dni }}</td>
-            <td>{{ $benefval->cuit }}</td>
-            <td>
-              <div class="btn-group">
-                  
-                <button class="btn btn-warning btnEditarBeneficiario" data-toggle="modal" data-target="#modalEditarBeneficiario" idBenef="{{ $benefval->id }}"><i class="fa fa-pencil"></i></button>
+              <td>{{ $benefval->nombre }}</td>
+              <td>{{ $benefval->apellido }}</td>
+              <td>{{ $prestacionprof }}</td>
+              <td>{{ $benefval->email }}</td>
+              <td>{{ $benefval->telefono }}</td>
+              <td>{{ $benefval->direccion }}</td>
+              <td>{{ $benefval->localidad }}</td>
+              <td>{{ $benefval->dni }}</td>
+              <td>{{ $benefval->cuit }}</td>
+              <td>
+                <div class="btn-group">
+                    
+                  <button class="btn btn-warning btnEditarBeneficiario" data-toggle="modal" data-target="#modalEditarBeneficiario" idBenef="{{ $benefval->id }}"><i class="fa fa-pencil"></i></button>
 
-                <button class="btn btn-danger"><i class="fa fa-times"></i></button>
+                  <button class="btn btn-danger"><i class="fa fa-times"></i></button>
 
-              </div>  
+                </div>  
 
-            </td>
+              </td>
 
-          </tr>
+            </tr>
+
+            @endforeach
 
           @endforeach
 
-        @endforeach
+          </tbody>
 
-        </tbody>
+         </table>
 
-       </table>
+
+       @else
+
+                 <table class="table table-bordered table-striped dt-responsive tablas">
+           
+          <thead>
+           
+           <tr>
+             
+             <th style="width:10px">#</th>
+
+              @if($obrasocial[0]->nombre == "OSECAC")
+                <th style="width: 20px">Presupuesto</th>
+              @endif
+
+             <th>Nombre</th>
+             <th>Apellido</th>
+             <th>Prestacion</th>
+             <th>Email</th>
+             <th>Teléfono</th>
+             <th>Direccion</th>
+             <th>Localidad</th>
+             <th>DNI</th>
+             <th>CUIT</th>
+             <th>Acciones</th>
+
+           </tr> 
+
+          </thead>
+
+          <tbody>
+
+
+          @foreach($beneficiarios as $beneficiario)
+
+            <?php $prestacionprof = $beneficiario->prestacion ?>
+
+            @foreach($beneficiario->beneficiario as $key => $benefval)
+
+            <tr>
+
+              <td>{{ $key+1 }}</td>
+
+              @if($obrasocial[0]->nombre == "OSECAC")
+                <td style="text-align: center"><a href="{{ route('beneficiario-presupuesto', ['prestador_id' => $benefval->prestador_id, 'beneficiario_id' => $benefval->id]) }}" target="_BLANK"><button class="btn btn-success">8.4</button></a></td>
+              @endif
+
+              <td>{{ $benefval->nombre }}</td>
+              <td>{{ $benefval->apellido }}</td>
+              <td>{{ $prestacionprof }}</td>
+              <td>{{ $benefval->email }}</td>
+              <td>{{ $benefval->telefono }}</td>
+              <td>{{ $benefval->direccion }}</td>
+              <td>{{ $benefval->localidad }}</td>
+              <td>{{ $benefval->dni }}</td>
+              <td>{{ $benefval->cuit }}</td>
+              <td>
+                <div class="btn-group">
+                    
+                  <button class="btn btn-warning btnEditarBeneficiario" data-toggle="modal" data-target="#modalEditarBeneficiario" idBenef="{{ $benefval->id }}"><i class="fa fa-pencil"></i></button>
+
+                  <button class="btn btn-danger"><i class="fa fa-times"></i></button>
+
+                </div>  
+
+              </td>
+
+            </tr>
+
+            @endforeach
+
+          @endforeach
+
+          </tbody>
+
+         </table>
+
+       @endif
 
       </div>
 

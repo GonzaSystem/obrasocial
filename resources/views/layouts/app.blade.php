@@ -118,7 +118,7 @@
                         <ul class="nav navbar-nav">
                             <li class="dropdown user user-menu">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                    <span class="hidden-xs"><b>{{ Auth::user()->name . ' ' . Auth::user()->surname}}</b></span>
+                                    <span><b>{{ Auth::user()->name . ' ' . Auth::user()->surname}}</b></span>
                                 </a>
                                 <!-- Dropdown-toggle -->
                                 <ul class="dropdown-menu">
@@ -165,7 +165,7 @@
                                 <i class="fa fa-users"></i>
                                 <span>Adm. beneficiarios</span>
                                 <span class="pull-right-container">
-                                    <i class="fa fa-angle-down pull-right"></i>
+                                    <i class="fa fa-angle-left pull-right"></i>
                                 </span>
                             </a>
                             <ul class="treeview-menu">
@@ -202,7 +202,7 @@
     @auth
         {{-- Footer --}}
         <footer class="main-footer">
-            <strong>Copyright &copy; 2019 <a href="mailto:info@smartposonline.com?Subject=Sistema" target="_top">Gonzalo Ivan Gomez</a> - info@smartposonline.com</strong> .
+            <strong>Copyright &copy; 2020 <a href="mailto:gonzaloholzmeister@gmail.com?Subject=Sistema" target="_top">Gonzalo Ivan Gomez</a> - gonzaloholzmeister@gmail.com</strong> .
 
             Todos los derechos reservados.
         </footer>
