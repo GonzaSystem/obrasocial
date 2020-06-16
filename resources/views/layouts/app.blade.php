@@ -191,7 +191,7 @@
 
                         <li>
                             <a href="{{ route('prestaciones') }}">
-                                <i class="fa fa-wrench"></i>
+                                <i class="fa fa-ambulance"></i>
                                 <span>Prestaciones</span>
                             </a>
                         </li>

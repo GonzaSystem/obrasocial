@@ -12,4 +12,9 @@ class ObraSocial extends Model
     {
     	return $this->belongsTo('App\Prestador');
     }
+
+    public function prestacion()
+    {
+    	return $this->hasMany('App\Prestacion');
+    }
 }

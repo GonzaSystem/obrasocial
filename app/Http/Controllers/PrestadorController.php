@@ -96,12 +96,4 @@ class PrestadorController extends Controller
 
     	return redirect()->route('datos-prestador')->with(['message' => 'Los datos de prestador han sido editados correctamente']);
     }
-
-    public function prestaciones()
-    {
-        $prestaciones = DB::table('prestacion')->get();
-        return view('datos-prestacion', [
-            'prestaciones' => $prestaciones,
-        ]);
-    }
 }

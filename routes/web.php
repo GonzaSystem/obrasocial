@@ -45,4 +45,5 @@ Route::get('beneficiario/presupuesto/{prestador_id}/{beneficiario_id}', 'Benefic
 Route::post('beneficiario/update', 'BeneficiarioController@update')->name('beneficiario-update');
 
 //Prestaciones
-Route::get('/prestaciones', 'PrestadorController@prestaciones')->name('prestaciones');
+Route::get('/prestaciones', 'ObraSocialController@lista_prestaciones')->name('prestaciones');
+Route::post('/prestacion/create', 'ObraSocialController@create_prestacion')->name('prestacion-create');

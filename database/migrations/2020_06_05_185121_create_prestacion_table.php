@@ -15,7 +15,9 @@ class CreatePrestacionTable extends Migration
     {
         Schema::create('prestacion', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre');
+            $table->integer('os_id')->nullable();
+            $table->string('nombre')->nullable();
+            $table->string('valor_modulo')->nullable();
             $table->timestamps();
         });
     }

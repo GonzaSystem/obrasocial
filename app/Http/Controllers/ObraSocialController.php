@@ -7,6 +7,7 @@ use Illuminate\Http\Response;
 use App\User;
 use App\ObraSocial;
 use App\Prestador;
+use App\Prestacion;
 
 
 class ObraSocialController extends Controller
@@ -121,4 +122,41 @@ class ObraSocialController extends Controller
 
    		return redirect()->route('obra-social')->with(['message' => 'La obra social ha sido editada correctamente']);
    	}
+
+      public function lista_prestaciones()
+      {
+         // Devuelvo vista prestaciones
+         $user_id = \Auth::user()->id;
+
+         $prestador_menu = Prestador::where('user_id', '=', $user_id)->with('obrasocial')->get();
+
+         // Devuelvo prestaciones
+         $prestaciones = Prestacion::with('obrasocial')->get();
+
+         // Devuelvo Obras Sociales
+         $os = ObraSocial::orderBy('id', 'asc')->get();
+         
+         return view('prestaciones', [
+            'prestador_menu' => $prestador_menu, 
+            'prestaciones' => $prestaciones,
+            'obras_sociales' => $os,
+         ]);
+      }
+
+      public function create_prestacion(Request $request)
+      {
+         $prestacion = new Prestacion;
+
+         $nombre_prestacion = $request->input('prestacion');
+         $obra_social = $request->input('obra_social');
+         $valor_modulo = $request->input('valor_prestacion');
+
+         $prestacion->nombre = $nombre_prestacion;
+         $prestacion->os_id = $obra_social;
+         $prestacion->valor_modulo = $valor_modulo;
+
+         $prestacion->save();
+
+         return redirect()->route('prestaciones')->with(['message' => 'La prestacion ha sido guardada correctamente']);
+      }
 }
