@@ -95,7 +95,7 @@
 </div>
 
 <!--=====================================
-MODAL AGREGAR CLIENTE
+MODAL AGREGAR PRESTACION
 ======================================-->
 
 <div id="modalAgregarPrestacion" class="modal fade" role="dialog">

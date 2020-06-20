@@ -17,8 +17,9 @@ class CreatePrestadorTable extends Migration
             $table->id();
             $table->integer('user_id');
             $table->integer('os_id');
-            $table->string('numero_prestador', 45);
-            $table->string('prestacion', 50)->nullable();
+            $table->integer('prestacion_id');
+            $table->string('numero_prestador', 45);  
+            $table->string('valor_default', 1);     
             $table->decimal('valor_prestacion', 2)->nullable();
             $table->timestamps();
         });

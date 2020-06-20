@@ -51,6 +51,7 @@
            <th>Obra Social</th>
            <th>Numero de Prestador</th>
            <th>Prestacion</th>
+           <th>Valor de Módulo</th>
            <th>Acciones</th>
 
          </tr> 
@@ -67,6 +68,7 @@
               <td>{{ $prestacion->obrasocial[0]->nombre }}</td>
               <td>{{ $prestacion->numero_prestador }}</td>
               <td>{{ $prestacion->prestacion }}</td>
+              <td>{{ $prestacion->valor_modulo }}</td>
               <td>
                 <div class="btn-group">
                     
@@ -136,7 +138,9 @@ MODAL AGREGAR PRESTACION
 
                     <label for="obraSocial">Obra Social</label>
 
-                    <select type="text" class="form-control input-lg" name="obraSocial" required>
+                    <select type="text" class="form-control input-lg" id="obraSocial" name="obraSocial" required>
+
+                      <option value="">Seleccionar...</option>
                       
                       @foreach($obrasocial as $obra)
         
@@ -157,22 +161,38 @@ MODAL AGREGAR PRESTACION
                 </div>
 
                    @if(Auth::user()->role == "Prestador")
-                    <div class="col-lg-12 mt-2">
-                        <label for="role_profesion">{{ __('Profesion') }}</label>
+                      <div class="col-lg-6" style="margin-top: 10px;">
+                          <label for="role_profesion">{{ __('Profesion') }}</label>
 
-                            <select id="role_profesion" type="text" class="form-control @error('role_profesion') is-invalid @enderror" name="profesion" value="{{ old('role_profesion') }}" autocomplete="profesion" autofocus>
-                              <option value="">Seleccionar...</option>
-                               @foreach($prestaciones as $prestacion)
-                                  <option value="{{ $prestacion->nombre }}">{{ $prestacion->nombre }}</option>
-                               @endforeach
-                            </select>
+                              <select id="role_profesion" type="text" class="form-control @error('role_profesion') is-invalid @enderror" name="profesion" value="{{ old('role_profesion') }}" autocomplete="profesion" autofocus>
+                                    <option value="">Seleccionar...</option>
+    {{--                                  @foreach($prestaciones as $prestacion)
+                                        <option value="{{ $prestacion->nombre }}">{{ $prestacion->nombre }}</option>
+                                     @endforeach --}}
+                              </select>
 
-                            @error('role_profesion')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                    </div>
+                              @error('role_profesion')
+                                  <span class="invalid-feedback" role="alert">
+                                      <strong>{{ $message }}</strong>
+                                  </span>
+                              @enderror
+                      </div>
+
+                      <div class="col-lg-6" style="margin-top: 10px;">
+                          <label for="utiliza_valor_profesion">{{ __('Utiliza Valor Predeterminado') }}</label>
+
+                              <select id="utiliza_valor_profesion" type="text" class="form-control @error('role_profesion') is-invalid @enderror" name="utiliza_valor_profesion" value="{{ old('utiliza_valor_profesion') }}" autocomplete="utiliza_valor_profesion" autofocus>
+                                <option value="">Seleccionar...</option>
+                                <option value="Si">Si</option>
+                                <option value="No">No</option>
+                              </select>
+
+                              @error('role_profesion')
+                                  <span class="invalid-feedback" role="alert">
+                                      <strong>{{ $message }}</strong>
+                                  </span>
+                              @enderror
+                      </div>
 
                 @elseif(Auth::user()->role == "Institucion")
                   <div class="col-lg-12 mt-2">
@@ -217,6 +237,8 @@ MODAL AGREGAR PRESTACION
             </div>
 
           </div>
+
+{{--           <input type="hidden" name="valor_prestacion" value="{{ $prestacion->valor_modulo }}"> --}}
 
         </div>
 

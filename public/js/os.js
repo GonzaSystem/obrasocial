@@ -105,3 +105,28 @@ $.ajax({
 		}
 	});
 });
+
+// Traigo prestaciones segun OS
+$(document).on('change', '#obraSocial', function(){
+	var idOs = $("#obraSocial").val();
+	$("#role_profesion").empty();
+	$("#role_profesion").append('<option value="">Seleccionar...</option>');
+	
+	$.ajaxSetup({
+	headers: {
+		'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+	}
+		});
+
+		$.ajax({
+			url: "http://localhost/os/public/prestacion/show/"+idOs+"",
+			// data: {id:id},
+			dataType: "json",
+			success: function(respuesta){
+				console.log("respuesta", respuesta);
+				$.each(respuesta, function(key, val){
+					$("#role_profesion").append('<option value='+val.id+'>'+val.nombre+'</option>');
+				});
+			}
+		});
+	});
