@@ -143,7 +143,7 @@ class ObraSocialController extends Controller
          ]);
       }
 
-      public function create_prestacion(Request $request)
+      public function create_prestacion()
       {
          $prestacion = new Prestacion;
 

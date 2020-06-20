@@ -22,4 +22,9 @@ class Prestador extends Model
     {
     	return $this->hasMany('App\Beneficiario', 'prestador_id', 'id');
     }
+
+    public function prestacion()
+    {
+        return $this->hasMany('App\Prestacion', 'id', 'prestacion_id');
+    }
 }

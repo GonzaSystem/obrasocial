@@ -21,7 +21,7 @@ class PrestadorController extends Controller
     	$userId = \Auth::user()->id;
 
     	// Obtengo datos de prestador si existen
-        $prestador = Prestador::where('user_id', $userId)->with('user', 'obrasocial')->get();
+        $prestador = Prestador::where('user_id', $userId)->with('user', 'obrasocial', 'prestacion')->get();
 
         //Prestador_menu 
         $prestador_menu = \DB::select("SELECT obrasocial.nombre, obrasocial.id FROM obrasocial LEFT JOIN prestador on prestador.os_id = obrasocial.id WHERE prestador.user_id = " . $userId . " GROUP BY obrasocial.id, obrasocial.nombre");
@@ -29,16 +29,12 @@ class PrestadorController extends Controller
     	$os = DB::table('obrasocial')->select('id', 'nombre')->get();
 
     		// $os = DB::select(DB::raw('SELECT os.id, os.nombre FROM `obrasocial` os LEFT JOIN prestador pr on os.id = pr.os_id WHERE os.id NOT IN (SELECT pr.os_id from prestador pr WHERE pr.user_id = '.$userId.')'));					
-    	
-        // Obtengo Prestaciones
-        $prestaciones = \DB::table('prestacion')->get();
 
     	// Devuelvo vista con parametros
         return view('datos-prestador', [
         	"prestador" => $prestador,
         	"obrasocial" => $os,
-            "prestador_menu" => $prestador_menu,
-            "prestaciones" => $prestaciones,
+            "prestador_menu" => $prestador_menu
         ]);
     }
 
@@ -57,13 +53,22 @@ class PrestadorController extends Controller
     	// Obtengo datos de formulario
     	$os_id = $request->input('obraSocial');
     	$numero_prestador = $request->input('numeroPrestador');
-        $profesion = $request->input('profesion');
+        $prestacion_id = $request->input('profesion');
+        $valor_default = $request->input('utiliza_valor_profesion');
+
+        if($valor_default == 'T'){
+            $valor = 0;
+        }else{
+            $valor = $request->input('valor_profesion');
+        }
 
     	// Asigno datos al objeto prestador
     	$prestador->user_id = $usuario;
     	$prestador->os_id = $os_id;
     	$prestador->numero_prestador = $numero_prestador;
-        $prestador->prestacion = $profesion;
+        $prestador->prestacion_id = $prestacion_id;
+        $prestador->valor_default = $valor_default;
+        $prestador->valor_prestacion = $valor;
 
     	// Guardo en DB 		
    		$prestador->save();

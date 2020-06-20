@@ -62,13 +62,18 @@
 
           @if($prestador != null)
             @foreach($prestador as $key=>$prestacion)
-            
+
             <tr>
               <td>{{ $key+1 }}</td>
               <td>{{ $prestacion->obrasocial[0]->nombre }}</td>
               <td>{{ $prestacion->numero_prestador }}</td>
-              <td>{{ $prestacion->prestacion }}</td>
-              <td>{{ $prestacion->valor_modulo }}</td>
+              <td>{{ $prestacion->prestacion[0]->nombre }}</td>
+              @if($prestacion->valor_default == 'T')
+                 <td>{{ $prestacion->prestacion[0]->valor_modulo }}</td>
+              @else
+                 <td>{{ $prestacion->valor_prestacion }}</td>
+              @endif
+             
               <td>
                 <div class="btn-group">
                     
@@ -183,8 +188,8 @@ MODAL AGREGAR PRESTACION
 
                               <select id="utiliza_valor_profesion" type="text" class="form-control @error('role_profesion') is-invalid @enderror" name="utiliza_valor_profesion" value="{{ old('utiliza_valor_profesion') }}" autocomplete="utiliza_valor_profesion" autofocus>
                                 <option value="">Seleccionar...</option>
-                                <option value="Si">Si</option>
-                                <option value="No">No</option>
+                                <option value="T">Si</option>
+                                <option value="F">No</option>
                               </select>
 
                               @error('role_profesion')
