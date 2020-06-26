@@ -17,4 +17,5 @@ class ObraSocial extends Model
     {
     	return $this->hasMany('App\Prestacion');
     }
+
 }

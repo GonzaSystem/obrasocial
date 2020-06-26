@@ -17,6 +17,7 @@ class CreatePrestacionTable extends Migration
             $table->id();
             $table->integer('os_id')->nullable();
             $table->string('nombre')->nullable();
+            $table->string('codigo_modulo')->nullable();
             $table->string('valor_modulo')->nullable();
             $table->timestamps();
         });

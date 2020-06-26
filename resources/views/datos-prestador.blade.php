@@ -167,7 +167,7 @@ MODAL AGREGAR PRESTACION
 
                    @if(Auth::user()->role == "Prestador")
                       <div class="col-lg-6" style="margin-top: 10px;">
-                          <label for="role_profesion">{{ __('Profesion') }}</label>
+                          <label for="role_profesion">{{ __('Profesion/Prestacion') }}</label>
 
                               <select id="role_profesion" type="text" class="form-control @error('role_profesion') is-invalid @enderror" name="profesion" value="{{ old('role_profesion') }}" autocomplete="profesion" autofocus>
                                     <option value="">Seleccionar...</option>
@@ -198,6 +198,10 @@ MODAL AGREGAR PRESTACION
                                   </span>
                               @enderror
                       </div>
+
+                       <div class="col-lg-12" style="margin-top: 15px" id="valor_profesion_personalizado">
+                         
+                       </div>               
 
                 @elseif(Auth::user()->role == "Institucion")
                   <div class="col-lg-12 mt-2">
@@ -242,8 +246,6 @@ MODAL AGREGAR PRESTACION
             </div>
 
           </div>
-
-{{--           <input type="hidden" name="valor_prestacion" value="{{ $prestacion->valor_modulo }}"> --}}
 
         </div>
 
@@ -297,7 +299,7 @@ MODAL AGREGAR PRESTACION
 
           <div class="box-body">
 
-            <!-- ENTRADA PARA EL NOMBRE -->
+            <!-- ENTRADA PARA EL NUMERO DE PRESTADOR -->
             
             <div class="form-group col-lg-12">
               
@@ -310,6 +312,28 @@ MODAL AGREGAR PRESTACION
                       <input type="text" class="form-control input-lg" name="editarNumeroPrestador" id="editarNumeroPrestador" placeholder="Ingresar numero" required>
 
                 </div>
+
+              <!-- ENTRADA PARA EL VALOR POR DEFECTO DE PRESTACION -->
+            
+              <div class="col-lg-6" style="margin-top: 10px;">
+                  <label for="editar_utiliza_valor_profesion">{{ __('Utiliza Valor Predeterminado') }}</label>
+
+                      <select id="editar_utiliza_valor_profesion" type="text" class="form-control @error('role_profesion') is-invalid @enderror" name="editar_utiliza_valor_profesion" value="{{ old('editar_utiliza_valor_profesion') }}" autocomplete="editar_utiliza_valor_profesion" autofocus>
+                        <option value="">Seleccionar...</option>
+                        <option value="T">Si</option>
+                        <option value="F">No</option>
+                      </select>
+
+                      @error('role_profesion')
+                          <span class="invalid-feedback" role="alert">
+                              <strong>{{ $message }}</strong>
+                          </span>
+                      @enderror
+              </div>
+
+                <div class="col-lg-12" style="margin-top: 15px" id="editar_valor_profesion_personalizado">
+                   
+                 </div> 
 
               </div>
 

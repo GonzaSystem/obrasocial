@@ -156,7 +156,7 @@
 
           @foreach($beneficiarios as $beneficiario)
 
-            <?php $prestacionprof = $beneficiario->prestacion ?>
+            <?php $prestacionprof = $beneficiario->prestacion[0]->nombre ?>
 
             @foreach($beneficiario->beneficiario as $key => $benefval)
 
@@ -280,7 +280,7 @@ MODAL AGREGAR BENEFICIARIO
                       <option value="">Seleccionar...</option>
 
                       @foreach ($prestacion as $presta)
-                        <option value="{{ $presta->id }}">{{ $presta->prestacion }}</option>
+                        <option value="{{ $presta->id }}">{{ $presta->prestacion[0]->nombre }}</option>
                       @endforeach
 
                     </select>

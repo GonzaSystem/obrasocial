@@ -130,3 +130,23 @@ $(document).on('change', '#obraSocial', function(){
 			}
 		});
 	});
+
+// Agrego campo de valor personalizado
+$(document).on('change', '#utiliza_valor_profesion', function(){
+	if($("#utiliza_valor_profesion").val() == 'F'){
+		$("#valor_profesion_personalizado").empty();
+		$("#valor_profesion_personalizado").append('<label for="valor_profesion">Valor de Profesion</label><input type="text" name="valor_profesion" class="form-control" placeholder="Valor de profesion">');
+	}else{
+		$("#valor_profesion_personalizado").empty();
+	}
+});
+
+// Agrego campo de valor personalizado en edicion
+$(document).on('change', '#editar_utiliza_valor_profesion', function(){
+	if($("#editar_utiliza_valor_profesion").val() == 'F'){
+		$("#editar_valor_profesion_personalizado").empty();
+		$("#editar_valor_profesion_personalizado").append('<label for="valor_profesion">Valor de Profesion</label><input type="text" name="valor_profesion" class="form-control" placeholder="Valor de profesion">');
+	}else{
+		$("#editar_valor_profesion_personalizado").empty();
+	}
+});

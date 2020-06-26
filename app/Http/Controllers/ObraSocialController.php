@@ -22,7 +22,7 @@ class ObraSocialController extends Controller
          // Devuelvo vista obra social
          $user_id = \Auth::user()->id;
 
-         $prestador_menu = Prestador::where('user_id', '=', $user_id)->with('obrasocial')->get();
+        $prestador_menu = Prestador::where('user_id', '=', $user_id)->with('obrasocial')->get();
    		$os = ObraSocial::orderBy('id', 'asc')->get();
    		return view('obrasocial', [
    			'os' => $os,
@@ -42,7 +42,7 @@ class ObraSocialController extends Controller
 
    		// Datos de input
    		$nombre = $request->input('nombre');
-         $tipo = $request->input('tipoObra');
+        $tipo = $request->input('tipoObra');
    		$cuit = $request->input('cuit');
    		$ciudad = $request->input('ciudad');
    		$direccion = $request->input('direccion');
@@ -55,7 +55,7 @@ class ObraSocialController extends Controller
 
    		// Asigno objeto relacionado a inputs
    		$os->nombre = $nombre;
-         $os->tipo_obra = $tipo;
+        $os->tipo_obra = $tipo;
    		$os->cuit = $cuit;
    		$os->telefono = $telefono;
    		$os->ciudad = $ciudad;
@@ -135,15 +135,15 @@ class ObraSocialController extends Controller
 
          // Devuelvo Obras Sociales
          $os = ObraSocial::orderBy('id', 'asc')->get();
-         
+
          return view('prestaciones', [
-            'prestador_menu' => $prestador_menu, 
+            'prestador_menu' => $prestador_menu,
             'prestaciones' => $prestaciones,
             'obras_sociales' => $os,
          ]);
       }
 
-      public function create_prestacion()
+      public function create_prestacion(Request $request)
       {
          $prestacion = new Prestacion;
 

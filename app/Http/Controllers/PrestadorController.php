@@ -93,8 +93,16 @@ class PrestadorController extends Controller
     	// Datos de input
     	$numero_prestador = $request->input('editarNumeroPrestador');
 
+
     	// Asigno datos a objeto
     	$prestador->numero_prestador = $numero_prestador;
+        $valor_default = $request->input('editar_utiliza_valor_profesion');
+
+        if($valor_default == 'T'){
+            $valor = 0;
+        }else{
+            $valor = $request->input('valor_profesion');
+        }
 
     	// Guardo en DB
     	$prestador->save();
