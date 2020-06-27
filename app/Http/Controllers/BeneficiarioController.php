@@ -68,12 +68,16 @@ class BeneficiarioController extends Controller
         $localidad_prestacion = $request->input('localidadPrestacion');
     	$dni = $request->input('dni');
     	$cuit = $request->input('cuit');
-    	$km_ida = $request->input('kmIda');
-    	$km_vuelta = $request->input('kmVuelta');
-    	$viajes_ida = $request->input('viajesIda');
-    	$viajes_vuelta = $request->input('viajesVuelta');
-    	$turno = $request->input('turno');
-    	$dependencia = $request->input('dependencia');
+
+        if(\Auth::user()->role == 'Traslado'){
+        	$km_ida = $request->input('kmIda');
+        	$km_vuelta = $request->input('kmVuelta');
+        	$viajes_ida = $request->input('viajesIda');
+        	$viajes_vuelta = $request->input('viajesVuelta');
+        	$dependencia = $request->input('dependencia');
+        }
+
+        $turno = $request->input('turno');
     	$notas = $request->input('notas');
 
     	// Asigno inputs a objeto beneficiario
@@ -89,12 +93,16 @@ class BeneficiarioController extends Controller
         $beneficiario->cuit = $cuit;
         $beneficiario->direccion_prestacion = $direccion_prestacion;
         $beneficiario->localidad_prestacion = $localidad_prestacion;
-        $beneficiario->km_ida = $km_ida;
-        $beneficiario->km_vuelta = $km_vuelta;
-        $beneficiario->viajes_ida = $viajes_ida;
-        $beneficiario->viajes_vuelta = $viajes_vuelta;
+
+        if(\Auth::user()->role == 'Traslado'){
+            $beneficiario->km_ida = $km_ida;
+            $beneficiario->km_vuelta = $km_vuelta;
+            $beneficiario->viajes_ida = $viajes_ida;
+            $beneficiario->viajes_vuelta = $viajes_vuelta;
+            $beneficiario->dependencia = $dependencia;
+        }
+
         $beneficiario->turno = $turno;
-        $beneficiario->dependencia = $dependencia;
         $beneficiario->notas = $notas;
 
     	// Guardo en DB        

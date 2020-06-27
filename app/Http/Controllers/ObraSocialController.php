@@ -149,14 +149,42 @@ class ObraSocialController extends Controller
 
          $nombre_prestacion = $request->input('prestacion');
          $obra_social = $request->input('obra_social');
+         $codigo_modulo = $request->input('codigo_modulo');
          $valor_modulo = $request->input('valor_prestacion');
 
          $prestacion->nombre = $nombre_prestacion;
          $prestacion->os_id = $obra_social;
+         $prestacion->codigo_modulo = $codigo_modulo;
          $prestacion->valor_modulo = $valor_modulo;
 
          $prestacion->save();
 
          return redirect()->route('prestaciones')->with(['message' => 'La prestacion ha sido guardada correctamente']);
+      }
+
+      public function edit(Request $request)
+      {
+         $prestacion = Prestacion::find($request->input('id'));
+
+
+         $obra_social = $request->input('obra_social');
+         $codigo_modulo = $request->input('codigo_modulo');
+         $nombre_prestacion = $request->input('prestacion');
+         $valor_modulo = $request->input('valor_prestacion');
+
+         $prestacion->nombre = $nombre_prestacion;
+         $prestacion->os_id = $obra_social;
+         $prestacion->codigo_modulo = $codigo_modulo;
+         $prestacion->valor_modulo = $valor_modulo;
+
+         $prestacion->save();
+
+         return redirect()->route('prestaciones')->with(['message' => 'La prestacion ha sido editada correctamente']);
+      }
+
+      public function show($id)
+      {
+         $prestacion = Prestacion::where('id', $id)->get();
+         return $prestacion;
       }
 }

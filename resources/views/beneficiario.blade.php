@@ -423,6 +423,8 @@ MODAL AGREGAR BENEFICIARIO
 
               </div>
 
+              @if(Auth::user()->role == 'Traslado')
+
               <!--Entrada para KM ida y vuelta -->
 
               <div class="form-group col-lg-12">
@@ -475,6 +477,8 @@ MODAL AGREGAR BENEFICIARIO
 
               </div>
 
+              @endif
+
               <!-- Entrada para Turno y Dependencia -->
 
               <div class="form-group col-lg-12">
@@ -492,6 +496,8 @@ MODAL AGREGAR BENEFICIARIO
                         </select>
 
                   </div>
+
+                @if(Auth::user()->role == 'Traslado')
                 
                   <div class="col-lg-6">
 
@@ -504,6 +510,8 @@ MODAL AGREGAR BENEFICIARIO
                         </select>
 
                   </div>
+
+                @endif
 
                 </div>
 

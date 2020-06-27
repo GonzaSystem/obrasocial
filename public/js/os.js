@@ -150,3 +150,28 @@ $(document).on('change', '#editar_utiliza_valor_profesion', function(){
 		$("#editar_valor_profesion_personalizado").empty();
 	}
 });
+
+// Editar prestacion
+$(document).on('click', '#btnEditarPrestacion', function(){
+	var idPrest = $("#btnEditarPrestacion").val();
+	console.log("idPrest", idPrest);
+
+	$.ajaxSetup({
+	headers: {
+		'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+	}
+	});
+
+		$.ajax({
+			url: "http://localhost/os/public/prestacionind/show/"+idPrest+"",
+			// data: {id:id},
+			dataType: "json",
+			success: function(respuesta){
+				$("#editar_obra_social").val(respuesta[0]['os_id']);
+				$("#editar_codigo_modulo").val(respuesta[0]['codigo_modulo']);
+				$("#editar_prestacion").val(respuesta[0]['nombre']);
+				$("#editar_valor_prestacion").val(respuesta[0]['valor_modulo']);
+				$("#id").val(respuesta[0]['id']);
+			}
+		});
+	});
