@@ -103,9 +103,11 @@
               <td>
                 <div class="btn-group">
 
+                  <button class="btn btn-primary" data-toggle="modal" data-target="#modalHorarioBeneficiario" idBenef="{{ $benefval->id }}"><i class="fa fa-clock-o"></i></button>
+
                   <button class="btn btn-warning btnEditarBeneficiario" data-toggle="modal" data-target="#modalEditarBeneficiario" idBenef="{{ $benefval->id }}"><i class="fa fa-pencil"></i></button>
 
-                  <button class="btn btn-danger"><i class="fa fa-times"></i></button>
+                  <button class="btn btn-danger"><i class="fa fa-trash"></i></button>
 
                 </div>
 
@@ -180,9 +182,11 @@
               <td>
                 <div class="btn-group">
 
-                  <button class="btn btn-warning btnEditarBeneficiario" data-toggle="modal" data-target="#modalEditarBeneficiario" idBenef="{{ $benefval->id }}"><i class="fa fa-pencil"></i></button>
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#modalHorarioBeneficiario" idBenef="{{ $benefval->id }}"><i class="fa fa-clock-o"></i></button>
 
-                  <button class="btn btn-danger"><i class="fa fa-times"></i></button>
+                    <button class="btn btn-warning btnEditarBeneficiario" data-toggle="modal" data-target="#modalEditarBeneficiario" idBenef="{{ $benefval->id }}"><i class="fa fa-pencil"></i></button>
+
+                  <button class="btn btn-danger"><i class="fa fa-trash"></i></button>
 
                 </div>
 
@@ -866,6 +870,147 @@ MODAL EDITAR BENEFICIARIO
     </div>
 
   </div>
+
+</div>
+
+<!--=====================================
+MODAL HORARIO BENEFICIARIO
+======================================-->
+
+<div id="modalHorarioBeneficiario" class="modal fade" role="dialog">
+
+    <div class="modal-dialog modal-lg">
+
+        <div class="modal-content">
+
+            <form role="form" method="POST" action="{{ route('beneficiario-create') }}">
+            @csrf
+
+            <!--=====================================
+            CABEZA DEL MODAL
+            ======================================-->
+
+                <div class="modal-header" style="background:#3c8dbc; color:white">
+
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                    <h4 class="modal-title">Horario beneficiario</h4>
+
+                </div>
+
+                <!--=====================================
+                CUERPO DEL MODAL
+                ======================================-->
+
+                <div class="modal-body">
+
+                    <div class="box-body">
+
+                        <!-- Entrada para Obra Social-->
+                        <div class="form-group col-lg-12">
+
+                            <div class="input-group col-lg-12">
+
+                                <div class="col-lg-3">
+
+                                    <label for="dia">Dia</label>
+
+                                    <select type="text" class="form-control input-lg" id="dia" name="dia" required>
+
+                                        <option value="">Seleccionar..</option>
+                                        <option value="1">Lunes</option>
+                                        <option value="2">Martes</option>
+                                        <option value="3">Miercoles</option>
+                                        <option value="4">Jueves</option>
+                                        <option value="5">Viernes</option>
+                                        <option value="6">Sabado</option>
+                                        <option value="7">Domingo</option>
+
+                                    </select>
+
+                                </div>
+
+                                <div class="col-lg-3">
+
+                                    <label for="dia">Hora</label>
+
+                                    <input type="text" class="form-control input-lg" id="hora" name="hora" placeholder="HH:MM (24hs)" data-inputmask="'alias': 'hh:mm'" data-mask required>
+
+                                </div>
+
+                                <div class="col-lg-3">
+
+                                    <label for="tiempo">Duracion en minutos</label>
+
+                                    <select type="number" class="form-control input-lg" id="tiempo" name="tiempo" required>
+                                        <option value="">Seleccionar..</option>
+                                        <option value="45">45</option>
+                                        <option value="60">60</option>
+                                        <option value="90">90</option>
+                                        <option value="120">120</option>
+                                        <option value="135">135</option>
+                                        <option value="180">180</option>
+                                        <option value="210">210</option>
+                                        <option value="240">240</option>
+                                    </select>
+
+                                </div>
+
+                                <div class="col-lg-3">
+
+                                    <label for="guardar">Guardar horario</label>
+
+                                    <button type="submit" id="guardar" class="btn btn-success form-control input-lg"><i class="fa fa-check"></i></button>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <hr>
+
+                        <div class="form-group col-lg-12">
+                            <div class="input-group col-lg-12">
+                                <table style="width: 100%">
+                                    <thead>
+                                        <th>Dia</th>
+                                        <th>Hora</th>
+                                        <th>Duracion</th>
+                                        <th>Acciones</th>
+                                    </thead>
+
+                                    <tbody>
+                                        <td>Lunes</td>
+                                        <td>10:30</td>
+                                        <td>45 minutos</td>
+                                        <td><button class="btn btn-danger"><i class="fa fa-trash"></i></button></td>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!--=====================================
+                PIE DEL MODAL
+                ======================================-->
+
+                <div class="modal-footer">
+
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Salir</button>
+
+                    <button type="submit" class="btn btn-primary">Guardar beneficiario</button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
 
 </div>
 

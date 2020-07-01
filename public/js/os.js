@@ -176,3 +176,14 @@ $(document).on('click', '#btnEditarPrestacion', function(){
 			}
 		});
 	});
+
+/*Data mask*/
+$(document).ready(function($){
+    //Datemask hh:mm
+    $('#datemask').inputmask('hh:mm', { 'placeholder': 'hh:mm am/pm' });
+    //Datemask2 hh:mm
+    $('#datemask2').inputmask('hh:mm', { 'placeholder': 'hh:mm am/pm' });
+    //Money Euro
+    $('[data-mask]').inputmask();
+});
+
