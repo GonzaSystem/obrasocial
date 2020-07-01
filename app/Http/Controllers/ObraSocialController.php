@@ -151,11 +151,13 @@ class ObraSocialController extends Controller
          $obra_social = $request->input('obra_social');
          $codigo_modulo = $request->input('codigo_modulo');
          $valor_modulo = $request->input('valor_prestacion');
+         $planilla = $request->input('planilla');
 
          $prestacion->nombre = $nombre_prestacion;
          $prestacion->os_id = $obra_social;
          $prestacion->codigo_modulo = $codigo_modulo;
          $prestacion->valor_modulo = $valor_modulo;
+         $prestacion->planilla = $planilla;
 
          $prestacion->save();
 
@@ -171,11 +173,13 @@ class ObraSocialController extends Controller
          $codigo_modulo = $request->input('codigo_modulo');
          $nombre_prestacion = $request->input('prestacion');
          $valor_modulo = $request->input('valor_prestacion');
+         $planilla = $request->input('planilla');
 
          $prestacion->nombre = $nombre_prestacion;
          $prestacion->os_id = $obra_social;
          $prestacion->codigo_modulo = $codigo_modulo;
          $prestacion->valor_modulo = $valor_modulo;
+         $prestacion->planilla = $planilla;
 
          $prestacion->save();
 

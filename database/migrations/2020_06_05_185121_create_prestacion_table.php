@@ -19,6 +19,7 @@ class CreatePrestacionTable extends Migration
             $table->string('nombre')->nullable();
             $table->string('codigo_modulo')->nullable();
             $table->string('valor_modulo')->nullable();
+            $table->tinyInteger('planilla')->nullable();
             $table->timestamps();
         });
     }

@@ -4,11 +4,11 @@
 <div class="content-wrapper">
 
   <section class="content-header">
-    
+
     <h1>
-      
+
       Módulo de Prestaciones.
-    
+
     </h1>
 
      <div style="padding-top: 15px">
@@ -16,11 +16,11 @@
      </div>
 
     <ol class="breadcrumb">
-      
+
       <li><a href="inicio"><i class="fa fa-dashboard"></i> Inicio</a></li>
-      
+
       <li class="active">Prestaciones</li>
-    
+
     </ol>
 
   </section>
@@ -30,9 +30,9 @@
     <div class="box">
 
       <div class="box-header with-border">
-  
+
         <button class="btn btn-primary" data-toggle="modal" data-target="#modalAgregarPrestacion">
-          
+
           Agregar Prestacion
 
         </button>
@@ -40,43 +40,45 @@
       </div>
 
       <div class="box-body">
-        
+
        <table class="table table-bordered table-striped dt-responsive tablas">
-         
+
         <thead>
-         
+
          <tr>
-           
+
            <th style="width:10px">#</th>
            <th>Nombre</th>
            <th>Obra Social</th>
            <th>Valor Módulo</th>
            <th>Codigo de Modulo</th>
+           <th>Planilla</th>
            <th>Acciones</th>
 
-         </tr> 
+         </tr>
 
         </thead>
 
         <tbody>
 
           @foreach ($prestaciones as $key => $prestacion)
-           
+
           <tr>
             <td>{{ ($key+1) }}</td>
             <td>{{ $prestacion->nombre }}</td>
             <td>{{ $prestacion->obrasocial->nombre }}</td>
             <td>{{ $prestacion->valor_modulo }}</td>
             <td>{{ $prestacion->codigo_modulo }}</td>
+            <td>{{ $prestacion->planilla }}</td>
 
             <td>
               <div class="btn-group">
-                  
-                <button class="btn btn-warning" id="btnEditarPrestacion" value="{{ $prestacion->id }}" data-toggle="modal" data-target="#modalEditarPrestacion"><i class="fa fa-pencil"></i></button>
+
+                <button class="btn btn-warning" id="btnEditarPrestacion" idPrest="{{ $prestacion->id }}" data-toggle="modal" data-target="#modalEditarPrestacion"><i class="fa fa-pencil"></i></button>
 
                 <button class="btn btn-danger"><i class="fa fa-times"></i></button>
 
-              </div>  
+              </div>
 
             </td>
 
@@ -101,7 +103,7 @@ MODAL AGREGAR PRESTACION
 ======================================-->
 
 <div id="modalAgregarPrestacion" class="modal fade" role="dialog">
-  
+
   <div class="modal-dialog">
 
     <div class="modal-content">
@@ -130,19 +132,19 @@ MODAL AGREGAR PRESTACION
           <div class="box-body">
 
             <!-- ENTRADA PARA OBRA SOCIAL -->
-            
+
             <div class="form-group">
 
-              <label for="obra_social">Obra Social</label>               
-              
-              <div class="input-group">               
-              
-                <span class="input-group-addon"><i class="fa fa-user"></i></span> 
+              <label for="obra_social">Obra Social</label>
+
+              <div class="input-group">
+
+                <span class="input-group-addon"><i class="fa fa-user"></i></span>
 
                 <select type="text" id="obra_social" class="form-control input-lg" name="obra_social" placeholder="Seleccionar Obra Social" required>
 
                   <option value="">Seleccionar obra social...</option>
-                  
+
                   @foreach ($obras_sociales as $obra_social)
                     <option value="{{ $obra_social->id }}">{{ $obra_social->nombre }}</option>
                   @endforeach
@@ -151,32 +153,32 @@ MODAL AGREGAR PRESTACION
 
               </div>
 
-            </div> 
+            </div>
 
           <!-- ENTRADA PARA EL CODIGO DE MODULO -->
-            
+
             <div class="form-group">
 
-              <label for="codigo_modulo">Código de Módulo</label>   
-              
+              <label for="codigo_modulo">Código de Módulo</label>
+
               <div class="input-group">
 
-                <span class="input-group-addon"><i class="fa fa-user"></i></span> 
+                <span class="input-group-addon"><i class="fa fa-user"></i></span>
 
                 <input type="text" id="codigo_modulo" class="form-control input-lg" name="codigo_modulo" placeholder="Ingresar Código de Módulo">
 
               </div>
 
-            </div>  
+            </div>
 
             <!-- ENTRADA PARA EL NOMBRE -->
-            
+
             <div class="form-group">
 
-              <label for="prestacion">Prestación</label>               
-              
+              <label for="prestacion">Prestación</label>
+
               <div class="input-group">
-              
+
                 <span class="input-group-addon"><i class="fa fa-user"></i></span>
 
                 <input type="text" id="prestacion" class="form-control input-lg" name="prestacion" placeholder="Ingresar Prestación" required>
@@ -186,20 +188,41 @@ MODAL AGREGAR PRESTACION
             </div>
 
             <!-- ENTRADA PARA EL VALOR -->
-            
+
             <div class="form-group">
 
-            <label for="valor_prestacion">Valor de Prestacion</label>                 
-              
-              <div class="input-group">             
-              
-                <span class="input-group-addon"><i class="fa fa-money"></i></span> 
+            <label for="valor_prestacion">Valor de Prestacion</label>
+
+              <div class="input-group">
+
+                <span class="input-group-addon"><i class="fa fa-money"></i></span>
 
                 <input type="text" id="valor_prestacion" class="form-control input-lg" name="valor_prestacion" placeholder="Ingresar Valor de Modulo (si corresponde)">
 
               </div>
 
-            </div>         
+            </div>
+
+              <!-- ENTRADA PARA PLANILLA -->
+
+              <div class="form-group">
+
+                  <label for="planilla">Planilla</label>
+
+                  <div class="input-group">
+
+                      <span class="input-group-addon"><i class="fa fa-money"></i></span>
+
+                      <select type="text" id="planilla" class="form-control input-lg" name="planilla">
+                          <option value="0">Seleccionar...</option>
+                          <option value="1">REHABILITACION</option>
+                          <option value="2">INTEGRACION</option>
+                          <option value="3">TRASLADO</option>
+                      </select>
+
+                  </div>
+
+              </div>
 
           </div>
 
@@ -230,7 +253,7 @@ MODAL EDITAR PRESTACION
 ======================================-->
 
 <div id="modalEditarPrestacion" class="modal fade" role="dialog">
-  
+
   <div class="modal-dialog">
 
     <div class="modal-content">
@@ -259,19 +282,19 @@ MODAL EDITAR PRESTACION
           <div class="box-body">
 
             <!-- ENTRADA PARA OBRA SOCIAL -->
-            
+
             <div class="form-group">
 
-              <label for="obra_social">Editar Obra Social</label>               
-              
-              <div class="input-group">               
-              
-                <span class="input-group-addon"><i class="fa fa-user"></i></span> 
+              <label for="obra_social">Editar Obra Social</label>
+
+              <div class="input-group">
+
+                <span class="input-group-addon"><i class="fa fa-user"></i></span>
 
                 <select type="text" id="editar_obra_social" class="form-control input-lg" name="obra_social" placeholder="Editar Obra Social" required>
 
                   <option value="">Seleccionar obra social...</option>
-                  
+
                   @foreach ($obras_sociales as $obra_social)
                     <option value="{{ $obra_social->id }}">{{ $obra_social->nombre }}</option>
                   @endforeach
@@ -280,32 +303,32 @@ MODAL EDITAR PRESTACION
 
               </div>
 
-            </div> 
+            </div>
 
           <!-- ENTRADA PARA EL CODIGO DE MODULO -->
-            
+
             <div class="form-group">
 
-              <label for="codigo_modulo">Editar Código de Módulo</label>   
-              
+              <label for="codigo_modulo">Editar Código de Módulo</label>
+
               <div class="input-group">
 
-                <span class="input-group-addon"><i class="fa fa-user"></i></span> 
+                <span class="input-group-addon"><i class="fa fa-user"></i></span>
 
                 <input type="text" id="editar_codigo_modulo" class="form-control input-lg" name="codigo_modulo" placeholder="Editar Código de Módulo">
 
               </div>
 
-            </div>  
+            </div>
 
             <!-- ENTRADA PARA EL NOMBRE -->
-            
+
             <div class="form-group">
 
-              <label for="prestacion">Editar Prestación</label>               
-              
+              <label for="prestacion">Editar Prestación</label>
+
               <div class="input-group">
-              
+
                 <span class="input-group-addon"><i class="fa fa-user"></i></span>
 
                 <input type="text" id="editar_prestacion" class="form-control input-lg" name="prestacion" placeholder="Editar Prestación" required>
@@ -315,20 +338,41 @@ MODAL EDITAR PRESTACION
             </div>
 
             <!-- ENTRADA PARA EL VALOR -->
-            
+
             <div class="form-group">
 
-            <label for="valor_prestacion">Editar Valor de Prestacion</label>                 
-              
-              <div class="input-group">             
-              
-                <span class="input-group-addon"><i class="fa fa-money"></i></span> 
+            <label for="valor_prestacion">Editar Valor de Prestacion</label>
+
+              <div class="input-group">
+
+                <span class="input-group-addon"><i class="fa fa-money"></i></span>
 
                 <input type="text" id="editar_valor_prestacion" class="form-control input-lg" name="valor_prestacion" placeholder="Editar Valor de Modulo (si corresponde)">
 
               </div>
 
-            </div>         
+            </div>
+
+              <!-- ENTRADA PARA PLANILLA -->
+
+              <div class="form-group">
+
+                  <label for="planilla">Planilla</label>
+
+                  <div class="input-group">
+
+                      <span class="input-group-addon"><i class="fa fa-money"></i></span>
+
+                      <select type="text" id="editar_planilla" class="form-control input-lg" name="planilla">
+                          <option value="0">Seleccionar...</option>
+                          <option value="1">REHABILITACION</option>
+                          <option value="2">INTEGRACION</option>
+                          <option value="3">TRASLADO</option>
+                      </select>
+
+                  </div>
+
+              </div>
 
           </div>
 

@@ -111,7 +111,7 @@ $(document).on('change', '#obraSocial', function(){
 	var idOs = $("#obraSocial").val();
 	$("#role_profesion").empty();
 	$("#role_profesion").append('<option value="">Seleccionar...</option>');
-	
+
 	$.ajaxSetup({
 	headers: {
 		'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -153,8 +153,7 @@ $(document).on('change', '#editar_utiliza_valor_profesion', function(){
 
 // Editar prestacion
 $(document).on('click', '#btnEditarPrestacion', function(){
-	var idPrest = $("#btnEditarPrestacion").val();
-	console.log("idPrest", idPrest);
+	var idPrest = $(this).attr("idPrest");
 
 	$.ajaxSetup({
 	headers: {
@@ -167,10 +166,12 @@ $(document).on('click', '#btnEditarPrestacion', function(){
 			// data: {id:id},
 			dataType: "json",
 			success: function(respuesta){
+			    console.log("respuesta", respuesta);
 				$("#editar_obra_social").val(respuesta[0]['os_id']);
 				$("#editar_codigo_modulo").val(respuesta[0]['codigo_modulo']);
 				$("#editar_prestacion").val(respuesta[0]['nombre']);
 				$("#editar_valor_prestacion").val(respuesta[0]['valor_modulo']);
+				$("#editar_planilla").val(respuesta[0]['planilla']);
 				$("#id").val(respuesta[0]['id']);
 			}
 		});
