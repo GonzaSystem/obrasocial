@@ -63,13 +63,21 @@
 
           @foreach ($prestaciones as $key => $prestacion)
 
+              @if($prestacion->planilla == 1)
+                  <?php $planilla = 'REHABILITACION' ?>
+              @elseif($prestacion->planilla == 2)
+                  <?php $planilla = 'INTEGRACION' ?>
+              @else
+                  <?php $planilla = 'TRASLADO' ?>
+              @endif
+
           <tr>
             <td>{{ ($key+1) }}</td>
             <td>{{ $prestacion->nombre }}</td>
             <td>{{ $prestacion->obrasocial->nombre }}</td>
             <td>{{ $prestacion->valor_modulo }}</td>
             <td>{{ $prestacion->codigo_modulo }}</td>
-            <td>{{ $prestacion->planilla }}</td>
+            <td>{{ $planilla }}</td>
 
             <td>
               <div class="btn-group">
