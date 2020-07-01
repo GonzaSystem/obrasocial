@@ -4,11 +4,11 @@
 <div class="content-wrapper">
 
   <section class="content-header">
-    
+
     <h1>
-      
+
      Datos de prestador - <span><small>{{ Auth::user()->name . ' ' . Auth::user()->surname}}</small></span>
-    
+
     </h1>
 
       <div style="padding-top: 15px">
@@ -16,11 +16,11 @@
      </div>
 
     <ol class="breadcrumb">
-      
+
       <li><a href="inicio"><i class="fa fa-dashboard"></i> Inicio</a></li>
-      
+
       <li class="active">Datos de Prestador</li>
-    
+
     </ol>
 
   </section>
@@ -30,23 +30,23 @@
     <div class="box">
 
       <div class="box-header with-border">
-  
+
         <button class="btn btn-primary" data-toggle="modal" data-target="#modalAgregarPrestacion">
-          
+
           Agregar datos de prestador
 
         </button>
-  
+
       </div>
 
       <div class="box-body">
-        
+
        <table class="table table-bordered table-striped dt-responsive tablas">
-         
+
         <thead>
-         
+
          <tr>
-           
+
            <th style="width:10px">#</th>
            <th>Obra Social</th>
            <th>Numero de Prestador</th>
@@ -54,7 +54,7 @@
            <th>Valor de Módulo</th>
            <th>Acciones</th>
 
-         </tr> 
+         </tr>
 
         </thead>
 
@@ -73,13 +73,13 @@
               @else
                  <td>{{ $prestacion->valor_prestacion }}</td>
               @endif
-             
+
               <td>
                 <div class="btn-group">
-                    
+
                   <button class="btn btn-warning btnEditarPrestacion" data-toggle="modal" data-target="#modalEditarPrestacion" idPrest="{{ $prestacion->id }}"><i class="fa fa-pencil"></i></button>
 
-                </div>  
+                </div>
 
               </td>
 
@@ -105,7 +105,7 @@ MODAL AGREGAR PRESTACION
 ======================================-->
 
 <div id="modalAgregarPrestacion" tabindex="-1" aria-hidden="true" class="modal fade" role="dialog">
-  
+
   <div class="modal-dialog modal-lg">
 
     <div class="modal-content">
@@ -134,9 +134,9 @@ MODAL AGREGAR PRESTACION
           <div class="box-body">
 
             <!-- ENTRADA PARA EL NOMBRE -->
-            
+
             <div class="form-group col-lg-12">
-              
+
               <div class="input-group col-lg-12">
 
                 <div class="col-lg-6">
@@ -146,9 +146,9 @@ MODAL AGREGAR PRESTACION
                     <select type="text" class="form-control input-lg" id="obraSocial" name="obraSocial" required>
 
                       <option value="">Seleccionar...</option>
-                      
+
                       @foreach($obrasocial as $obra)
-        
+
                         <option value="{{ $obra->id }}">{{ $obra->nombre }}</option>
 
                       @endforeach
@@ -156,7 +156,7 @@ MODAL AGREGAR PRESTACION
                     </select>
 
                 </div>
-              
+
                 <div class="col-lg-6">
 
                       <label for="numeroPrestador">Número de Prestador</label>
@@ -200,18 +200,15 @@ MODAL AGREGAR PRESTACION
                       </div>
 
                        <div class="col-lg-12" style="margin-top: 15px" id="valor_profesion_personalizado">
-                         
-                       </div>               
+
+                       </div>
 
                 @elseif(Auth::user()->role == "Institucion")
-                  <div class="col-lg-12 mt-2">
+                  <div class="col-lg-6" style="margin-top: 10px">
                     <label for="role_instit">{{ __('Institucion') }}</label>
 
-                        <select id="role_institucion" type="text" class="form-control @error('role_instit') is-invalid @enderror" name="profesion" value="{{ old('role_institucion') }}" autocomplete="profesion" autofocus>
-                            <option value="">Seleccionar Tipo de Institucion</option>
-                            <option value="Institucion de rehabilitacion">Institucion de rehabilitacion</option>
-                            <option value="Institucion de rehabilitacion e integracion escolar">Institucion de rehabilitacion e integracion escolar</option>
-                            <option value="Institucion con internacion de pacientes">Institucion con internacion de pacientes</option>
+                        <select id="role_profesion" type="text" class="form-control @error('role_instit') is-invalid @enderror" name="profesion" value="{{ old('role_institucion') }}" autocomplete="profesion" autofocus>
+                            <option value="">Seleccionar...</option>
                         </select>
 
                         @error('role_institucion')
@@ -219,6 +216,22 @@ MODAL AGREGAR PRESTACION
                                 <strong>{{ $message }}</strong>
                             </span>
                         @enderror
+                  </div>
+
+                  <div class="col-lg-6" style="margin-top: 10px;">
+                      <label for="utiliza_valor_profesion">{{ __('Utiliza Valor Predeterminado') }}</label>
+
+                      <select id="utiliza_valor_profesion" type="text" class="form-control @error('role_profesion') is-invalid @enderror" name="utiliza_valor_profesion" value="{{ old('utiliza_valor_profesion') }}" autocomplete="utiliza_valor_profesion" autofocus>
+                          <option value="">Seleccionar...</option>
+                          <option value="T">Si</option>
+                          <option value="F">No</option>
+                      </select>
+
+                      @error('role_profesion')
+                      <span class="invalid-feedback" role="alert">
+                                  <strong>{{ $message }}</strong>
+                              </span>
+                      @enderror
                   </div>
 
                 @elseif(Auth::user()->role == "Traslado")
@@ -271,7 +284,7 @@ MODAL AGREGAR PRESTACION
 
 {{-- Editar prestacion --}}
 <div id="modalEditarPrestacion" tabindex="-1" aria-hidden="true" class="modal fade" role="dialog">
-  
+
   <div class="modal-dialog modal-lg">
 
     <div class="modal-content">
@@ -300,11 +313,11 @@ MODAL AGREGAR PRESTACION
           <div class="box-body">
 
             <!-- ENTRADA PARA EL NUMERO DE PRESTADOR -->
-            
+
             <div class="form-group col-lg-12">
-              
+
               <div class="input-group col-lg-12">
-              
+
                 <div class="col-lg-6">
 
                       <label for="editarNumeroPrestador">Editar número de Prestador</label>
@@ -314,26 +327,21 @@ MODAL AGREGAR PRESTACION
                 </div>
 
               <!-- ENTRADA PARA EL VALOR POR DEFECTO DE PRESTACION -->
-            
+
               <div class="col-lg-6" style="margin-top: 10px;">
                   <label for="editar_utiliza_valor_profesion">{{ __('Utiliza Valor Predeterminado') }}</label>
 
-                      <select id="editar_utiliza_valor_profesion" type="text" class="form-control @error('role_profesion') is-invalid @enderror" name="editar_utiliza_valor_profesion" value="{{ old('editar_utiliza_valor_profesion') }}" autocomplete="editar_utiliza_valor_profesion" autofocus>
+                      <select id="editar_utiliza_valor_profesion" type="text" class="form-control" name="editar_utiliza_valor_profesion" value="{{ old('editar_utiliza_valor_profesion') }}" autocomplete="editar_utiliza_valor_profesion" autofocus>
                         <option value="">Seleccionar...</option>
                         <option value="T">Si</option>
                         <option value="F">No</option>
                       </select>
 
-                      @error('role_profesion')
-                          <span class="invalid-feedback" role="alert">
-                              <strong>{{ $message }}</strong>
-                          </span>
-                      @enderror
               </div>
 
                 <div class="col-lg-12" style="margin-top: 15px" id="editar_valor_profesion_personalizado">
-                   
-                 </div> 
+
+                 </div>
 
               </div>
 
