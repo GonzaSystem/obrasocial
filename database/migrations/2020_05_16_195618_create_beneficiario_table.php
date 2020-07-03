@@ -34,6 +34,9 @@ class CreateBeneficiarioTable extends Migration
             $table->string('turno', 20)->nullable();
             $table->string('dependencia', 50)->nullable();
             $table->string('notas')->nullable();
+            $table->integer('numero_afiliado')->nullable();
+            $table->integer('codigo_seguridad')->nullable();
+            $table->integer('cantidad_solicitada')->nullable();
             $table->timestamps();
         });
     }

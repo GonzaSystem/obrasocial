@@ -19,7 +19,7 @@ class BeneficiarioController extends Controller
     public function index($prest_id, $os_id)
     {
         // Muestro beneficiarios
-        
+
     	// Declaro objeto de usuario
     	$user = \Auth::user()->id;
 
@@ -79,6 +79,9 @@ class BeneficiarioController extends Controller
 
         $turno = $request->input('turno');
     	$notas = $request->input('notas');
+    	$numero_afiliado = $request->input('numero_afiliado');
+    	$codigo_seguridad = $request->input('codigo_seguridad');
+    	$cantidad_solicitada = $request->input('cantidad_solicitada');
 
     	// Asigno inputs a objeto beneficiario
     	$beneficiario->prestador_id = $prestador;
@@ -104,8 +107,11 @@ class BeneficiarioController extends Controller
 
         $beneficiario->turno = $turno;
         $beneficiario->notas = $notas;
+        $beneficiario->numero_afiliado = $numero_afiliado;
+        $beneficiario->codigo_seguridad = $codigo_seguridad;
+        $beneficiario->cantidad_solicitada = $cantidad_solicitada;
 
-    	// Guardo en DB        
+    	// Guardo en DB
         $beneficiario->save();
 
         return redirect()->route('beneficiarios', ['prestador_id' => \Auth::user()->id, 'obrasocial_id' => $obra_social])
@@ -146,13 +152,21 @@ class BeneficiarioController extends Controller
         $localidad_prestacion = $request->input('editarLocalidadPrestacion');
         $dni = $request->input('editarDni');
         $cuit = $request->input('editarCuit');
-        $km_ida = $request->input('editarKmIda');
-        $km_vuelta = $request->input('editarKmVuelta');
-        $viajes_ida = $request->input('editarViajesIda');
-        $viajes_vuelta = $request->input('editarViajesVuelta');
+
+        if(\Auth::user()->role == 'Traslado'){
+            $km_ida = $request->input('editarKmIda');
+            $km_vuelta = $request->input('editarKmVuelta');
+            $viajes_ida = $request->input('editarViajesIda');
+            $viajes_vuelta = $request->input('editarViajesVuelta');
+            $dependencia = $request->input('editarDependencia');
+        }
+
         $turno = $request->input('editarTurno');
-        $dependencia = $request->input('editarDependencia');
         $notas = $request->input('editarNotas');
+        $numero_afiliado = $request->input('editar_numero_afiliado');
+        $codigo_seguridad = $request->input('editar_codigo_seguridad');
+        $cantidad_solicitada = $request->input('editar_cantidad_solicitada');
+
 
         // Asigno inputs a objeto beneficiario
         $beneficiario->nombre = $nombre;
@@ -165,15 +179,22 @@ class BeneficiarioController extends Controller
         $beneficiario->cuit = $cuit;
         $beneficiario->direccion_prestacion = $direccion_prestacion;
         $beneficiario->localidad_prestacion = $localidad_prestacion;
-        $beneficiario->km_ida = $km_ida;
-        $beneficiario->km_vuelta = $km_vuelta;
-        $beneficiario->viajes_ida = $viajes_ida;
-        $beneficiario->viajes_vuelta = $viajes_vuelta;
-        $beneficiario->turno = $turno;
-        $beneficiario->dependencia = $dependencia;
-        $beneficiario->notas = $notas;
 
-        // Guardo en DB        
+        if(\Auth::user()->role == 'Traslado'){
+            $beneficiario->km_ida = $km_ida;
+            $beneficiario->km_vuelta = $km_vuelta;
+            $beneficiario->viajes_ida = $viajes_ida;
+            $beneficiario->viajes_vuelta = $viajes_vuelta;
+            $beneficiario->dependencia = $dependencia;
+        }
+
+        $beneficiario->turno = $turno;
+        $beneficiario->notas = $notas;
+        $beneficiario->numero_afiliado = $numero_afiliado;
+        $beneficiario->codigo_seguridad = $codigo_seguridad;
+        $beneficiario->cantidad_solicitada = $cantidad_solicitada;
+
+        // Guardo en DB
         $beneficiario->save();
 
         return redirect()->route('beneficiarios', ['prestador_id' => \Auth::user()->id, 'obrasocial_id' => $obra_social])

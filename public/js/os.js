@@ -102,6 +102,10 @@ $.ajax({
 		$("#editarTurno").val(respuesta[0]["turno"]);
 		$("#editarDependencia").val(respuesta[0]["dependencia"]);
 		$("#editarNotas").val(respuesta[0]["notas"]);
+		$("#editar_numero_afiliado").val(respuesta[0]['numero_afiliado']);
+		$("#editar_codigo_seguridad").val(respuesta[0]['codigo_seguridad']);
+		$("#editar_cantidad_solicitada").val(respuesta[0]['cantidad_solicitada']);
+
 		}
 	});
 });

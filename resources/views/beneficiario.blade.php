@@ -501,25 +501,65 @@ MODAL AGREGAR BENEFICIARIO
 
                   </div>
 
-                @if(Auth::user()->role == 'Traslado')
+                   <div class="col-lg-6">
 
-                  <div class="col-lg-6">
+                        <label for="numero_afiliado">Numero de Beneficiario</label>
 
-                        <label for="dependencia">Dependencia</label>
+                        <input type="text" class="form-control input-lg" name="numero_afiliado">
 
-                        <select type="text" class="form-control input-lg" name="dependencia" placeholder="Ingresar Dependencia">
-                            <option>Seleccionar...</option>
-                            <option value="Si">Si</option>
-                            <option value="No">No</option>
-                        </select>
-
-                  </div>
-
-                @endif
+                    </div>
 
                 </div>
 
               </div>
+
+              <div class="form-group col-lg-12">
+
+                  <div class="input-group col-lg-12">
+
+                      <div class="col-lg-6">
+
+                          <label for="codigo_seguridad">Codigo de Seguridad</label>
+
+                          <input type="text" class="form-control input-lg" name="codigo_seguridad">
+
+                      </div>
+
+                      <div class="col-lg-6">
+
+                          <label for="cantidad_solicitada">Cantidad Solicitada</label>
+
+                          <input type="text" class="form-control input-lg" name="cantidad_solicitada">
+
+                      </div>
+
+                  </div>
+
+              </div>
+
+                @if(Auth::user()->role == 'Traslado')
+
+                <div class="form-group col-lg-12">
+
+                    <div class="input-group col-lg-12">
+
+                          <div class="col-lg-6">
+
+                                <label for="dependencia">Dependencia</label>
+
+                                <select type="text" class="form-control input-lg" name="dependencia" placeholder="Ingresar Dependencia">
+                                    <option>Seleccionar...</option>
+                                    <option value="Si">Si</option>
+                                    <option value="No">No</option>
+                                </select>
+
+                          </div>
+
+                    </div>
+
+                </div>
+
+                @endif
 
               <!-- Entrada para notas -->
                <div class="form-group col-lg-12">
@@ -750,55 +790,59 @@ MODAL EDITAR BENEFICIARIO
 
               <!--Entrada para KM ida y vuelta -->
 
-              <div class="form-group col-lg-12">
+              @if(Auth::user()->role == 'Traslado')
 
-                <div class="input-group col-lg-12">
+                  <div class="form-group col-lg-12">
 
-                  <div class="col-lg-6">
+                    <div class="input-group col-lg-12">
 
-                        <label for="editarKmIda">Editar KM de ida</label>
+                      <div class="col-lg-6">
 
-                        <input type="text" class="form-control input-lg" id="editarKmIda" name="editarKmIda" placeholder="Ingresar KM de ida">
+                            <label for="editarKmIda">Editar KM de ida</label>
 
-                  </div>
+                            <input type="text" class="form-control input-lg" id="editarKmIda" name="editarKmIda" placeholder="Ingresar KM de ida">
 
-                  <div class="col-lg-6">
+                      </div>
 
-                        <label for="editarKmVuelta">Editar KM de vuelta</label>
+                      <div class="col-lg-6">
 
-                        <input type="text" class="form-control input-lg" id="editarKmVuelta" name="editarKmVuelta" placeholder="Ingresar KM de Vuelta">
+                            <label for="editarKmVuelta">Editar KM de vuelta</label>
 
-                  </div>
+                            <input type="text" class="form-control input-lg" id="editarKmVuelta" name="editarKmVuelta" placeholder="Ingresar KM de Vuelta">
 
-                </div>
+                      </div>
 
-              </div>
-
-              <!--Entrada para Viajes de ida y vuelta -->
-
-              <div class="form-group col-lg-12">
-
-                <div class="input-group col-lg-12">
-
-                  <div class="col-lg-6">
-
-                        <label for="editarViajesIda">Editar Viajes de ida</label>
-
-                        <input type="text" class="form-control input-lg" id="editarViajesIda" name="editarViajesIda" placeholder="Ingresar Viajes de ida">
+                    </div>
 
                   </div>
 
-                  <div class="col-lg-6">
+                  <!--Entrada para Viajes de ida y vuelta -->
 
-                        <label for="editarViajesVuelta">Editar Viajes de vuelta</label>
+                  <div class="form-group col-lg-12">
 
-                        <input type="text" class="form-control input-lg" id="editarViajesVuelta" name="editarViajesVuelta" placeholder="Ingresar Viajes de vuelta">
+                    <div class="input-group col-lg-12">
+
+                      <div class="col-lg-6">
+
+                            <label for="editarViajesIda">Editar Viajes de ida</label>
+
+                            <input type="text" class="form-control input-lg" id="editarViajesIda" name="editarViajesIda" placeholder="Ingresar Viajes de ida">
+
+                      </div>
+
+                      <div class="col-lg-6">
+
+                            <label for="editarViajesVuelta">Editar Viajes de vuelta</label>
+
+                            <input type="text" class="form-control input-lg" id="editarViajesVuelta" name="editarViajesVuelta" placeholder="Ingresar Viajes de vuelta">
+
+                      </div>
+
+                    </div>
 
                   </div>
 
-                </div>
-
-              </div>
+              @endif
 
               <!-- Entrada para Turno y Dependencia -->
 
@@ -818,21 +862,65 @@ MODAL EDITAR BENEFICIARIO
 
                   </div>
 
-                  <div class="col-lg-6">
+                    <div class="col-lg-6">
 
-                        <label for="editarDependencia">Dependencia</label>
+                        <label for="numero_afiliado">Numero de Beneficiario</label>
 
-                        <select type="text" class="form-control input-lg" id="editarDependencia" name="editarDependencia" placeholder="Ingresar Dependencia">
-                            <option>Seleccionar...</option>
-                            <option value="Si">Si</option>
-                            <option value="No">No</option>
-                        </select>
+                        <input type="text" class="form-control input-lg" id="editar_numero_afiliado" name="editar_numero_afiliado">
 
-                  </div>
+                    </div>
 
                 </div>
 
               </div>
+
+              <div class="form-group col-lg-12">
+
+                  <div class="input-group col-lg-12">
+
+                      <div class="col-lg-6">
+
+                          <label for="codigo_seguridad">Codigo de Seguridad</label>
+
+                          <input type="text" class="form-control input-lg" id="editar_codigo_seguridad" name="editar_codigo_seguridad">
+
+                      </div>
+
+                      <div class="col-lg-6">
+
+                          <label for="cantidad_solicitada">Cantidad Solicitada</label>
+
+                          <input type="text" class="form-control input-lg" id="editar_cantidad_solicitada" name="editar_cantidad_solicitada">
+
+                      </div>
+
+                  </div>
+
+              </div>
+
+              @if(Auth::user()->role == 'Traslado')
+
+                  <div class="form-group col-lg-12">
+
+                      <div class="input-group col-lg-12">
+
+                      <div class="col-lg-6">
+
+                            <label for="editarDependencia">Dependencia</label>
+
+                            <select type="text" class="form-control input-lg" id="editarDependencia" name="editarDependencia" placeholder="Ingresar Dependencia">
+                                <option>Seleccionar...</option>
+                                <option value="Si">Si</option>
+                                <option value="No">No</option>
+                            </select>
+
+                      </div>
+
+                    </div>
+
+                  </div>
+
+              @endif
 
               <!-- Entrada para notas -->
                <div class="form-group col-lg-12">
