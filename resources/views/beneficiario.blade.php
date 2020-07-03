@@ -54,7 +54,7 @@
            <tr>
 
              <th style="width:10px">#</th>
-
+             <th style="text-align: center">Clonar</th>
              <th>Nombre y Apellido</th>
              <th style="text-align: center">N° de Afiliado</th>
              <th style="text-align: center">Cod. Seguridad</th>
@@ -80,6 +80,7 @@
             <tr>
 
               <td>{{ $key+1 }}</td>
+              <td style="text-align: center"> <button class="btn btn-success btnClonarBeneficiario" data-toggle="modal" data-target="#modalClonarBeneficiario" idBenef="{{ $benefval->id }}"><i class="fa fa-users"></i></button></td>
 
               @if($obrasocial[0]->nombre == "OSECAC")
                 <td style="text-align: center"><a href="{{ route('beneficiario-presupuesto', ['prestador_id' => $benefval->prestador_id, 'beneficiario_id' => $benefval->id]) }}" target="_BLANK"><button class="btn btn-success">8.4</button></a></td>
@@ -95,8 +96,7 @@
               <td>
                 <div class="btn-group">
 
-                  <button class="btn btn-success btnClonarBeneficiario" data-toggle="modal" data-target="#modalClonarBeneficiario" idBenef="{{ $benefval->id }}"><i class="fa fa-users"></i></button>
-
+                 
                   <button class="btn btn-primary" data-toggle="modal" data-target="#modalHorarioBeneficiario" idBenef="{{ $benefval->id }}"><i class="fa fa-clock-o"></i></button>
 
                   <button class="btn btn-warning btnEditarBeneficiario" data-toggle="modal" data-target="#modalEditarBeneficiario" idBenef="{{ $benefval->id }}"><i class="fa fa-pencil"></i></button>
@@ -127,7 +127,7 @@
            <tr>
 
              <th style="width:10px">#</th>
-
+             <th style="text-align: center">Clonar</th>
               @if($obrasocial[0]->nombre == "OSECAC")
                 <th style="width: 20px">Presupuesto</th>
               @endif
@@ -159,7 +159,7 @@
             <tr>
 
               <td>{{ $key+1 }}</td>
-
+              <td style="text-align: center"> <button class="btn btn-success btnClonarBeneficiario" data-toggle="modal" data-target="#modalClonarBeneficiario" idBenef="{{ $benefval->id }}"><i class="fa fa-users"></i></button></td>
               @if($obrasocial[0]->nombre == "OSECAC")
                 <td style="text-align: center"><a href="{{ route('beneficiario-presupuesto', ['prestador_id' => $benefval->prestador_id, 'beneficiario_id' => $benefval->id]) }}" target="_BLANK"><button class="btn btn-success">8.4</button></a></td>
               @endif
@@ -272,9 +272,9 @@ MODAL AGREGAR BENEFICIARIO
 
                       <div class="col-lg-12">
 
-                          <label for="nombre">Nombre</label>
+                          <label for="nombre">Nombre y Apellido</label>
 
-                          <input type="text" class="form-control input-lg" name="nombre" placeholder="Ingresar nombre">
+                          <input type="text" class="form-control input-lg" name="nombre" placeholder="Ingresar nombre y Apellido">
 
                       </div>
 
@@ -333,6 +333,31 @@ MODAL AGREGAR BENEFICIARIO
 
             </div>
 
+              <!--Entrada para DNI y CUIT -->
+
+              <div class="form-group col-lg-12">
+
+                <div class="input-group col-lg-12">
+
+                  <div class="col-lg-6">
+
+                        <label for="dni">DNI</label>
+
+                        <input type="text" class="form-control input-lg" name="dni" placeholder="Ingresar DNI">
+
+                  </div>
+
+                  <div class="col-lg-6">
+
+                        <label for="cuit">CUIT</label>
+
+                        <input type="text" class="form-control input-lg" name="cuit" placeholder="Ingresar CUIT">
+
+                  </div>
+
+                </div>
+
+              </div>
 
 
               <!--Entrada para correo y telefono -->
@@ -387,7 +412,7 @@ MODAL AGREGAR BENEFICIARIO
 
               </div>
 
-               <!--Entrada para Codigo Postal y DNI -->
+               <!--Entrada para Dir. Prestacion y Localidad Prestacion -->
 
               <div class="form-group col-lg-12">
 
@@ -414,31 +439,6 @@ MODAL AGREGAR BENEFICIARIO
 
               </div>
 
-              <!--Entrada para CUIT y Prestacion -->
-
-              <div class="form-group col-lg-12">
-
-                <div class="input-group col-lg-12">
-
-                  <div class="col-lg-6">
-
-                        <label for="cuit">CUIT</label>
-
-                        <input type="text" class="form-control input-lg" name="cuit" placeholder="Ingresar CUIT">
-
-                  </div>
-
-                  <div class="col-lg-6">
-
-                        <label for="dni">DNI</label>
-
-                        <input type="text" class="form-control input-lg" name="dni" placeholder="Ingresar DNI">
-
-                  </div>
-
-                </div>
-
-              </div>
 
               @if(Auth::user()->role == 'Traslado')
 
@@ -649,23 +649,67 @@ MODAL EDITAR BENEFICIARIO
 
            <!-- ENTRADA PARA NOMBRE Y APELLIDO -->
 
-                <div class="form-group col-lg-12">
+            <div class="form-group col-lg-12">
 
                 <div class="input-group col-lg-12">
 
-                  <div class="col-lg-6">
+                  <div class="col-lg-12">
 
-                        <label for="editarNombre">Editar Nombre</label>
+                        <label for="editarNombre">Editar Nombre y Apellido</label>
 
                         <input type="text" class="form-control input-lg" id="editarNombre" name="editarNombre" placeholder="Ingresar nombre">
 
                   </div>
 
+                </div>
+
+              </div>
+
+              <!-- Entrada para Num. Beneficiario y Cod. Seguridad -->
+
+                <div class="form-group col-lg-12">
+
+                  <div class="input-group col-lg-12">
+
+                    <div class="col-lg-6">
+
+                        <label for="numero_afiliado">Numero de Beneficiario</label>
+
+                        <input type="text" class="form-control input-lg" id="editar_numero_afiliado" name="editar_numero_afiliado">
+
+                    </div>                    
+
+                      <div class="col-lg-6">
+
+                          <label for="codigo_seguridad">Codigo de Seguridad</label>
+
+                          <input type="text" class="form-control input-lg" id="editar_codigo_seguridad" name="editar_codigo_seguridad">
+
+                      </div>
+
+                  </div>
+
+              </div>
+
+              <!--Entrada para CUIT y DNI -->
+
+              <div class="form-group col-lg-12">
+
+                <div class="input-group col-lg-12">
+
                   <div class="col-lg-6">
 
-                        <label for="editarApellido">Editar Apellido</label>
+                        <label for="editarDni">Editar DNI</label>
 
-                        <input type="text" class="form-control input-lg" id="editarApellido" name="editarApellido" placeholder="Ingresar apellido">
+                        <input type="text" class="form-control input-lg" id="editarDni" name="editarDni" placeholder="Ingresar DNI">
+
+                  </div>                  
+
+                  <div class="col-lg-6">
+
+                        <label for="editarCuit">Editar CUIT</label>
+
+                        <input type="text" class="form-control input-lg" id="editarCuit" name="editarCuit" placeholder="Ingresar CUIT">
 
                   </div>
 
@@ -680,6 +724,14 @@ MODAL EDITAR BENEFICIARIO
 
                 <div class="input-group col-lg-12">
 
+                 <div class="col-lg-6">
+
+                        <label for="editarTelefono">Editar Telefono</label>
+
+                        <input type="text" class="form-control input-lg" id="editarTelefono" name="editarTelefono" placeholder="Ingresar Telefono">
+
+                  </div>                  
+
                   <div class="col-lg-6">
 
                         <label for="editarCorreo">Editar Correo</label>
@@ -688,13 +740,6 @@ MODAL EDITAR BENEFICIARIO
 
                   </div>
 
-                  <div class="col-lg-6">
-
-                        <label for="editarTelefono">Editar Telefono</label>
-
-                        <input type="text" class="form-control input-lg" id="editarTelefono" name="editarTelefono" placeholder="Ingresar Telefono">
-
-                  </div>
 
                 </div>
 
@@ -753,31 +798,7 @@ MODAL EDITAR BENEFICIARIO
 
               </div>
 
-              <!--Entrada para CUIT y Prestacion -->
 
-              <div class="form-group col-lg-12">
-
-                <div class="input-group col-lg-12">
-
-                  <div class="col-lg-6">
-
-                        <label for="editarCuit">Editar CUIT</label>
-
-                        <input type="text" class="form-control input-lg" id="editarCuit" name="editarCuit" placeholder="Ingresar CUIT">
-
-                  </div>
-
-                  <div class="col-lg-6">
-
-                        <label for="editarDni">Editar DNI</label>
-
-                        <input type="text" class="form-control input-lg" id="editarDni" name="editarDni" placeholder="Ingresar DNI">
-
-                  </div>
-
-                </div>
-
-              </div>
 
               <!--Entrada para KM ida y vuelta -->
 
@@ -853,31 +874,7 @@ MODAL EDITAR BENEFICIARIO
 
                   </div>
 
-                    <div class="col-lg-6">
-
-                        <label for="numero_afiliado">Numero de Beneficiario</label>
-
-                        <input type="text" class="form-control input-lg" id="editar_numero_afiliado" name="editar_numero_afiliado">
-
-                    </div>
-
-                </div>
-
-              </div>
-
-              <div class="form-group col-lg-12">
-
-                  <div class="input-group col-lg-12">
-
-                      <div class="col-lg-6">
-
-                          <label for="codigo_seguridad">Codigo de Seguridad</label>
-
-                          <input type="text" class="form-control input-lg" id="editar_codigo_seguridad" name="editar_codigo_seguridad">
-
-                      </div>
-
-                      <div class="col-lg-6">
+                     <div class="col-lg-6">
 
                           <label for="cantidad_solicitada">Cantidad Solicitada</label>
 
@@ -885,7 +882,7 @@ MODAL EDITAR BENEFICIARIO
 
                       </div>
 
-                  </div>
+                </div>
 
               </div>
 
