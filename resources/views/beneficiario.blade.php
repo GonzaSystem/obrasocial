@@ -55,19 +55,13 @@
 
              <th style="width:10px">#</th>
 
-              @if($obrasocial[0]->nombre == "OSECAC")
-                <th style="width: 20px">Presupuesto</th>
-              @endif
-
-             <th>Nombre</th>
-             <th>Apellido</th>
-             <th>Prestacion</th>
-             <th>Email</th>
-             <th>Teléfono</th>
-             <th>Direccion</th>
-             <th>Localidad</th>
-             <th>DNI</th>
-             <th>CUIT</th>
+             <th>Nombre y Apellido</th>
+             <th style="text-align: center">N° de Afiliado</th>
+             <th style="text-align: center">Cod. Seguridad</th>
+             <th style="text-align: center">Cod. Modulo</th>
+             <th style="text-align: center">Cant. Solicitada</th>
+             <th>Observaciones</th>
+             <th style="text-align: center">Cod. Traditum</th>
              <th>Acciones</th>
 
            </tr>
@@ -79,7 +73,7 @@
 
           @foreach($beneficiarios as $beneficiario)
 
-            <?php $prestacionprof = $beneficiario->prestacion[0]->nombre ?>
+              <?php $codigo_prestacion = $beneficiario->prestacion[0]->codigo_modulo ?>
 
             @foreach($beneficiario->beneficiario as $key => $benefval)
 
@@ -91,15 +85,13 @@
                 <td style="text-align: center"><a href="{{ route('beneficiario-presupuesto', ['prestador_id' => $benefval->prestador_id, 'beneficiario_id' => $benefval->id]) }}" target="_BLANK"><button class="btn btn-success">8.4</button></a></td>
               @endif
 
-              <td>{{ $benefval->nombre }}</td>
-              <td>{{ $benefval->apellido }}</td>
-              <td>{{ $prestacionprof }}</td>
-              <td>{{ $benefval->email }}</td>
-              <td>{{ $benefval->telefono }}</td>
-              <td>{{ $benefval->direccion }}</td>
-              <td>{{ $benefval->localidad }}</td>
-              <td>{{ $benefval->dni }}</td>
-              <td>{{ $benefval->cuit }}</td>
+              <td>{{ $benefval->nombre . ' ' . $benefval->apellido }}</td>
+              <td style="text-align: center">{{ $benefval->numero_afiliado }}</td>
+              <td style="text-align: center">{{ $benefval->codigo_seguridad }}</td>
+              <td style="text-align: center">{{ $codigo_prestacion }}</td>
+              <td style="text-align: center">{{ $benefval->cantidad_solicitada }}</td>
+              <td>{{ $benefval->notas }}</td>
+              <td></td>
               <td>
                 <div class="btn-group">
 
@@ -126,7 +118,7 @@
 
        @else
 
-                 <table class="table table-bordered table-striped dt-responsive tablas">
+        <table class="table table-bordered table-striped dt-responsive tablas">
 
           <thead>
 
@@ -270,12 +262,62 @@ MODAL AGREGAR BENEFICIARIO
 
             </div>
 
+              <!-- ENTRADA PARA NOMBRE Y APELLIDO -->
+
+              <div class="form-group col-lg-12">
+
+                  <div class="input-group col-lg-12">
+
+                      <div class="col-lg-6">
+
+                          <label for="nombre">Nombre</label>
+
+                          <input type="text" class="form-control input-lg" name="nombre" placeholder="Ingresar nombre">
+
+                      </div>
+
+                      <div class="col-lg-6">
+
+                          <label for="apellido">Apellido</label>
+
+                          <input type="text" class="form-control input-lg" name="apellido" placeholder="Ingresar apellido">
+
+                      </div>
+
+                  </div>
+
+              </div>
+
+              <div class="form-group col-lg-12">
+
+                  <div class="input-group col-lg-12">
+
+                      <div class="col-lg-6">
+
+                          <label for="numero_afiliado">Numero de Beneficiario</label>
+
+                          <input type="text" class="form-control input-lg" name="numero_afiliado" placeholder="Ingresar N° de Beneficiario">
+
+                      </div>
+
+                      <div class="col-lg-6">
+
+                          <label for="codigo_seguridad">Código de Seguridad</label>
+
+                          <input type="text" class="form-control input-lg" name="codigo_seguridad" placeholder="Ingresar Código de Seguridad">
+
+                      </div>
+
+                  </div>
+
+              </div>
+
             <!-- Entrada para Prestación -->
             <div class="form-group col-lg-12">
 
               <div class="input-group col-lg-12">
 
-                <div class="col-lg-12">
+                <div class="col-lg-6">
 
                     <label for="obraSocial">Prestación</label>
 
@@ -291,35 +333,18 @@ MODAL AGREGAR BENEFICIARIO
 
                 </div>
 
+                  <div class="col-lg-6">
+
+                      <label for="cantidad">Cantidad</label>
+
+                      <input type="text" class="form-control input-lg" name="cantidad" placeholder="Ingresar Cantidad" value="1">
+
+                  </div>
+
               </div>
 
             </div>
 
-           <!-- ENTRADA PARA NOMBRE Y APELLIDO -->
-
-                <div class="form-group col-lg-12">
-
-                <div class="input-group col-lg-12">
-
-                  <div class="col-lg-6">
-
-                        <label for="nombre">Nombre</label>
-
-                        <input type="text" class="form-control input-lg" name="nombre" placeholder="Ingresar nombre">
-
-                  </div>
-
-                  <div class="col-lg-6">
-
-                        <label for="apellido">Apellido</label>
-
-                        <input type="text" class="form-control input-lg" name="apellido" placeholder="Ingresar apellido">
-
-                  </div>
-
-                </div>
-
-              </div>
 
 
               <!--Entrada para correo y telefono -->
@@ -501,11 +526,11 @@ MODAL AGREGAR BENEFICIARIO
 
                   </div>
 
-                   <div class="col-lg-6">
+                    <div class="col-lg-6">
 
-                        <label for="numero_afiliado">Numero de Beneficiario</label>
+                        <label for="cantidad_solicitada">Cantidad Solicitada</label>
 
-                        <input type="text" class="form-control input-lg" name="numero_afiliado">
+                        <input type="text" class="form-control input-lg" name="cantidad_solicitada">
 
                     </div>
 
@@ -513,29 +538,7 @@ MODAL AGREGAR BENEFICIARIO
 
               </div>
 
-              <div class="form-group col-lg-12">
 
-                  <div class="input-group col-lg-12">
-
-                      <div class="col-lg-6">
-
-                          <label for="codigo_seguridad">Codigo de Seguridad</label>
-
-                          <input type="text" class="form-control input-lg" name="codigo_seguridad">
-
-                      </div>
-
-                      <div class="col-lg-6">
-
-                          <label for="cantidad_solicitada">Cantidad Solicitada</label>
-
-                          <input type="text" class="form-control input-lg" name="cantidad_solicitada">
-
-                      </div>
-
-                  </div>
-
-              </div>
 
                 @if(Auth::user()->role == 'Traslado')
 

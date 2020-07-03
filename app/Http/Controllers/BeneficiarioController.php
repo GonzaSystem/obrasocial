@@ -36,7 +36,7 @@ class BeneficiarioController extends Controller
         // Traigo beneficiarios segun prestador y obra social
         $beneficiario = Prestador::where('user_id', $user)
          ->where('os_id', $os_id)
-         ->with('beneficiario')
+         ->with('beneficiario', 'prestacion')
          ->get();
 
     	// Objeto Obra Social
@@ -52,39 +52,44 @@ class BeneficiarioController extends Controller
 
     public function create(Request $request)
     {
-    	// Objeto de beneficiario
-    	$beneficiario = new Beneficiario;
 
-    	// Obtengo datos de inputs
+        // Segun la cantidad los creo
+        $cantidad = $request->input('cantidad');
+
+        for ($i = 0; $i < $cantidad; $i++){
+        // Objeto de beneficiario
+        $beneficiario = new Beneficiario;
+
+        // Obtengo datos de inputs
         $obra_social = $request->input('obraSocial');
         $prestador = $request->input('prestacion');
-    	$nombre = $request->input('nombre');
-    	$apellido = $request->input('apellido');
-    	$correo = $request->input('correo');
-    	$telefono = $request->input('telefono');
-    	$direccion = $request->input('direccion');
-    	$localidad = $request->input('localidad');
+        $nombre = $request->input('nombre');
+        $apellido = $request->input('apellido');
+        $correo = $request->input('correo');
+        $telefono = $request->input('telefono');
+        $direccion = $request->input('direccion');
+        $localidad = $request->input('localidad');
         $direccion_prestacion = $request->input('direccionPrestacion');
         $localidad_prestacion = $request->input('localidadPrestacion');
-    	$dni = $request->input('dni');
-    	$cuit = $request->input('cuit');
+        $dni = $request->input('dni');
+        $cuit = $request->input('cuit');
 
         if(\Auth::user()->role == 'Traslado'){
-        	$km_ida = $request->input('kmIda');
-        	$km_vuelta = $request->input('kmVuelta');
-        	$viajes_ida = $request->input('viajesIda');
-        	$viajes_vuelta = $request->input('viajesVuelta');
-        	$dependencia = $request->input('dependencia');
+            $km_ida = $request->input('kmIda');
+            $km_vuelta = $request->input('kmVuelta');
+            $viajes_ida = $request->input('viajesIda');
+            $viajes_vuelta = $request->input('viajesVuelta');
+            $dependencia = $request->input('dependencia');
         }
 
         $turno = $request->input('turno');
-    	$notas = $request->input('notas');
-    	$numero_afiliado = $request->input('numero_afiliado');
-    	$codigo_seguridad = $request->input('codigo_seguridad');
-    	$cantidad_solicitada = $request->input('cantidad_solicitada');
+        $notas = $request->input('notas');
+        $numero_afiliado = $request->input('numero_afiliado');
+        $codigo_seguridad = $request->input('codigo_seguridad');
+        $cantidad_solicitada = $request->input('cantidad_solicitada');
 
-    	// Asigno inputs a objeto beneficiario
-    	$beneficiario->prestador_id = $prestador;
+        // Asigno inputs a objeto beneficiario
+        $beneficiario->prestador_id = $prestador;
         $beneficiario->sesion_id = 1;
         $beneficiario->nombre = $nombre;
         $beneficiario->apellido = $apellido;
@@ -111,8 +116,9 @@ class BeneficiarioController extends Controller
         $beneficiario->codigo_seguridad = $codigo_seguridad;
         $beneficiario->cantidad_solicitada = $cantidad_solicitada;
 
-    	// Guardo en DB
+        // Guardo en DB
         $beneficiario->save();
+        }
 
         return redirect()->route('beneficiarios', ['prestador_id' => \Auth::user()->id, 'obrasocial_id' => $obra_social])
             ->with(['message' => 'Los datos de beneficiario han sido guardados correctamente']);
