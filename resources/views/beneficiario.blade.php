@@ -95,6 +95,8 @@
               <td>
                 <div class="btn-group">
 
+                  <button class="btn btn-success btnClonarBeneficiario" data-toggle="modal" data-target="#modalClonarBeneficiario" idBenef="{{ $benefval->id }}"><i class="fa fa-users"></i></button>
+
                   <button class="btn btn-primary" data-toggle="modal" data-target="#modalHorarioBeneficiario" idBenef="{{ $benefval->id }}"><i class="fa fa-clock-o"></i></button>
 
                   <button class="btn btn-warning btnEditarBeneficiario" data-toggle="modal" data-target="#modalEditarBeneficiario" idBenef="{{ $benefval->id }}"><i class="fa fa-pencil"></i></button>
@@ -174,7 +176,7 @@
               <td>
                 <div class="btn-group">
 
-                    <button class="btn btn-primary" data-toggle="modal" data-target="#modalHorarioBeneficiario" idBenef="{{ $benefval->id }}"><i class="fa fa-clock-o"></i></button>
+                    <button class="btn btn-primary btnClonarBeneficiario" data-toggle="modal" data-target="#modalClonarBeneficiario" idBenef="{{ $benefval->id }}"><i class="fa fa-clock-o"></i></button>
 
                     <button class="btn btn-warning btnEditarBeneficiario" data-toggle="modal" data-target="#modalEditarBeneficiario" idBenef="{{ $benefval->id }}"><i class="fa fa-pencil"></i></button>
 
@@ -268,7 +270,7 @@ MODAL AGREGAR BENEFICIARIO
 
                   <div class="input-group col-lg-12">
 
-                      <div class="col-lg-6">
+                      <div class="col-lg-12">
 
                           <label for="nombre">Nombre</label>
 
@@ -276,13 +278,6 @@ MODAL AGREGAR BENEFICIARIO
 
                       </div>
 
-                      <div class="col-lg-6">
-
-                          <label for="apellido">Apellido</label>
-
-                          <input type="text" class="form-control input-lg" name="apellido" placeholder="Ingresar apellido">
-
-                      </div>
 
                   </div>
 
@@ -312,12 +307,13 @@ MODAL AGREGAR BENEFICIARIO
 
               </div>
 
+
             <!-- Entrada para Prestación -->
             <div class="form-group col-lg-12">
 
               <div class="input-group col-lg-12">
 
-                <div class="col-lg-6">
+                <div class="col-lg-12">
 
                     <label for="obraSocial">Prestación</label>
 
@@ -326,20 +322,12 @@ MODAL AGREGAR BENEFICIARIO
                       <option value="">Seleccionar...</option>
 
                       @foreach ($prestacion as $presta)
-                        <option value="{{ $presta->id }}">{{ $presta->prestacion[0]->nombre }}</option>
+                        <option value="{{ $presta->id }}">{{ $presta->prestacion[0]->codigo_modulo . ' - ' . $presta->prestacion[0]->nombre }}</option>
                       @endforeach
 
                     </select>
 
                 </div>
-
-                  <div class="col-lg-6">
-
-                      <label for="cantidad">Cantidad</label>
-
-                      <input type="text" class="form-control input-lg" name="cantidad" placeholder="Ingresar Cantidad" value="1">
-
-                  </div>
 
               </div>
 
@@ -355,17 +343,17 @@ MODAL AGREGAR BENEFICIARIO
 
                   <div class="col-lg-6">
 
-                        <label for="correo">Correo</label>
+                        <label for="telefono">Telefono</label>
 
-                        <input type="email" class="form-control input-lg" name="correo" placeholder="Ingresar correo">
+                        <input type="text" class="form-control input-lg" name="telefono" placeholder="Ingresar Telefono">
 
                   </div>
 
                   <div class="col-lg-6">
 
-                        <label for="telefono">Telefono</label>
+                        <label for="correo">Correo</label>
 
-                        <input type="text" class="form-control input-lg" name="telefono" placeholder="Ingresar Telefono">
+                        <input type="email" class="form-control input-lg" name="correo" placeholder="Ingresar correo">
 
                   </div>
 
@@ -1104,5 +1092,388 @@ MODAL HORARIO BENEFICIARIO
     </div>
 
 </div>
+
+<!--=====================================
+MODAL CLONAR BENEFICIARIO
+======================================-->
+
+<div id="modalClonarBeneficiario" class="modal fade" role="dialog">
+
+    <div class="modal-dialog modal-lg">
+
+        <div class="modal-content">
+
+            <form role="form" method="POST" action="{{ route('beneficiario-create') }}">
+            @csrf
+
+            <!--=====================================
+        CABEZA DEL MODAL
+        ======================================-->
+
+                <div class="modal-header" style="background:#3c8dbc; color:white">
+
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                    <h4 class="modal-title">Agregar beneficiario</h4>
+
+                </div>
+
+                <!--=====================================
+                CUERPO DEL MODAL
+                ======================================-->
+
+                <div class="modal-body">
+
+                    <div class="box-body">
+
+                        <!-- Entrada para Obra Social-->
+                        <div class="form-group col-lg-12">
+
+                            <div class="input-group col-lg-12">
+
+                                <div class="col-lg-12">
+
+                                    <label for="obraSocial">Obra Social</label>
+
+                                    <select type="text" class="form-control input-lg" name="obraSocial" readonly>
+
+                                        @foreach($obrasocial as $key=>$os)
+
+                                            <option value="{{ $os->id }}">{{ $os->nombre }}</option>
+
+                                        @endforeach
+
+                                    </select>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- ENTRADA PARA NOMBRE Y APELLIDO -->
+
+                        <div class="form-group col-lg-12">
+
+                            <div class="input-group col-lg-12">
+
+                                <div class="col-lg-12">
+
+                                    <label for="nombre">Nombre</label>
+
+                                    <input type="text" class="form-control input-lg" id="nombre_clon" name="nombre" placeholder="Ingresar nombre">
+
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+                        <div class="form-group col-lg-12">
+
+                            <div class="input-group col-lg-12">
+
+                                <div class="col-lg-6">
+
+                                    <label for="numero_afiliado">Numero de Beneficiario</label>
+
+                                    <input type="text" class="form-control input-lg" id="numero_afiliado_clon" name="numero_afiliado" placeholder="Ingresar N° de Beneficiario">
+
+                                </div>
+
+                                <div class="col-lg-6">
+
+                                    <label for="codigo_seguridad">Código de Seguridad</label>
+
+                                    <input type="text" class="form-control input-lg" id="codigo_seguridad_clon" name="codigo_seguridad" placeholder="Ingresar Código de Seguridad">
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Entrada para Prestación -->
+                        <div class="form-group col-lg-12">
+
+                            <div class="input-group col-lg-12">
+
+                                <div class="col-lg-12">
+
+                                    <label for="obraSocial">Prestación</label>
+
+                                    <select type="text" class="form-control input-lg" id="prestacion_clon" name="prestacion">
+
+                                        <option value="">Seleccionar...</option>
+
+                                        @foreach ($prestacion as $presta)
+                                            <option value="{{ $presta->id }}">{{ $presta->prestacion[0]->codigo_modulo . ' - ' . $presta->prestacion[0]->nombre }}</option>
+                                        @endforeach
+
+                                    </select>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!--Entrada para correo y telefono -->
+
+                        <div class="form-group col-lg-12">
+
+                            <div class="input-group col-lg-12">
+
+                                <div class="col-lg-6">
+
+                                    <label for="correo">Correo</label>
+
+                                    <input type="email" class="form-control input-lg" id="correo_clon" name="correo" placeholder="Ingresar correo">
+
+                                </div>
+
+                                <div class="col-lg-6">
+
+                                    <label for="telefono">Telefono</label>
+
+                                    <input type="text" class="form-control input-lg" id="telefono_clon" name="telefono" placeholder="Ingresar Telefono">
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!--Entrada para direccion y localidad -->
+
+                        <div class="form-group col-lg-12">
+
+                            <div class="input-group col-lg-12">
+
+                                <div class="col-lg-6">
+
+                                    <label for="direccion">Dirección del Beneficiario</label>
+
+                                    <input type="text" class="form-control input-lg" id="direccion_clon" name="direccion" placeholder="Ingresar Dirección">
+
+                                </div>
+
+                                <div class="col-lg-6">
+
+                                    <label for="localidad">Localidad del Beneficiario</label>
+
+                                    <input type="text" class="form-control input-lg" id="localidad_clon" name="localidad" placeholder="Ingresar Localidad">
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!--Entrada para Codigo Postal y DNI -->
+
+                        <div class="form-group col-lg-12">
+
+                            <div class="input-group col-lg-12">
+
+                                <div class="col-lg-6">
+
+                                    <label for="codigoPostal">Dirección de Prestación</label>
+
+                                    <input type="text" class="form-control input-lg" id="direccionPrestacion_clon" name="direccionPrestacion" placeholder="Ingresar Dirección de Prestación">
+
+                                </div>
+
+                                <div class="col-lg-6">
+
+                                    <label for="codigoPostal">Localidad de Prestación</label>
+
+                                    <input type="text" class="form-control input-lg" id="localidadPrestacion_clon" name="localidadPrestacion" placeholder="Ingresar Localidad de Prestación">
+
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+                        <!--Entrada para CUIT y Prestacion -->
+
+                        <div class="form-group col-lg-12">
+
+                            <div class="input-group col-lg-12">
+
+                                <div class="col-lg-6">
+
+                                    <label for="cuit">CUIT</label>
+
+                                    <input type="text" class="form-control input-lg" id="cuit_clon" name="cuit" placeholder="Ingresar CUIT">
+
+                                </div>
+
+                                <div class="col-lg-6">
+
+                                    <label for="dni">DNI</label>
+
+                                    <input type="text" class="form-control input-lg" id="dni_clon" name="dni" placeholder="Ingresar DNI">
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    @if(Auth::user()->role == 'Traslado')
+
+                        <!--Entrada para KM ida y vuelta -->
+
+                            <div class="form-group col-lg-12">
+
+                                <div class="input-group col-lg-12">
+
+                                    <div class="col-lg-6">
+
+                                        <label for="kmIda">KM de ida</label>
+
+                                        <input type="number" class="form-control input-lg" id="kmIda_clon" name="kmIda" placeholder="Ingresar KM de ida">
+
+                                    </div>
+
+                                    <div class="col-lg-6">
+
+                                        <label for="kmVuelta">KM de vuelta</label>
+
+                                        <input type="text" class="form-control input-lg" id="kmVuelta_clon" name="kmVuelta" placeholder="Ingresar KM de Vuelta">
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <!--Entrada para Viajes de ida y vuelta -->
+
+                            <div class="form-group col-lg-12">
+
+                                <div class="input-group col-lg-12">
+
+                                    <div class="col-lg-6">
+
+                                        <label for="viajesIda">Viajes de ida</label>
+
+                                        <input type="text" class="form-control input-lg" id="viajesIda_clon" name="viajesIda" placeholder="Ingresar Viajes de ida">
+
+                                    </div>
+
+                                    <div class="col-lg-6">
+
+                                        <label for="viajesVuelta">Viajes de vuelta</label>
+
+                                        <input type="number" class="form-control input-lg" id="viajesVuelta_clon" name="viajesVuelta" placeholder="Ingresar Viajes de vuelta">
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                    @endif
+
+                    <!-- Entrada para Turno y Dependencia -->
+
+                        <div class="form-group col-lg-12">
+
+                            <div class="input-group col-lg-12">
+
+                                <div class="col-lg-6">
+
+                                    <label for="turno">Turno</label>
+
+                                    <select type="text" class="form-control input-lg" id="turno_clon" name="turno">
+                                        <option value="Mañana">Mañana</option>
+                                        <option value="Tarde">Tarde</option>
+                                        <option value="Noche">Noche</option>
+                                    </select>
+
+                                </div>
+
+                                <div class="col-lg-6">
+
+                                    <label for="cantidad_solicitada">Cantidad Solicitada</label>
+
+                                    <input type="text" class="form-control input-lg" id="cantidad_solicitada_clon" name="cantidad_solicitada">
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                        @if(Auth::user()->role == 'Traslado')
+
+                            <div class="form-group col-lg-12">
+
+                                <div class="input-group col-lg-12">
+
+                                    <div class="col-lg-6">
+
+                                        <label for="dependencia">Dependencia</label>
+
+                                        <select type="text" class="form-control input-lg" id="dependencia_clon" name="dependencia" placeholder="Ingresar Dependencia">
+                                            <option>Seleccionar...</option>
+                                            <option value="Si">Si</option>
+                                            <option value="No">No</option>
+                                        </select>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                    @endif
+
+                    <!-- Entrada para notas -->
+                        <div class="form-group col-lg-12">
+
+                            <div class="input-group col-lg-12">
+
+                    <textarea type="text" name="notas" maxlength="255" rows="5" cols="130" id="notas_clon" placeholder="Notas..">
+
+                    </textarea>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!--=====================================
+                PIE DEL MODAL
+                ======================================-->
+
+                <div class="modal-footer">
+
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Salir</button>
+
+                    <button type="submit" class="btn btn-primary">Guardar beneficiario</button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
 
 @endsection

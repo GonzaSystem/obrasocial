@@ -29,6 +29,7 @@ class BeneficiarioController extends Controller
         // Objeto prestaciones
         $prestacion = Prestador::where('user_id', $user)
         ->where('os_id', $os_id)
+        ->with('prestacion')
         ->get();
 
         //$beneficiario = Beneficiario::where('prestador_id', $prest_id)->with('prestador')->get();
@@ -53,10 +54,6 @@ class BeneficiarioController extends Controller
     public function create(Request $request)
     {
 
-        // Segun la cantidad los creo
-        $cantidad = $request->input('cantidad');
-
-        for ($i = 0; $i < $cantidad; $i++){
         // Objeto de beneficiario
         $beneficiario = new Beneficiario;
 
@@ -118,7 +115,6 @@ class BeneficiarioController extends Controller
 
         // Guardo en DB
         $beneficiario->save();
-        }
 
         return redirect()->route('beneficiarios', ['prestador_id' => \Auth::user()->id, 'obrasocial_id' => $obra_social])
             ->with(['message' => 'Los datos de beneficiario han sido guardados correctamente']);

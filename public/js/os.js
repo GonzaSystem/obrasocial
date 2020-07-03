@@ -191,3 +191,67 @@ $(document).ready(function($){
     $('[data-mask]').inputmask();
 });
 
+// Clonar beneficiario
+
+$(document).on('click', '.btnClonarBeneficiario', function(){
+    var id = $(this).attr("idbenef");
+
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    $.ajax({
+        url: "http://localhost/os/public/beneficiario/list",
+        data: {id:id},
+        dataType: "json",
+        type: "POST",
+        success: function(respuesta){
+        	console.log("respuesta", respuesta);
+        	$("#nombre_clon").empty();
+            $("#correo_clon").empty();
+            $("#telefono_clon").empty();
+            $("#direccion_clon").empty();
+            $("#localidad_clon").empty();
+            $("#direccionPrestacion_clon").empty();
+            $("#localidadPrestacion_clon").empty();
+            $("#cuit_clon").empty();
+            $("#dni_clon").empty();
+            $("#kmIda_clon").empty();
+            $("#kmVuelta_clon").empty();
+            $("#viajesIda_clon").empty();
+            $("#viajesVuelta_clon").empty();
+            $("#turno_clon").empty();
+            $("#dependencia_clon").empty();
+            $("#notas_clon").empty();
+            $("#numero_afiliado_clon").empty();
+            $("#codigo_seguridad_clon").empty();
+            $("#cantidad_solicitada_clon").empty();
+
+
+            $("#nombre_clon").val(respuesta[0]["nombre"]);
+            $("#correo_clon").val(respuesta[0]["email"]);
+            $("#telefono_clon").val(respuesta[0]["telefono"]);
+            $("#direccion_clon").val(respuesta[0]["direccion"]);
+            $("#localidad_clon").val(respuesta[0]["localidad"]);
+            $("#prestacion_clon").val(respuesta[0]["prestador"]["id"]);
+            $("#direccionPrestacion_clon").val(respuesta[0]["direccion_prestacion"]);
+            $("#localidadPrestacion_clon").val(respuesta[0]["localidad_prestacion"]);
+            $("#cuit_clon").val(respuesta[0]["cuit"]);
+            $("#dni_clon").val(respuesta[0]["dni"]);
+            $("#KmIda_clon").val(respuesta[0]["km_ida"]);
+            $("#KmVuelta_clon").val(respuesta[0]["km_vuelta"]);
+            $("#ViajesIda_clon").val(respuesta[0]["viajes_ida"]);
+            $("#ViajesVuelta_clon").val(respuesta[0]["viajes_vuelta"]);
+            $("#turno_clon").val(respuesta[0]["turno"]);
+            $("#dependencia_clon").val(respuesta[0]["dependencia"]);
+            $("#notas_clon").val(respuesta[0]["notas"]);
+            $("#numero_afiliado_clon").val(respuesta[0]['numero_afiliado']);
+            $("#codigo_seguridad_clon").val(respuesta[0]['codigo_seguridad']);
+            $("#cantidad_solicitada_clon").val(respuesta[0]['cantidad_solicitada']);
+
+        }
+    });
+});
+
