@@ -255,3 +255,52 @@ $(document).on('click', '.btnClonarBeneficiario', function(){
     });
 });
 
+
+// Al presionar el boton de horarios traigo los resultados
+$(document).on('click', '.btnHorarioBeneficiario', function(){
+	var id = $(this).attr("idBenef");
+
+	 $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+	$("#beneficiario_id").val(id);
+
+    $.ajax({
+        url: "http://localhost/os/public/sesion/horarios",
+        data: {id:id},
+        dataType: "json",
+        type: "POST",
+        success: function(respuesta){
+        	for (var i = 0; i < respuesta.length; i++) {
+        		switch( respuesta[i]["dia"]){
+        			case 1:
+        				dia = 'Lunes';
+        				break;
+        			case 2:
+        				dia = 'Martes';
+        				break;
+        			case 3: 
+        				dia = 'Miercoles';
+        				break;
+        			case 4:
+        				dia = 'Jueves';
+        				break;
+        			case 5:
+        				dia = 'Viernes';
+        				break;
+        			case 6:
+        				dia = 'Sabado';
+        				break;
+        			case 7:
+        				dia = 'Domingo';
+        				break;
+        		}
+
+        		$("#horarioBenef").append('<tr><td>'+dia+'</td><td>'+respuesta[i]["hora"]+'</td><td>'+respuesta[i]["tiempo"]+' minutos</td><td><button class="btn btn-danger"><i class="fa fa-trash"></i></button></td></tr>')
+        	}
+        }
+    });
+});

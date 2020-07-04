@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Sesion;
+use App\Beneficiario;
 use Illuminate\Http\Request;
 
 class SesionController extends Controller
@@ -12,9 +13,12 @@ class SesionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $id = $request->id;
+
+        $sesiones = Sesion::where('beneficiario_id', $id)->get();
+        return $sesiones;
     }
 
     /**
@@ -35,7 +39,25 @@ class SesionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $sesion = new Sesion;
+        $obra_social = $request->input('obrasocial_id');
+
+        $beneficiario_id = $request->input('beneficiario_id');
+        $dia = $request->input('dia');
+        $hora = $request->input('hora');
+        $tiempo = $request->input('tiempo');
+
+        $sesion->beneficiario_id = $beneficiario_id;
+        $sesion->dia = $dia;
+        $sesion->hora = $hora;
+        $sesion->tiempo = $tiempo;
+
+        $sesion->save();
+
+        $beneficiario = Beneficiario::find($beneficiario_id);
+
+        return redirect()->route('beneficiarios', ['prestador_id' => \Auth::user()->id, 'obrasocial_id' => $obra_social])
+            ->with(['message' => 'El horario de '.$beneficiario->nombre.' ha sido guardado correctamente']);
     }
 
     /**

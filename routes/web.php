@@ -38,11 +38,12 @@ Route::post('obrasocial/update', 'ObraSocialController@update')->name('os-update
 Route::post('/obrasocial/list', 'ObraSocialController@list')->name('os-list');
 
 // Beneficiario
-Route::get('/beneficiarios/{prestador_id}/{obrasocial_id}', 'BeneficiarioController@index')->name('beneficiarios');
+Route::get('/beneficiarios/{prestador_id}/{obrasocial_id}/{mes?}/{anio?}', 'BeneficiarioController@index')->name('beneficiarios');
 Route::post('/beneficiarios/create', 'BeneficiarioController@create')->name('beneficiario-create');
 Route::post('beneficiario/list', 'BeneficiarioController@list')->name('beneficiario-list');
 Route::get('beneficiario/presupuesto/{prestador_id}/{beneficiario_id}', 'BeneficiarioController@presupuesto')->name('beneficiario-presupuesto');
 Route::post('beneficiario/update', 'BeneficiarioController@update')->name('beneficiario-update');
+Route::get('/beneficiario/form/{id}/{planilla}', 'BeneficiarioController@formulario')->name('formulario-beneficiario');
 
 //Prestaciones
 Route::get('/prestaciones', 'ObraSocialController@lista_prestaciones')->name('prestaciones');
@@ -50,3 +51,7 @@ Route::post('/prestacion/create', 'ObraSocialController@create_prestacion')->nam
 Route::get('/prestacion/show/{id}', 'PrestacionController@show')->name('prestacion-show');
 Route::post('/prestacion/edit', 'ObraSocialController@edit')->name('prestacion-edit');
 Route::get('/prestacionind/show/{id}', 'ObraSocialController@show')->name('prestacion-ind-show');
+
+// Sesiones
+Route::post('/sesion/horarios', 'SesionController@index')->name('sesion-horarios');
+Route::post('/sesion/create', 'SesionController@store')->name('sesion-create');

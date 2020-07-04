@@ -16,7 +16,7 @@ class BeneficiarioController extends Controller
         $this->middleware('auth');
     }
 
-    public function index($prest_id, $os_id)
+    public function index($prest_id, $os_id, $mes = null, $anio = null)
     {
         // Muestro beneficiarios
 
@@ -201,5 +201,18 @@ class BeneficiarioController extends Controller
 
         return redirect()->route('beneficiarios', ['prestador_id' => \Auth::user()->id, 'obrasocial_id' => $obra_social])
             ->with(['message' => 'Los datos de beneficiario han sido actualizados correctamente']);
+    }
+
+    public function formulario($id, $planilla)
+    {
+        if( $planilla == 1 ){
+            $view = 'forms.rehabilitacion';
+        }elseif( $planilla == 2 ){
+            $view = 'forms.integracion';
+        }elseif( $planilla == 3){
+            $view = 'forms.traslado';
+        }
+
+        return view($view);
     }
 }

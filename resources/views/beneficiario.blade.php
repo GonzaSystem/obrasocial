@@ -56,7 +56,7 @@
              <th style="width:10px">#</th>
              <th style="text-align: center">Clonar</th>
              <th>Nombre y Apellido</th>
-             <th style="text-align: center">N° de Afiliado</th>
+             <th style="text-align: center">N° de Beneficiario</th>
              <th style="text-align: center">Cod. Seguridad</th>
              <th style="text-align: center">Cod. Modulo</th>
              <th style="text-align: center">Cant. Solicitada</th>
@@ -73,7 +73,9 @@
 
           @foreach($beneficiarios as $beneficiario)
 
+
               <?php $codigo_prestacion = $beneficiario->prestacion[0]->codigo_modulo ?>
+              <?php $planilla = $beneficiario->prestacion[0]->planilla ?>
 
             @foreach($beneficiario->beneficiario as $key => $benefval)
 
@@ -95,9 +97,10 @@
               <td></td>
               <td>
                 <div class="btn-group">
-
+                  
+                  <a target="_BLANK" href="{{ route('formulario-beneficiario', ['id' => $benefval->id, 'planilla' => $planilla]) }}" class="btn btn-primary" style="color: white; background-color: #605CA8"><i class="fa fa-address-card"></i></a>
                  
-                  <button class="btn btn-primary" data-toggle="modal" data-target="#modalHorarioBeneficiario" idBenef="{{ $benefval->id }}"><i class="fa fa-clock-o"></i></button>
+                  <button class="btn btn-primary btnHorarioBeneficiario" data-toggle="modal" data-target="#modalHorarioBeneficiario" idBenef="{{ $benefval->id }}"><i class="fa fa-clock-o"></i></button>
 
                   <button class="btn btn-warning btnEditarBeneficiario" data-toggle="modal" data-target="#modalEditarBeneficiario" idBenef="{{ $benefval->id }}"><i class="fa fa-pencil"></i></button>
 
@@ -313,7 +316,7 @@ MODAL AGREGAR BENEFICIARIO
 
               <div class="input-group col-lg-12">
 
-                <div class="col-lg-12">
+                <div class="col-lg-9">
 
                     <label for="obraSocial">Prestación</label>
 
@@ -328,6 +331,14 @@ MODAL AGREGAR BENEFICIARIO
                     </select>
 
                 </div>
+
+                    <div class="col-lg-3">
+
+                        <label for="cantidad_solicitada">Cantidad Solicitada</label>
+
+                        <input type="text" class="form-control input-lg" name="cantidad_solicitada">
+
+                    </div>
 
               </div>
 
@@ -514,14 +525,6 @@ MODAL AGREGAR BENEFICIARIO
 
                   </div>
 
-                    <div class="col-lg-6">
-
-                        <label for="cantidad_solicitada">Cantidad Solicitada</label>
-
-                        <input type="text" class="form-control input-lg" name="cantidad_solicitada">
-
-                    </div>
-
                 </div>
 
               </div>
@@ -684,6 +687,24 @@ MODAL EDITAR BENEFICIARIO
                           <label for="codigo_seguridad">Codigo de Seguridad</label>
 
                           <input type="text" class="form-control input-lg" id="editar_codigo_seguridad" name="editar_codigo_seguridad">
+
+                      </div>
+
+                  </div>
+
+              </div>
+
+              <!-- Entrada para cant. prestacion solicitada -->
+
+               <div class="form-group col-lg-12">
+
+                  <div class="input-group col-lg-12">
+
+                        <div class="col-lg-6">
+
+                          <label for="cantidad_solicitada">Cantidad de Prestacion Solicitada</label>
+
+                          <input type="text" class="form-control input-lg" id="editar_cantidad_solicitada" name="editar_cantidad_solicitada">
 
                       </div>
 
@@ -874,14 +895,6 @@ MODAL EDITAR BENEFICIARIO
 
                   </div>
 
-                     <div class="col-lg-6">
-
-                          <label for="cantidad_solicitada">Cantidad Solicitada</label>
-
-                          <input type="text" class="form-control input-lg" id="editar_cantidad_solicitada" name="editar_cantidad_solicitada">
-
-                      </div>
-
                 </div>
 
               </div>
@@ -959,7 +972,8 @@ MODAL HORARIO BENEFICIARIO
 
         <div class="modal-content">
 
-            <form role="form" method="POST" action="{{ route('beneficiario-create') }}">
+            <form role="form" method="POST" action="{{ route('sesion-create') }}">
+
             @csrf
 
             <!--=====================================
@@ -1036,7 +1050,7 @@ MODAL HORARIO BENEFICIARIO
 
                                     <label for="guardar">Guardar horario</label>
 
-                                    <button type="submit" id="guardar" class="btn btn-success form-control input-lg"><i class="fa fa-check"></i></button>
+                                    <button type="submit" id="guardarHorario" idBeneficiario class="btn btn-success form-control input-lg"><i class="fa fa-check"></i></button>
 
                                 </div>
 
@@ -1046,7 +1060,7 @@ MODAL HORARIO BENEFICIARIO
 
                         <hr>
 
-                        <div class="form-group col-lg-12">
+                        <div class="form-group col-lg-12" style="margin-left: 20px">
                             <div class="input-group col-lg-12">
                                 <table style="width: 100%">
                                     <thead>
@@ -1056,11 +1070,8 @@ MODAL HORARIO BENEFICIARIO
                                         <th>Acciones</th>
                                     </thead>
 
-                                    <tbody>
-                                        <td>Lunes</td>
-                                        <td>10:30</td>
-                                        <td>45 minutos</td>
-                                        <td><button class="btn btn-danger"><i class="fa fa-trash"></i></button></td>
+                                    <tbody id="horarioBenef">
+
                                     </tbody>
                                 </table>
                             </div>
@@ -1070,6 +1081,9 @@ MODAL HORARIO BENEFICIARIO
 
                 </div>
 
+                <input type="hidden" name="beneficiario_id" id="beneficiario_id">
+                <input type="hidden" name="obrasocial_id" id="obrasocial_id" value={{ $obrasocial[0]->id }}>
+
                 <!--=====================================
                 PIE DEL MODAL
                 ======================================-->
@@ -1078,7 +1092,7 @@ MODAL HORARIO BENEFICIARIO
 
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Salir</button>
 
-                    <button type="submit" class="btn btn-primary">Guardar beneficiario</button>
+                    <button class="btn btn-primary">Guardar beneficiario</button>
 
                 </div>
 
@@ -1197,7 +1211,7 @@ MODAL CLONAR BENEFICIARIO
 
                             <div class="input-group col-lg-12">
 
-                                <div class="col-lg-12">
+                                <div class="col-lg-9">
 
                                     <label for="obraSocial">Prestación</label>
 
@@ -1210,6 +1224,14 @@ MODAL CLONAR BENEFICIARIO
                                         @endforeach
 
                                     </select>
+
+                                </div>
+
+                                <div class="col-lg-3">
+
+                                    <label for="cantidad_solicitada">Cantidad Solicitada</label>
+
+                                    <input type="text" class="form-control input-lg" id="cantidad_solicitada_clon" name="cantidad_solicitada">
 
                                 </div>
 
@@ -1394,14 +1416,6 @@ MODAL CLONAR BENEFICIARIO
                                         <option value="Tarde">Tarde</option>
                                         <option value="Noche">Noche</option>
                                     </select>
-
-                                </div>
-
-                                <div class="col-lg-6">
-
-                                    <label for="cantidad_solicitada">Cantidad Solicitada</label>
-
-                                    <input type="text" class="form-control input-lg" id="cantidad_solicitada_clon" name="cantidad_solicitada">
 
                                 </div>
 

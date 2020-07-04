@@ -12,4 +12,9 @@ class Beneficiario extends Model
     {
     	return $this->belongsTo('App\Prestador', 'prestador_id', 'id');
     }
+
+    public function sesion()
+    {
+    	return $this->hasMany('\App\Sesion', 'id', 'beneficiario_id');
+    }
 }
