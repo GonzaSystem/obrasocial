@@ -74,8 +74,9 @@
           @foreach($beneficiarios as $beneficiario)
 
 
-              <?php $codigo_prestacion = $beneficiario->prestacion[0]->codigo_modulo ?>
-              <?php $planilla = $beneficiario->prestacion[0]->planilla ?>
+              <?php $codigo_prestacion = $beneficiario->prestacion[0]->codigo_modulo; ?>
+              <?php $planilla = $beneficiario->prestacion[0]->planilla; ?>
+              <?php $os_id = $beneficiario->os_id; ?>
 
             @foreach($beneficiario->beneficiario as $key => $benefval)
 
@@ -93,7 +94,7 @@
               <td style="text-align: center">{{ $benefval->codigo_seguridad }}</td>
               <td style="text-align: center">{{ $codigo_prestacion }}</td>
               <td style="text-align: center">{{ $benefval->cantidad_solicitada }}</td>
-              <td>{{ $benefval->notas }}</td>
+              <td>{{ substr($benefval->notas,0,10).'...' }}</td>
               <td></td>
               <td>
                 <div class="btn-group">
@@ -104,7 +105,7 @@
 
                   <button class="btn btn-warning btnEditarBeneficiario" data-toggle="modal" data-target="#modalEditarBeneficiario" idBenef="{{ $benefval->id }}"><i class="fa fa-pencil"></i></button>
 
-                  <button class="btn btn-danger"><i class="fa fa-trash"></i></button>
+                  <button class="btn btn-danger btnEliminarBeneficiario" idOs="{{ $os_id }}" idBenef=" {{ $benefval->id }}"><i class="fa fa-trash"></i></button>
 
                 </div>
 
@@ -320,7 +321,7 @@ MODAL AGREGAR BENEFICIARIO
 
                     <label for="obraSocial">Prestación</label>
 
-                    <select type="text" class="form-control input-lg" name="prestacion">
+                    <select type="text" class="form-control input-lg" name="prestacion" required>
 
                       <option value="">Seleccionar...</option>
 
@@ -972,9 +973,9 @@ MODAL HORARIO BENEFICIARIO
 
         <div class="modal-content">
 
-            <form role="form" method="POST" action="{{ route('sesion-create') }}">
+{{--             <form role="form" method="POST" action="{{ route('sesion-create') }}">
 
-            @csrf
+            @csrf --}}
 
             <!--=====================================
             CABEZA DEL MODAL
@@ -1050,7 +1051,7 @@ MODAL HORARIO BENEFICIARIO
 
                                     <label for="guardar">Guardar horario</label>
 
-                                    <button type="submit" id="guardarHorario" idBeneficiario class="btn btn-success form-control input-lg"><i class="fa fa-check"></i></button>
+                                    <button type="button" id="guardarHorario" idBeneficiario class="btn btn-success form-control input-lg"><i class="fa fa-check"></i></button>
 
                                 </div>
 
@@ -1092,11 +1093,9 @@ MODAL HORARIO BENEFICIARIO
 
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Salir</button>
 
-                    <button class="btn btn-primary">Guardar beneficiario</button>
-
                 </div>
 
-            </form>
+{{--  </form> --}}
 
         </div>
 

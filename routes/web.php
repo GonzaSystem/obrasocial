@@ -44,6 +44,7 @@ Route::post('beneficiario/list', 'BeneficiarioController@list')->name('beneficia
 Route::get('beneficiario/presupuesto/{prestador_id}/{beneficiario_id}', 'BeneficiarioController@presupuesto')->name('beneficiario-presupuesto');
 Route::post('beneficiario/update', 'BeneficiarioController@update')->name('beneficiario-update');
 Route::get('/beneficiario/form/{id}/{planilla}', 'BeneficiarioController@formulario')->name('formulario-beneficiario');
+Route::get('/beneficiario/delete/{os_id}/{beneficiario_id}', 'BeneficiarioController@delete')->name('beneficiario-delete');
 
 //Prestaciones
 Route::get('/prestaciones', 'ObraSocialController@lista_prestaciones')->name('prestaciones');
@@ -55,3 +56,4 @@ Route::get('/prestacionind/show/{id}', 'ObraSocialController@show')->name('prest
 // Sesiones
 Route::post('/sesion/horarios', 'SesionController@index')->name('sesion-horarios');
 Route::post('/sesion/create', 'SesionController@store')->name('sesion-create');
+Route::post('/sesion/destroy', 'SesionController@destroy')->name('sesion-destroy');

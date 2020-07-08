@@ -40,12 +40,12 @@ class SesionController extends Controller
     public function store(Request $request)
     {
         $sesion = new Sesion;
-        $obra_social = $request->input('obrasocial_id');
+        $obra_social = $request->obrasocial_id;
 
-        $beneficiario_id = $request->input('beneficiario_id');
-        $dia = $request->input('dia');
-        $hora = $request->input('hora');
-        $tiempo = $request->input('tiempo');
+        $beneficiario_id = $request->beneficiario_id;
+        $dia = $request->dia;
+        $hora = $request->hora;
+        $tiempo = $request->tiempo;
 
         $sesion->beneficiario_id = $beneficiario_id;
         $sesion->dia = $dia;
@@ -56,8 +56,8 @@ class SesionController extends Controller
 
         $beneficiario = Beneficiario::find($beneficiario_id);
 
-        return redirect()->route('beneficiarios', ['prestador_id' => \Auth::user()->id, 'obrasocial_id' => $obra_social])
-            ->with(['message' => 'El horario de '.$beneficiario->nombre.' ha sido guardado correctamente']);
+        $sesiones = Sesion::where('beneficiario_id', $beneficiario_id)->get();
+        return $sesiones;
     }
 
     /**
@@ -100,8 +100,14 @@ class SesionController extends Controller
      * @param  \App\Sesion  $sesion
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Sesion $sesion)
+    public function destroy(Request $request)
     {
-        //
+
+        $sesion = Sesion::find($request->id);
+        $sesion->delete();
+
+        $beneficiario_id = $request->beneficiario_id;
+        $sesiones = Sesion::where('beneficiario_id', $beneficiario_id)->get();
+        return $sesiones;
     }
 }

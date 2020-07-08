@@ -8,6 +8,7 @@ use App\Prestador;
 use App\User;
 use App\Beneficiario;
 use App\ObraSocial;
+use App\Sesion;
 
 class BeneficiarioController extends Controller
 {
@@ -127,6 +128,16 @@ class BeneficiarioController extends Controller
         return $beneficiario;
     }
 
+    public function delete($os_id, $beneficiario_id)
+    {
+        // Borro beneficiario
+        $beneficiario = Beneficiario::find($beneficiario_id);
+        $beneficiario->delete();
+
+         return redirect()->route('beneficiarios', ['prestador_id' => \Auth::user()->id, 'obrasocial_id' => $os_id])
+            ->with(['message' => 'El beneficiario ha sido eliminado correctamente']);
+    }
+
     public function presupuesto($prestador_id, $beneficiario_id)
     {
         $prestador = Prestador::where('id', '=', $prestador_id)->with('user')->get();
@@ -203,6 +214,21 @@ class BeneficiarioController extends Controller
             ->with(['message' => 'Los datos de beneficiario han sido actualizados correctamente']);
     }
 
+    public function cuenta_dias($mes,$anio,$numero_dia, $horario)
+    {
+        $count=0;
+        $dias_mes=cal_days_in_month(CAL_GREGORIAN, $mes, $anio);
+        $coincidencia = array();
+
+        for($i=1;$i<=$dias_mes;$i++){
+            if(date('N',strtotime($anio.'-'.$mes.'-'.$i))==$numero_dia){
+                $count++;
+                $coincidencia[$i] = date($i.'/'.$mes.'/'.substr($anio, -2)). '/' . $horario;
+            }
+        }     
+        return $coincidencia;
+    }
+
     public function formulario($id, $planilla)
     {
         if( $planilla == 1 ){
@@ -213,6 +239,23 @@ class BeneficiarioController extends Controller
             $view = 'forms.traslado';
         }
 
-        return view($view);
+        $beneficiario_id = $id;
+        $mes = date('m');
+        $anio = date('Y');
+
+        $sesiones = Sesion::where('beneficiario_id', $beneficiario_id)->get();
+        $fechas = array();
+        foreach ($sesiones as $key => $sesion) {
+            //Ver de pasar el horario a la funcion
+             $fechas[] = $this->cuenta_dias($mes, $anio, $sesion['dia'], $sesion['hora']);
+        }
+        $merged = array_merge(...$fechas);
+        sort($merged, SORT_NUMERIC);
+
+
+
+        return view($view, [
+            'fechas' => $merged
+        ]);
     }
 }

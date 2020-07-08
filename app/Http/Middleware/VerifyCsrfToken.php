@@ -12,6 +12,7 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
-        //
+        'http://localhost/os/public/sesion/create',
+        'http://localhost/os/public/sesion/destroy'
     ];
 }

@@ -83,7 +83,6 @@ $.ajax({
 	dataType: "json",
 	type: "POST",
 	success: function(respuesta){
-		console.log("respuesta", respuesta);
 		$("#id").val(respuesta[0]["id"]);
 		$("#editarNombre").val(respuesta[0]["nombre"]);
 		$("#editarApellido").val(respuesta[0]["apellido"]);
@@ -110,6 +109,33 @@ $.ajax({
 	});
 });
 
+// Eliminar beneficiario
+$(document).on("click", ".btnEliminarBeneficiario", function(){
+
+  var idBenef = $(this).attr("idBenef");
+  var idOs = $(this).attr("idOs");
+
+  swal({
+    title: '¿Está seguro de borrar el usuario?',
+    text: "¡Una vez eliminado, la acción no se podrá deshacer!",
+    type: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      cancelButtonText: 'Cancelar',
+      confirmButtonText: 'Si, borrar usuario!'
+  }).then(function(result){
+
+    if(result.value){
+
+      window.location = "http://localhost/os/public/beneficiario/delete/"+idOs+"/"+idBenef+"";
+
+    }
+
+  })
+
+})
+
 // Traigo prestaciones segun OS
 $(document).on('change', '#obraSocial', function(){
 	var idOs = $("#obraSocial").val();
@@ -127,7 +153,6 @@ $(document).on('change', '#obraSocial', function(){
 			// data: {id:id},
 			dataType: "json",
 			success: function(respuesta){
-				console.log("respuesta", respuesta);
 				$.each(respuesta, function(key, val){
 					$("#role_profesion").append('<option value='+val.id+'>'+val.nombre+'</option>');
 				});
@@ -170,7 +195,6 @@ $(document).on('click', '#btnEditarPrestacion', function(){
 			// data: {id:id},
 			dataType: "json",
 			success: function(respuesta){
-			    console.log("respuesta", respuesta);
 				$("#editar_obra_social").val(respuesta[0]['os_id']);
 				$("#editar_codigo_modulo").val(respuesta[0]['codigo_modulo']);
 				$("#editar_prestacion").val(respuesta[0]['nombre']);
@@ -208,7 +232,6 @@ $(document).on('click', '.btnClonarBeneficiario', function(){
         dataType: "json",
         type: "POST",
         success: function(respuesta){
-        	console.log("respuesta", respuesta);
         	$("#nombre_clon").empty();
             $("#correo_clon").empty();
             $("#telefono_clon").empty();
@@ -259,6 +282,7 @@ $(document).on('click', '.btnClonarBeneficiario', function(){
 // Al presionar el boton de horarios traigo los resultados
 $(document).on('click', '.btnHorarioBeneficiario', function(){
 	var id = $(this).attr("idBenef");
+	$("#horarioBenef").empty();
 
 	 $.ajaxSetup({
         headers: {
@@ -299,8 +323,108 @@ $(document).on('click', '.btnHorarioBeneficiario', function(){
         				break;
         		}
 
-        		$("#horarioBenef").append('<tr><td>'+dia+'</td><td>'+respuesta[i]["hora"]+'</td><td>'+respuesta[i]["tiempo"]+' minutos</td><td><button class="btn btn-danger"><i class="fa fa-trash"></i></button></td></tr>')
+        		$("#horarioBenef").append('<tr><td>'+dia+'</td><td>'+respuesta[i]["hora"]+'</td><td>'+respuesta[i]["tiempo"]+' minutos</td><td><button class="btn btn-danger btnEliminarSesion" idSesion="'+respuesta[i]["id"]+'"><i class="fa fa-trash"></i></button></td></tr>')
         	}
+        }
+    });
+});
+
+// Guardo Horario
+$(document).on('click', '#guardarHorario', function(){
+	
+	// Obtengo valores
+	var dia = $("#dia").val();
+	var hora = $("#hora").val();
+	var tiempo = $("#tiempo").val();
+	var beneficiario_id = $("#beneficiario_id").val();
+	var obrasocial_id = $("#obrasocial_id").val();
+
+	$("#horarioBenef").empty();
+
+    $.ajax({
+        url: "http://localhost/os/public/sesion/create",
+        data: {dia:dia, hora:hora, tiempo:tiempo, beneficiario_id:beneficiario_id, obrasocial_id:obrasocial_id},
+        dataType: "json",
+        type: "POST",
+        success: function(respuesta){
+        	for (var i = 0; i < respuesta.length; i++) {
+        		switch( respuesta[i]["dia"]){
+        			case 1:
+        				dia = 'Lunes';
+        				break;
+        			case 2:
+        				dia = 'Martes';
+        				break;
+        			case 3: 
+        				dia = 'Miercoles';
+        				break;
+        			case 4:
+        				dia = 'Jueves';
+        				break;
+        			case 5:
+        				dia = 'Viernes';
+        				break;
+        			case 6:
+        				dia = 'Sabado';
+        				break;
+        			case 7:
+        				dia = 'Domingo';
+        				break;
+        		}
+
+        		$("#horarioBenef").append('<tr><td>'+dia+'</td><td>'+respuesta[i]["hora"]+'</td><td>'+respuesta[i]["tiempo"]+' minutos</td><td><button class="btn btn-danger btnEliminarSesion" idSesion="'+respuesta[i]["id"]+'"><i class="fa fa-trash"></i></button></td></tr>');
+        		$("#dia").val('');
+        		$("#hora").val('');
+        		$("#tiempo").val('');
+        	}
+        }
+    });
+});
+
+//Eliminar sesion
+$(document).on('click', '.btnEliminarSesion', function(){
+	var id = $(this).attr("idSesion");
+	var beneficiario_id = $("#beneficiario_id").val();
+
+	$("#horarioBenef").empty();
+
+	    $.ajax({
+        url: "http://localhost/os/public/sesion/destroy",
+        data: {id:id, beneficiario_id:beneficiario_id},
+        dataType: "json",
+        type: "POST",
+        success: function(respuesta){
+        	console.log("respuesta", respuesta);
+        	for (var i = 0; i < respuesta.length; i++) {
+        		switch( respuesta[i]["dia"]){
+        			case 1:
+        				dia = 'Lunes';
+        				break;
+        			case 2:
+        				dia = 'Martes';
+        				break;
+        			case 3: 
+        				dia = 'Miercoles';
+        				break;
+        			case 4:
+        				dia = 'Jueves';
+        				break;
+        			case 5:
+        				dia = 'Viernes';
+        				break;
+        			case 6:
+        				dia = 'Sabado';
+        				break;
+        			case 7:
+        				dia = 'Domingo';
+        				break;
+        		}
+
+        		$("#horarioBenef").append('<tr><td>'+dia+'</td><td>'+respuesta[i]["hora"]+'</td><td>'+respuesta[i]["tiempo"]+' minutos</td><td><button class="btn btn-danger btnEliminarSesion" idSesion="'+respuesta[i]["id"]+'"><i class="fa fa-trash"></i></button></td></tr>');
+        	}
+        },
+        error: function(response){
+        	console.log('response', response);
         }
     });
 });
