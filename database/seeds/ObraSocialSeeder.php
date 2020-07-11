@@ -14,7 +14,7 @@ class ObraSocialSeeder extends Seeder
     public function run()
     {
         DB::table('obrasocial')->insert([
-        	'nombre' => 'OS '.Str::random(10),
+        	'nombre' => 'APROSS',
             'tipo_obra' => 'Nacional',
         	'cuit' => 1122334455,
         	'telefono' => 1167455471,

@@ -17,8 +17,7 @@ class CreateBeneficiarioTable extends Migration
             $table->id();
             $table->integer('prestador_id')->nullable();
             $table->integer('sesion_id')->nullable();
-            $table->string('nombre', 75)->nullable();
-            $table->string('apellido', 75)->nullable();
+            $table->text('nombre', 75)->nullable();
             $table->string('email', 45)->nullable();
             $table->string('telefono', 75)->nullable();
             $table->string('direccion', 75)->nullable();

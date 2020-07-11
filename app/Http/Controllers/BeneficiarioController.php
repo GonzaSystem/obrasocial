@@ -62,7 +62,6 @@ class BeneficiarioController extends Controller
         $obra_social = $request->input('obraSocial');
         $prestador = $request->input('prestacion');
         $nombre = $request->input('nombre');
-        $apellido = $request->input('apellido');
         $correo = $request->input('correo');
         $telefono = $request->input('telefono');
         $direccion = $request->input('direccion');
@@ -90,7 +89,6 @@ class BeneficiarioController extends Controller
         $beneficiario->prestador_id = $prestador;
         $beneficiario->sesion_id = 1;
         $beneficiario->nombre = $nombre;
-        $beneficiario->apellido = $apellido;
         $beneficiario->email = $correo;
         $beneficiario->telefono = $telefono;
         $beneficiario->direccion = $direccion;
@@ -214,22 +212,27 @@ class BeneficiarioController extends Controller
             ->with(['message' => 'Los datos de beneficiario han sido actualizados correctamente']);
     }
 
-    public function cuenta_dias($mes,$anio,$numero_dia, $horario)
+    public function cuenta_dias($mes,$anio,$numero_dia, $horario, $tope_dias, $tiempo)
     {
         $count=0;
         $dias_mes=cal_days_in_month(CAL_GREGORIAN, $mes, $anio);
         $coincidencia = array();
 
-        for($i=1;$i<=$dias_mes;$i++){
-            if(date('N',strtotime($anio.'-'.$mes.'-'.$i))==$numero_dia){
-                $count++;
-                $coincidencia[$i] = date($i.'/'.$mes.'/'.substr($anio, -2)). '/' . $horario;
-            }
+        for($i=1;$i<=$dias_mes && $count < $tope_dias;$i++){
+                if(date('N',strtotime($anio.'-'.$mes.'-'.$i))==$numero_dia){
+
+                    $hor=new \DateTime($horario);
+                    $fin=$hor->add( new \DateInterval( 'PT' . ( (integer) $tiempo ) . 'M' ) );
+                    $fecha_fin = $fin->format( 'H:i' );
+
+                    $count++;
+                    $coincidencia[$i] = date($i.'/'.$mes.'/'.substr($anio, -2)). '/' . $horario.'/'.$fecha_fin;
+                }
         }     
         return $coincidencia;
     }
 
-    public function formulario($id, $planilla)
+    public function formulario($bene_id, $prestador_id, $planilla)
     {
         if( $planilla == 1 ){
             $view = 'forms.rehabilitacion';
@@ -239,23 +242,72 @@ class BeneficiarioController extends Controller
             $view = 'forms.traslado';
         }
 
-        $beneficiario_id = $id;
+        $beneficiario_id = $bene_id;
         $mes = date('m');
         $anio = date('Y');
 
+        $beneficiario = Beneficiario::where('id', $beneficiario_id)->with('prestador')->get();
+        $prestador = Prestador::where('id', $prestador_id)->with('prestacion')->get();
         $sesiones = Sesion::where('beneficiario_id', $beneficiario_id)->get();
         $fechas = array();
+        $fecha_fin = array();
         foreach ($sesiones as $key => $sesion) {
             //Ver de pasar el horario a la funcion
-             $fechas[] = $this->cuenta_dias($mes, $anio, $sesion['dia'], $sesion['hora']);
+             $fechas[] = $this->cuenta_dias($mes, $anio, $sesion['dia'], $sesion['hora'], $beneficiario[0]->prestador->tope, $sesion['tiempo']);
         }
+
         $merged = array_merge(...$fechas);
         sort($merged, SORT_NUMERIC);
+
+        // Traigo mes actual
+        $mes = date('m');
+            switch ($mes){
+        case '1':
+            $mes = 'Enero';
+            break;
+        case '2':
+            $mes = 'Febrero';
+            break;
+        case '3':
+            $mes = 'Marzo';
+            break;
+        case '4':
+            $mes = 'Abril';
+            break;
+        case '5':
+            $mes = 'Mayo';
+            break;
+        case '6':
+            $mes = 'Junio';
+            break;
+        case '7':
+            $mes = 'Julio';
+            break;
+        case '8':
+            $mes = 'Agosto';
+            break;
+        case '9':
+            $mes = 'Septiembre';
+            break;
+        case '10':
+            $mes = 'Octubre';
+            break;
+        case '11':
+            $mes = 'Noviembre';
+            break;
+        case '12':
+            $mes = 'Diciembre';
+            break;
+    }
 
 
 
         return view($view, [
-            'fechas' => $merged
+            'fechas' => $merged,
+            'fecha_fin' => $fecha_fin,
+            'prestador' => $prestador,
+            'beneficiario' => $beneficiario,
+            'mes' => $mes,
         ]);
     }
 }

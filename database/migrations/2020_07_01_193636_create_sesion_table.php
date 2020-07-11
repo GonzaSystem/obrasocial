@@ -17,7 +17,7 @@ class CreateSesionTable extends Migration
             $table->id();
             $table->integer('beneficiario_id')->nullable();
             $table->tinyInteger('dia')->nullable();
-            $table->time('hora')->nullable();
+            $table->string('hora',5)->nullable();
             $table->tinyInteger('tiempo')->nullable();
             $table->timestamps();
         });

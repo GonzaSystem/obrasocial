@@ -43,7 +43,7 @@ $.ajax({
 	});
 });
 
-// Editar Prestacion
+// Editar datos Prestador
 $(document).on('click', '.btnEditarPrestacion', function(){
 
 var id = $(this).attr("idprest");
@@ -61,7 +61,11 @@ $.ajax({
 	type: "POST",
 	success: function(respuesta){
 		$("#editarNumeroPrestador").val(respuesta["numero_prestador"]);
+        $("#editar_utiliza_valor_profesion").val(respuesta["valor_default"]);
 		$("#id").val(respuesta["id"]);
+        $("#editar_mover_dias").val(respuesta["mover_dias"]);
+        $("#editar_quitar_feriado").val(respuesta["quitar_feriado"]);
+        $("#editar_tope").val(respuesta["tope"]);
 		}
 	});
 });
@@ -116,14 +120,14 @@ $(document).on("click", ".btnEliminarBeneficiario", function(){
   var idOs = $(this).attr("idOs");
 
   swal({
-    title: '¿Está seguro de borrar el usuario?',
+    title: '¿Está seguro de borrar el beneficiario?',
     text: "¡Una vez eliminado, la acción no se podrá deshacer!",
     type: 'warning',
     showCancelButton: true,
     confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       cancelButtonText: 'Cancelar',
-      confirmButtonText: 'Si, borrar usuario!'
+      confirmButtonText: 'Si, borrar beneficiario!'
   }).then(function(result){
 
     if(result.value){

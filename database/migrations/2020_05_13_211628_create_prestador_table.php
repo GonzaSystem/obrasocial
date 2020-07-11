@@ -21,6 +21,9 @@ class CreatePrestadorTable extends Migration
             $table->string('numero_prestador', 45);  
             $table->string('valor_default', 1);     
             $table->decimal('valor_prestacion', 10, 2)->nullable();
+            $table->string('mover_dias', 30);
+            $table->string('quitar_feriado', 2);
+            $table->tinyInteger('tope');
             $table->timestamps();
         });
     }

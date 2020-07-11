@@ -20,7 +20,7 @@ class Prestador extends Model
 
     public function beneficiario()
     {
-    	return $this->hasMany('App\Beneficiario', 'prestador_id', 'id');
+    	return $this->hasMany('App\Beneficiario', 'prestador_id', 'id')->orderBy('beneficiario.nombre');
     }
 
     public function prestacion()

@@ -43,7 +43,7 @@ Route::post('/beneficiarios/create', 'BeneficiarioController@create')->name('ben
 Route::post('beneficiario/list', 'BeneficiarioController@list')->name('beneficiario-list');
 Route::get('beneficiario/presupuesto/{prestador_id}/{beneficiario_id}', 'BeneficiarioController@presupuesto')->name('beneficiario-presupuesto');
 Route::post('beneficiario/update', 'BeneficiarioController@update')->name('beneficiario-update');
-Route::get('/beneficiario/form/{id}/{planilla}', 'BeneficiarioController@formulario')->name('formulario-beneficiario');
+Route::get('/beneficiario/form/{id}/{prestador_id}/{planilla}', 'BeneficiarioController@formulario')->name('formulario-beneficiario');
 Route::get('/beneficiario/delete/{os_id}/{beneficiario_id}', 'BeneficiarioController@delete')->name('beneficiario-delete');
 
 //Prestaciones

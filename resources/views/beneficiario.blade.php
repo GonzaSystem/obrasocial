@@ -77,6 +77,7 @@
               <?php $codigo_prestacion = $beneficiario->prestacion[0]->codigo_modulo; ?>
               <?php $planilla = $beneficiario->prestacion[0]->planilla; ?>
               <?php $os_id = $beneficiario->os_id; ?>
+              <?php $prestador_id = $beneficiario->id ?>
 
             @foreach($beneficiario->beneficiario as $key => $benefval)
 
@@ -99,7 +100,7 @@
               <td>
                 <div class="btn-group">
                   
-                  <a target="_BLANK" href="{{ route('formulario-beneficiario', ['id' => $benefval->id, 'planilla' => $planilla]) }}" class="btn btn-primary" style="color: white; background-color: #605CA8"><i class="fa fa-address-card"></i></a>
+                  <a target="_BLANK" href="{{ route('formulario-beneficiario', ['id' => $benefval->id, 'prestador_id' => $prestador_id ,'planilla' => $planilla]) }}" class="btn btn-primary" style="color: white; background-color: #605CA8"><i class="fa fa-address-card"></i></a>
                  
                   <button class="btn btn-primary btnHorarioBeneficiario" data-toggle="modal" data-target="#modalHorarioBeneficiario" idBenef="{{ $benefval->id }}"><i class="fa fa-clock-o"></i></button>
 
