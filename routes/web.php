@@ -52,6 +52,7 @@ Route::post('/prestacion/create', 'ObraSocialController@create_prestacion')->nam
 Route::get('/prestacion/show/{id}', 'PrestacionController@show')->name('prestacion-show');
 Route::post('/prestacion/edit', 'ObraSocialController@edit')->name('prestacion-edit');
 Route::get('/prestacionind/show/{id}', 'ObraSocialController@show')->name('prestacion-ind-show');
+Route::get('/prestacion/delete/{id}', 'PrestacionController@destroy')->name('prestacion-delete');
 
 // Sesiones
 Route::post('/sesion/horarios', 'SesionController@index')->name('sesion-horarios');

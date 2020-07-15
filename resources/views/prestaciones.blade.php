@@ -84,7 +84,7 @@
 
                 <button class="btn btn-warning" id="btnEditarPrestacion" idPrest="{{ $prestacion->id }}" data-toggle="modal" data-target="#modalEditarPrestacion"><i class="fa fa-pencil"></i></button>
 
-                <button class="btn btn-danger"><i class="fa fa-times"></i></button>
+                <button class="btn btn-danger" id="btnEliminarPrestacion" idPrest="{{ $prestacion->id }}"><i class="fa fa-times"></i></button>
 
               </div>
 

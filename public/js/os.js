@@ -209,6 +209,32 @@ $(document).on('click', '#btnEditarPrestacion', function(){
 		});
 	});
 
+// Eliminar prestacion
+$(document).on("click", "#btnEliminarPrestacion", function(){
+
+  var idPrest = $(this).attr("idPrest");
+
+  swal({
+    title: '¿Está seguro de borrar la prestación?',
+    text: "¡Una vez eliminada, la acción no se podrá deshacer!",
+    type: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      cancelButtonText: 'Cancelar',
+      confirmButtonText: 'Si, borrar prestación!'
+  }).then(function(result){
+
+    if(result.value){
+
+      window.location = "http://localhost/os/public/prestacion/delete/"+idPrest;
+
+    }
+
+  })
+
+})
+
 /*Data mask*/
 $(document).ready(function($){
     //Datemask hh:mm

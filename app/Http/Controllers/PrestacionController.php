@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Prestacion;
+use App\Prestador;
+use App\Beneficiario;
 
 class PrestacionController extends Controller
 {
@@ -81,6 +83,23 @@ class PrestacionController extends Controller
      */
     public function destroy($id)
     {
-        //
+        // Borro prestacion
+        $prestacion = Prestacion::find($id);
+        $prestacion->delete();
+
+        // Borro prestaciones asociadas en datos de prestador
+        $prestador = Prestador::where('prestacion_id', $id);
+
+        // Busco beneficiarios asociados y los elimino tambien
+        foreach($prestador as $prest){
+            $beneficiarios = Beneficiario::where('prestador_id', $prest->id);
+            $beneficiarios->delete();       
+        }
+         
+        // Elimino prestador
+        $prestador->delete();
+
+         return redirect()->route('prestaciones')
+            ->with(['message' => 'La prestacion con sus datos de prestador y beneficiarios asociados han sido eliminados correctamente']);
     }
 }

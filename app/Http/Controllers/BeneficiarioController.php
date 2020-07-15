@@ -154,7 +154,6 @@ class BeneficiarioController extends Controller
         // Obtengo datos de inputs
         $obra_social = $request->input('editarObraSocial');
         $nombre = $request->input('editarNombre');
-        $apellido = $request->input('editarApellido');
         $correo = $request->input('editarCorreo');
         $telefono = $request->input('editarTelefono');
         $direccion = $request->input('editarDireccion');
@@ -181,7 +180,6 @@ class BeneficiarioController extends Controller
 
         // Asigno inputs a objeto beneficiario
         $beneficiario->nombre = $nombre;
-        $beneficiario->apellido = $apellido;
         $beneficiario->email = $correo;
         $beneficiario->telefono = $telefono;
         $beneficiario->direccion = $direccion;
