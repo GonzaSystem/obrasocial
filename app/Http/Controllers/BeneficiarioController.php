@@ -251,7 +251,7 @@ class BeneficiarioController extends Controller
         $fecha_fin = array();
         foreach ($sesiones as $key => $sesion) {
             //Ver de pasar el horario a la funcion
-             $fechas[] = $this->cuenta_dias($mes, $anio, $sesion['dia'], $sesion['hora'], $beneficiario[0]->prestador->tope, $sesion['tiempo']);
+             $fechas[] = $this->cuenta_dias($mes, $anio, $sesion['dia'], $sesion['hora'], $beneficiario[0]->cantidad_solicitada, $sesion['tiempo']);
         }
 
         $merged = array_merge(...$fechas);

@@ -23,7 +23,6 @@ class CreatePrestadorTable extends Migration
             $table->decimal('valor_prestacion', 10, 2)->nullable();
             $table->string('mover_dias', 30);
             $table->string('quitar_feriado', 2);
-            $table->tinyInteger('tope');
             $table->timestamps();
         });
     }

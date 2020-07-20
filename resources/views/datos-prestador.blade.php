@@ -234,15 +234,16 @@ MODAL AGREGAR PRESTACION
                       @enderror
                   </div>
 
+                  <div class="col-lg-12" style="margin-top: 15px" id="valor_profesion_personalizado">
+
+                  </div>
+
                 @elseif(Auth::user()->role == "Traslado")
                   <div class="col-lg-12 mt-2">
                     <label for="role_traslado">{{ __('Traslado') }}</label>
 
-                        <select id="role_traslado" type="text" class="form-control @error('role_traslado') is-invalid @enderror" name="profesion" value="{{ old('role_traslado') }}" autofocus>
+                        <select id="role_profesion" type="text" class="form-control @error('role_traslado') is-invalid @enderror" name="profesion" value="{{ old('role_traslado') }}" autofocus>
                             <option value="">Seleccionar Tipo de Traslado</option>
-                            <option value="Traslado a rehabilitacion">Traslado a rehabilitacion</option>
-                            <option value="Traslado a Institutos Educativo">Traslado a Institutos Educativo</option>
-                            <option value="Traslado a Instituto de Rehabilitacion">Traslado a Instituto de Rehabilitacion</option>
                         </select>
 
                         @error('role_institucion')
@@ -251,6 +252,26 @@ MODAL AGREGAR PRESTACION
                             </span>
                         @enderror
                   </div>
+
+                  <div class="col-lg-6" style="margin-top: 10px;">
+                          <label for="utiliza_valor_profesion">{{ __('Utiliza Valor Predeterminado') }}</label>
+
+                              <select id="utiliza_valor_profesion" type="text" class="form-control @error('role_profesion') is-invalid @enderror" name="utiliza_valor_profesion" value="{{ old('utiliza_valor_profesion') }}" autocomplete="utiliza_valor_profesion" autofocus>
+                                <option value="">Seleccionar...</option>
+                                <option value="T">Si</option>
+                                <option value="F">No</option>
+                              </select>
+
+                              @error('role_profesion')
+                                  <span class="invalid-feedback" role="alert">
+                                      <strong>{{ $message }}</strong>
+                                  </span>
+                              @enderror
+                      </div>
+
+                       <div class="col-lg-12" style="margin-top: 15px" id="valor_profesion_personalizado">
+
+                       </div>
 
                 @endif
 
@@ -282,26 +303,6 @@ MODAL AGREGAR PRESTACION
                         <option value="Si">Si</option>
 
                         <option value="No">No</option>
-
-                      </select>
-
-                    </div>
-
-                    <div class="col-lg-6" style="margin-top: 15px">
-                        
-                      <label for="tope">Tope</label>
-
-                      <select type="text" class="form-control" id="tope" name="tope">
-
-                        <option value="">Seleccionar...</option>
-
-                        <option value="4">4</option>
-
-                        <option value="8">8</option>
-
-                        <option value="12">12</option>
-
-                        <option value="20">20</option>
 
                       </select>
 
@@ -423,26 +424,6 @@ MODAL AGREGAR PRESTACION
                         <option value="Si">Si</option>
 
                         <option value="No">No</option>
-
-                      </select>
-
-                    </div>
-
-                    <div class="col-lg-6" style="margin-top: 15px">
-                        
-                      <label for="editar_tope">Tope</label>
-
-                      <select type="text" class="form-control" id="editar_tope" name="editar_tope">
-
-                        <option value="">Seleccionar...</option>
-
-                        <option value="4">4</option>
-
-                        <option value="8">8</option>
-
-                        <option value="12">12</option>
-
-                        <option value="20">20</option>
 
                       </select>
 

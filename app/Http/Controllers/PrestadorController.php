@@ -57,7 +57,6 @@ class PrestadorController extends Controller
         $valor_default = $request->input('utiliza_valor_profesion');
         $mover_dias = $request->input('mover_dias');
         $quitar_feriado = $request->input('quitar_feriado');
-        $tope = $request->input('tope');
 
         if($valor_default == 'T'){
             $valor = 0;
@@ -74,7 +73,6 @@ class PrestadorController extends Controller
         $prestador->valor_prestacion = $valor;
         $prestador->mover_dias = $mover_dias;
         $prestador->quitar_feriado = $quitar_feriado;
-        $prestador->tope = $tope;
 
     	// Guardo en DB
    		$prestador->save();
@@ -100,7 +98,6 @@ class PrestadorController extends Controller
     	$numero_prestador = $request->input('editarNumeroPrestador');
         $mover_dias = $request->input('editar_mover_dias');
         $quitar_feriado = $request->input('editar_quitar_feriado');
-        $tope = $request->input('editar_tope');
 
     	// Asigno datos a objeto
     	$prestador->numero_prestador = $numero_prestador;
@@ -116,7 +113,6 @@ class PrestadorController extends Controller
         $prestador->valor_prestacion = $valor;
         $prestador->mover_dias = $mover_dias;
         $prestador->quitar_feriado = $quitar_feriado;
-        $prestador->tope = $tope;
 
     	// Guardo en DB
     	$prestador->save();
