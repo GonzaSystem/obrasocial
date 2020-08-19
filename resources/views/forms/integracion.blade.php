@@ -38,47 +38,47 @@
 						<div class="form">
 							<div class="row">
 								<div class="form-group">
-									<span class="form-prepend" style="padding-right: 100px;" 
+									<span class="form-prepend" 
 										>profesional:</span
 									>
 									<input id="professional" type="text" class="form-input" value="{{ Auth::user()->name . ' ' . Auth::user()->surname }}" />
 								</div>
 								<div class="form-group">
-									<span class="form-prepend" style="padding-left: 100px;"
+									<span class="form-prepend" style="padding-left: 25px;"
 										>especialidad:</span
 									>
 									<input id="specialty" type="text" class="form-input"  value="{{ $prestador[0]->prestacion[0]->nombre }}" />
 								</div>
 							</div>
-							<div class="row">
-								<div class="form-group" style="width: 40%;">
-									<span class="form-prepend" style="padding-right: 40px" 
+							<div class="row" style="padding-top: 0.5rem;">
+								<div class="form-group" style="width: 15%;">
+									<span class="form-prepend" 
 										>mes:</span
 									>
 									<input id="month" type="text" class="form-input" value="{{ $mes }}" />
 								</div>
-								<div class="form-group">
-									<span class="form-prepend" style="padding-left: 120px"
+								<div class="form-group" style="width: 50%;">
+									<span class="form-prepend" style="padding-left: 20px"
 										>direccion del establecimiento educativo:</span
 									>
 									<input id="address" type="text" class="form-input" value="{{ Auth::user()->direccion }}" />
 								</div>
 								<div class="form-group" style="width: 30%;">
-									<span class="form-prepend" style="padding-left: 50px"
+									<span class="form-prepend" style="padding-left: 10px"
 										>Teléfono:</span
 									>
 									<input id="phone" type="text" class="form-input" value="{{ Auth::user()->telefono }}" />
 								</div>
 							</div>
-							<div class="row">
+							<div class="row" style="padding-top: 0.5rem;">
 								<div class="form-group">
-									<span class="form-prepend" style="padding-right: 60px;"
+									<span class="form-prepend" style="padding-right: 10px;"
 										>nombre y apellido:</span
 									>
 									<input id="names" type="text" class="form-input"  value="{{ $beneficiario[0]->nombre }}" />
 								</div>
 								<div class="form-group" style="width: 60%">
-									<span class="form-prepend" style="padding-left: 100px;"
+									<span class="form-prepend" style="padding-left: 10px;"
 										>n&uacute;mero de afiliado:</span
 									>
 									<input id="filial-number" type="text" class="form-input"  value="{{ $beneficiario[0]->numero_afiliado }}" />

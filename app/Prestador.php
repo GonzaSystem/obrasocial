@@ -18,9 +18,14 @@ class Prestador extends Model
     	return $this->hasMany('App\ObraSocial', 'id', 'os_id');
     }
 
+    // public function beneficiario()
+    // {
+    // 	return $this->hasMany('App\Beneficiario', 'prestador_id', 'id')->leftJoin('traditum', 'beneficiario_id', 'beneficiario.id')->select('beneficiario.*', 'traditum.codigo', 'traditum.mes', 'traditum.anio')->orderBy('nombre', 'desc');
+    // }
+
     public function beneficiario()
     {
-    	return $this->hasMany('App\Beneficiario', 'prestador_id', 'id')->orderBy('beneficiario.nombre');
+        return $this->hasMany('App\Beneficiario', 'prestador_id', 'id')->where(\DB::raw('DATE_FORMAT(CAST(created_at as DATE), "%Y-%m")'), '<=', \Auth::user()->anio.'-'.\Auth::user()->mes)->orderBy('nombre', 'desc');
     }
 
     public function prestacion()

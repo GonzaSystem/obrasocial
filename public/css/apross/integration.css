@@ -1,8 +1,13 @@
 main {
 	padding-top: 0;
 }
+
+.form .form-group .form-input{
+	font-size: 1rem;
+}
+
 .content-print {
-	height: 800px;
+	height: 300px;
 }
 .panel {
 	height: 80%;

@@ -9,6 +9,7 @@ use App\User;
 use App\Beneficiario;
 use App\ObraSocial;
 use App\Sesion;
+use App\Traditum;
 
 class BeneficiarioController extends Controller
 {
@@ -36,19 +37,32 @@ class BeneficiarioController extends Controller
         //$beneficiario = Beneficiario::where('prestador_id', $prest_id)->with('prestador')->get();
 
         // Traigo beneficiarios segun prestador y obra social
-        $beneficiario = Prestador::where('user_id', $user)
+        $beneficiarios = Prestador::where('user_id', $user)
          ->where('os_id', $os_id)
-         ->with('beneficiario', 'prestacion')
+         ->with('prestacion', 'beneficiario')
+         ->orderBy('id', 'desc')
          ->get();
+
+         $traditums = array();
+         foreach($beneficiarios as $beneficiario){
+            foreach($beneficiario->beneficiario as $k => $benef){
+                $traditums[$benef->id] = Traditum::where('beneficiario_id', $benef->id)->where('mes', \Auth::user()->mes)->get()->toArray();
+                if(empty($traditums[$benef->id])){
+                    $traditums[$benef->id][0]['codigo'] = null;
+                    $traditums[$benef->id][0]['id'] = null;
+                }
+            }
+         }
 
     	// Objeto Obra Social
     	$obraSocial = ObraSocial::where('id', $os_id)->get();
 
     	return view('beneficiario',[
-    		"beneficiarios" => $beneficiario,
+    		"beneficiarios" => $beneficiarios,
     		"obrasocial" => $obraSocial,
             "prestador_menu" => $prestador_menu,
             "prestacion" => $prestacion,
+            "traditums" => $traditums,
     	]);
     }
 
@@ -115,6 +129,14 @@ class BeneficiarioController extends Controller
         // Guardo en DB
         $beneficiario->save();
 
+        // Traditum
+        $traditum = new Traditum;
+        $traditum->beneficiario_id = $beneficiario['id'];
+        $traditum->codigo = $request->input('codigo_traditum');   
+        $traditum->mes = date('m');
+        $traditum->anio = date('Y');
+        $traditum->save(); 
+
         return redirect()->route('beneficiarios', ['prestador_id' => \Auth::user()->id, 'obrasocial_id' => $obra_social])
             ->with(['message' => 'Los datos de beneficiario han sido guardados correctamente']);
     }
@@ -123,7 +145,14 @@ class BeneficiarioController extends Controller
     {
         // Busco objeto segun ID
         $beneficiario = Beneficiario::where('id', '=', $request->id)->with('prestador')->get();
-        return $beneficiario;
+
+        // Obtengo prestacion
+        $prestacion = Prestador::where('id', $beneficiario[0]->prestador->id)->with('prestacion')->get();
+
+        // Traditum
+        $traditum = Traditum::where('beneficiario_id', '=', $request->id)->get();
+        
+        return json_encode(['beneficiario' => $beneficiario, 'prestacion' => $prestacion[0]->prestacion[0]->nombre, 'traditum' => $traditum]);
     }
 
     public function delete($os_id, $beneficiario_id)
@@ -206,6 +235,23 @@ class BeneficiarioController extends Controller
         // Guardo en DB
         $beneficiario->save();
 
+        // Traditum
+        $traditum = Traditum::where('beneficiario_id', $request->id)->first();
+        if($traditum == null){
+            $traditum = new Traditum;
+            $traditum->beneficiario_id = $request->id;
+            $traditum->codigo = $request->input('editar_codigo_traditum');   
+            $traditum->mes = date('m');
+            $traditum->anio = date('Y');
+            $traditum->save();  
+        }else{
+            $traditum->codigo = $request->input('editar_codigo_traditum');   
+            $traditum->mes = date('m');
+            $traditum->anio = date('Y');
+            $traditum->save();
+        }
+
+
         return redirect()->route('beneficiarios', ['prestador_id' => \Auth::user()->id, 'obrasocial_id' => $obra_social])
             ->with(['message' => 'Los datos de beneficiario han sido actualizados correctamente']);
     }
@@ -230,7 +276,7 @@ class BeneficiarioController extends Controller
         return $coincidencia;
     }
 
-    public function formulario($bene_id, $prestador_id, $planilla)
+    public function formulario($bene_id, $prestador_id, $planilla, $mes = null, $anio = null)
     {
         if( $planilla == 1 ){
             $view = 'forms.rehabilitacion';
@@ -241,8 +287,13 @@ class BeneficiarioController extends Controller
         }
 
         $beneficiario_id = $bene_id;
-        $mes = date('m');
-        $anio = date('Y');
+        if($mes == null){
+            $mes = date('m');           
+        }
+
+        if($anio == null){
+            $anio = date('Y');           
+        }
 
         $beneficiario = Beneficiario::where('id', $beneficiario_id)->with('prestador')->get();
         $prestador = Prestador::where('id', $prestador_id)->with('prestacion')->get();
@@ -250,8 +301,12 @@ class BeneficiarioController extends Controller
         $fechas = array();
         $fecha_fin = array();
         foreach ($sesiones as $key => $sesion) {
+            $cant_solicitada = $beneficiario[0]->cantidad_solicitada;
+            $totalDias = count($sesiones);
+            $avgSesion = $cant_solicitada / $totalDias; 
+
             //Ver de pasar el horario a la funcion
-             $fechas[] = $this->cuenta_dias($mes, $anio, $sesion['dia'], $sesion['hora'], $beneficiario[0]->cantidad_solicitada, $sesion['tiempo']);
+             $fechas[] = $this->cuenta_dias($mes, $anio, $sesion['dia'], $sesion['hora'], $avgSesion, $sesion['tiempo']);
         }
 
         $merged = array_merge(...$fechas);
@@ -298,8 +353,6 @@ class BeneficiarioController extends Controller
             break;
     }
 
-
-
         return view($view, [
             'fechas' => $merged,
             'fecha_fin' => $fecha_fin,
@@ -307,5 +360,32 @@ class BeneficiarioController extends Controller
             'beneficiario' => $beneficiario,
             'mes' => $mes,
         ]);
+    }
+
+    public function status($id, $id_os, $status){
+        $obra_social = ObraSocial::where('id', $id_os)->first();
+        $beneficiario = Beneficiario::where('id', $id)->first();
+        $beneficiario->activo = $status;
+
+        if($beneficiario->save()){
+            return redirect()->route('beneficiarios', ['prestador_id' => \Auth::user()->id, 'obrasocial_id' => $obra_social])
+            ->with(['message' => 'El estado del beneficiario ha sido actualizado correctamente']);
+        }
+    }
+
+    public function traditum(Request $request)
+    {
+        $traditum = Traditum::where('id', $request['traditum'])->first();
+        if($traditum){
+            $traditum->codigo = $request['valor'];
+            $traditum->save();
+        }else{
+            $traditum = new Traditum;
+            $traditum->codigo = $request['valor'];
+            $traditum->beneficiario_id = $request['beneficiario'];
+            $traditum->mes = date('m');
+            $traditum->anio = date('Y');
+            $traditum->save();
+        }
     }
 }

@@ -15,6 +15,11 @@ class Beneficiario extends Model
 
     public function sesion()
     {
-    	return $this->hasMany('\App\Sesion', 'id', 'beneficiario_id');
+    	return $this->hasMany('App\Sesion', 'id', 'beneficiario_id');
+    }
+
+    public function traditum()
+    {
+        return $this->hasMany('App\Traditum', 'id', 'beneficiario_id');
     }
 }

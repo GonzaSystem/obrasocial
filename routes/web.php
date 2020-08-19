@@ -43,8 +43,10 @@ Route::post('/beneficiarios/create', 'BeneficiarioController@create')->name('ben
 Route::post('beneficiario/list', 'BeneficiarioController@list')->name('beneficiario-list');
 Route::get('beneficiario/presupuesto/{prestador_id}/{beneficiario_id}', 'BeneficiarioController@presupuesto')->name('beneficiario-presupuesto');
 Route::post('beneficiario/update', 'BeneficiarioController@update')->name('beneficiario-update');
-Route::get('/beneficiario/form/{id}/{prestador_id}/{planilla}', 'BeneficiarioController@formulario')->name('formulario-beneficiario');
+Route::get('/beneficiario/form/{id}/{prestador_id}/{planilla}/{mes?}/{anio?}', 'BeneficiarioController@formulario')->name('formulario-beneficiario');
 Route::get('/beneficiario/delete/{os_id}/{beneficiario_id}', 'BeneficiarioController@delete')->name('beneficiario-delete');
+Route::get('/beneficiario/status/{id}/{id_os}/{status}', 'BeneficiarioController@status')->name('beneficiario-status');
+Route::post('/beneficiario/traditum', 'BeneficiarioController@traditum')->name('beneficiario-traditum');
 
 //Prestaciones
 Route::get('/prestaciones', 'ObraSocialController@lista_prestaciones')->name('prestaciones');
@@ -58,3 +60,14 @@ Route::get('/prestacion/delete/{id}', 'PrestacionController@destroy')->name('pre
 Route::post('/sesion/horarios', 'SesionController@index')->name('sesion-horarios');
 Route::post('/sesion/create', 'SesionController@store')->name('sesion-create');
 Route::post('/sesion/destroy', 'SesionController@destroy')->name('sesion-destroy');
+
+// Users
+Route::get('/admin/users', 'UserController@showSystemUsers')->name('admin-users');
+Route::post('/user/month', 'UserController@saveUserMonth')->name('user-month');
+
+// Video tutoriales
+Route::get('/video/tutorials', 'VideoController@index')->name('video-tutorials');
+Route::post('/video/create', 'VideoController@store')->name('video-create');
+Route::post('/video/update', 'VideoController@update')->name('video-update');
+Route::post('/video/list', 'VideoController@list')->name('video-list');
+Route::get('/video/delete/{id}', 'VideoController@destroy')->name('video-destroy');

@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use App\Prestador;
+use App\User;
+use App\Beneficiario;
+use App\ObraSocial;
+use App\Sesion;
 
 class UserController extends Controller
 {
@@ -62,8 +66,34 @@ class UserController extends Controller
         $user->update();
 
         return redirect()->route('home')->with(['message' => 'Usuario actualizado correctamente']);
+    }
 
+    public function showSystemUsers()
+    {
+        $users = User::all();
+        $user_id = \Auth::user()->id;
+        $prestador_menu = Prestador::where('user_id', '=', $user_id)->with('obrasocial')->get();
+        return view('users', [
+            'users' => $users,
+            'prestador_menu' => $prestador_menu
+        ]);
+    }
 
-       
+    public function saveUserMonth(Request $request)
+    {
+        // Consulto si el prestador quiere ver algun mes en particular y lo asigno a su usuario
+        // De esta forma si cierra la sesion y la vuelve a abrir queda el mes y año grabado
+        $prestador = User::where('id', \Auth::user()->id)->first();
+        $prestador->mes = $request['mes'];
+        $prestador->save(); 
+
+        // return redirect()->route('beneficiarios', [
+        //     'prestador_id' => $request['idPrest'],
+        //     'obrasocial_id' => $request['idOs'],
+        //     'mes' => \Auth::user()->mes,
+        //     'anio' => \Auth::user()->anio,
+        // ])->with(['message' => 'Mes actualizado correctamente']);  
+
+        return true;
     }
 }

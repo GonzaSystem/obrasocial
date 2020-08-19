@@ -14,15 +14,26 @@
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
 
+
+    <!-- Multi Select -->
+    <link rel="stylesheet" href="{{ asset('css/multi-select.css') }}">
+
     <!-- jQuery 3 -->
     <script src="{{ asset('bower_components/jquery/dist/jquery.min.js') }}"></script>
 
-    <!-- OS -->
-    <script src="{{ asset('js/os.js') }}"></script>
+        <!-- Multiselect -->
+    <script src="{{ asset('js/jquery.multi-select.js')}}"></script>
 
     <!-- Bootstrap 3.3.7 -->
     <script src="{{ asset('bower_components/bootstrap/dist/js/bootstrap.min.js') }}"></script>
 
+
+
+    <script>
+        $(document).ready(function(){
+            $('#dia').multiselect();
+        });
+    </script>
     <!-- AdminLTE -->
     <script src="{{ asset('js/adminlte.js')}}"></script>
 
@@ -59,6 +70,9 @@
     <script src="{{ asset('bower_components/chart.js/Chart.js') }}"></script>
 
 
+    <!-- OS -->
+    <script src="{{ asset('js/os.js') }}"></script>
+    
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
@@ -181,22 +195,35 @@
                         </li>
                         @endif
                     
-                    @if(Auth::user()->role == "Administrador")
-                        <li>
-                            <a href="{{ route('obra-social') }}">
-                                <i class="fa fa-wrench"></i>
-                                <span>Obra Social</span>
-                            </a>
-                        </li>
+                        @if(Auth::user()->role == "Administrador")
+                            <li>
+                                <a href="{{ route('obra-social') }}">
+                                    <i class="fa fa-wrench"></i>
+                                    <span>Obra Social</span>
+                                </a>
+                            </li>
 
-                        <li>
-                            <a href="{{ route('prestaciones') }}">
-                                <i class="fa fa-ambulance"></i>
-                                <span>Prestaciones</span>
-                            </a>
-                        </li>
-                    @endif
-                    
+                            <li>
+                                <a href="{{ route('prestaciones') }}">
+                                    <i class="fa fa-ambulance"></i>
+                                    <span>Prestaciones</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="{{ route('admin-users') }}">
+                                    <i class="fa fa-user-circle-o"></i>
+                                    <span>Usuarios</span>
+                                </a>
+                            </li>
+                        @endif
+
+                            <li>
+                                <a href="{{ route('video-tutorials') }}">
+                                    <i class="fa fa-youtube-play"></i>
+                                    <span>Video Tutoriales</span>
+                                </a>
+                            </li>
                     </ul>
                  </section>
             </aside>

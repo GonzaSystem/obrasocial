@@ -1,6 +1,17 @@
 @extends('layouts.app', ['prestador' => $prestador_menu])
-
+<style>
+  .dataTables_filter {
+     display: none;
+  }
+</style>
 @section('content')
+
+<?php 
+
+  $meses = ['01' => 'Enero', '02' => 'Febrero', '03' => 'Marzo', '04' => 'Abril', '05' => 'Mayo', '06' => 'Junio', '07' => 'Julio', '08' => 'Agosto', '09' => 'Septiembre', '10' => 'Octubre', '11' => 'Noviembre', '12' => 'Diciembre'];
+
+?>
+
 <div class="content-wrapper">
 
   <section class="content-header">
@@ -30,16 +41,41 @@
   </section>
 
   <section class="content">
+  
+  <div class="form-group">
+    <div class="row" style="display: inline-flex; margin-left: 0;">
+    <div class="input-group">
+      <label for="mes">Mes</label>
+      <select type="text" name="mes" class="form-control input-md selectMes" idOs="{{ $obrasocial[0]->id}}" idPrest="{{ Auth::user()->id }}">
+          @foreach($meses as $mes => $nombre)
+              <option value="{{ $mes }}" {{ $mes == Auth::user()->mes ? 'selected' : '' }}>{{ $nombre }}</option>
+          @endforeach
+      </select>
+    </div>
+
+    <div class="input-group" style="margin-left: 10px">
+      <label for="anio">Año</label>
+      <select type="text" name="anio" class="form-control input-md selectAnio">
+          <option value="2019">2019</option>
+          <option value="2020" selected>2020</option>
+          <option value="2021">2021</option>
+          <option value="2022">2022</option>
+      </select>
+    </div>
+    </div>
+  </div>
 
     <div class="box">
 
       <div class="box-header with-border">
 
-        <button class="btn btn-primary" data-toggle="modal" data-target="#modalAgregarBeneficiario">
+        <button class="btn btn-primary" style="margin-right: 15px; {{Auth::user()->mes != date('m') || Auth::user()->anio != date('Y') ? 'display:none' : ''}}" data-toggle="modal" data-target="#modalAgregarBeneficiario">
 
           Agregar Beneficiario
 
         </button>
+
+          Buscar: <input type="text" id="searchbox">
 
       </div>
 
@@ -47,19 +83,18 @@
 
       @if($obrasocial[0]->nombre == "APROSS")
 
-         <table class="table table-bordered table-striped dt-responsive tablas">
+         <table class="table table-bordered table-striped dt-responsive tablaBeneficiario">
 
           <thead>
 
            <tr>
 
-             <th style="width:10px">#</th>
              <th style="text-align: center">Clonar</th>
              <th>Nombre y Apellido</th>
              <th style="text-align: center">N° de Beneficiario</th>
              <th style="text-align: center">Cod. Seguridad</th>
              <th style="text-align: center">Cod. Modulo</th>
-             <th style="text-align: center">Cant. Solicitada</th>
+             <th style="text-align: center; width: 30px">Cant. Solicitada</th>
              <th>Observaciones</th>
              <th style="text-align: center">Cod. Traditum</th>
              <th>Acciones</th>
@@ -70,20 +105,19 @@
 
           <tbody>
 
-
           @foreach($beneficiarios as $beneficiario)
 
-
-              <?php $codigo_prestacion = $beneficiario->prestacion[0]->codigo_modulo; ?>
-              <?php $planilla = $beneficiario->prestacion[0]->planilla; ?>
-              <?php $os_id = $beneficiario->os_id; ?>
-              <?php $prestador_id = $beneficiario->id ?>
+              <?php 
+                  $codigo_prestacion = $beneficiario->prestacion[0]->codigo_modulo;
+                  $planilla = $beneficiario->prestacion[0]->planilla;
+                  $os_id = $beneficiario->os_id;
+                  $prestador_id = $beneficiario->id;
+              ?>
 
             @foreach($beneficiario->beneficiario as $key => $benefval)
 
             <tr>
 
-              <td>{{ $key+1 }}</td>
               <td style="text-align: center"> <button class="btn btn-success btnClonarBeneficiario" data-toggle="modal" data-target="#modalClonarBeneficiario" idBenef="{{ $benefval->id }}"><i class="fa fa-users"></i></button></td>
 
               @if($obrasocial[0]->nombre == "OSECAC")
@@ -96,17 +130,21 @@
               <td style="text-align: center">{{ $codigo_prestacion }}</td>
               <td style="text-align: center">{{ $benefval->cantidad_solicitada }}</td>
               <td>{{ substr($benefval->notas,0,10).'...' }}</td>
-              <td></td>
-              <td>
+              <td style="text-align: center;">
+                  <input {{Auth::user()->mes != date('m') || Auth::user()->anio != date('Y') ? 'disabled' : ''}} type="text" name="traditum" id="traditum" beneficiario-id="{{$benefval->id}}" traditum-id="{{ $traditums[$benefval->id][0]['id'] }}" value="{{ $traditums[$benefval->id][0]['codigo']}}" style="border: none; text-align: center; background: transparent;">
+              </td>
+              <td style="width: 200px">
                 <div class="btn-group">
                   
-                  <a target="_BLANK" href="{{ route('formulario-beneficiario', ['id' => $benefval->id, 'prestador_id' => $prestador_id ,'planilla' => $planilla]) }}" class="btn btn-primary" style="color: white; background-color: #605CA8"><i class="fa fa-address-card"></i></a>
+                  <a target="_BLANK" href="{{ route('formulario-beneficiario', ['id' => $benefval->id, 'prestador_id' => $prestador_id ,'planilla' => $planilla, 'mes' => Auth::user()->mes, 'anio' => Auth::user()->anio]) }}" class="btn btn-primary" style="color: white; background-color: #605CA8"><i class="fa fa-address-card"></i></a>
                  
                   <button class="btn btn-primary btnHorarioBeneficiario" data-toggle="modal" data-target="#modalHorarioBeneficiario" idBenef="{{ $benefval->id }}"><i class="fa fa-clock-o"></i></button>
 
-                  <button class="btn btn-warning btnEditarBeneficiario" data-toggle="modal" data-target="#modalEditarBeneficiario" idBenef="{{ $benefval->id }}"><i class="fa fa-pencil"></i></button>
+                  <button class="btn btn-warning btnEditarBeneficiario" data-toggle="modal" data-target="#modalEditarBeneficiario" style="{{Auth::user()->mes != date('m') || Auth::user()->anio != date('Y') ? 'display:none' : ''}}" idBenef="{{ $benefval->id }}"><i class="fa fa-pencil"></i></button>
 
                   <button class="btn btn-danger btnEliminarBeneficiario" idOs="{{ $os_id }}" idBenef=" {{ $benefval->id }}"><i class="fa fa-trash"></i></button>
+
+                  <button type="button" class="btn {{ $benefval->activo == 1 ? 'btn-success' : 'btn-secondary' }}"><input type="checkbox" class="btnEstadoBeneficiario" name="btnActivarUsuario" {{ $benefval->activo == 1 ? 'checked' : '' }} value="{{ $benefval->activo }}" idBenef="{{ $benefval->id }}" idOs={{ $os_id}} style="margin-top: 1px"></button>
 
                 </div>
 
@@ -125,13 +163,12 @@
 
        @else
 
-        <table class="table table-bordered table-striped dt-responsive tablas">
+        <table class="table table-bordered table-striped tablaBeneficiario">
 
           <thead>
 
            <tr>
 
-             <th style="width:10px">#</th>
              <th style="text-align: center">Clonar</th>
               @if($obrasocial[0]->nombre == "OSECAC")
                 <th style="width: 20px">Presupuesto</th>
@@ -154,7 +191,6 @@
 
           <tbody>
 
-
           @foreach($beneficiarios as $beneficiario)
 
             <?php $prestacionprof = $beneficiario->prestacion[0]->nombre ?>
@@ -163,7 +199,6 @@
 
             <tr>
 
-              <td>{{ $key+1 }}</td>
               <td style="text-align: center"> <button class="btn btn-success btnClonarBeneficiario" data-toggle="modal" data-target="#modalClonarBeneficiario" idBenef="{{ $benefval->id }}"><i class="fa fa-users"></i></button></td>
               @if($obrasocial[0]->nombre == "OSECAC")
                 <td style="text-align: center"><a href="{{ route('beneficiario-presupuesto', ['prestador_id' => $benefval->prestador_id, 'beneficiario_id' => $benefval->id]) }}" target="_BLANK"><button class="btn btn-success">8.4</button></a></td>
@@ -192,6 +227,8 @@
               </td>
 
             </tr>
+
+            <?php $i++ ?>
 
             @endforeach
 
@@ -318,7 +355,7 @@ MODAL AGREGAR BENEFICIARIO
 
               <div class="input-group col-lg-12">
 
-                <div class="col-lg-9">
+                <div class="col-lg-5">
 
                     <label for="obraSocial">Prestación</label>
 
@@ -334,12 +371,19 @@ MODAL AGREGAR BENEFICIARIO
 
                 </div>
 
-                    <div class="col-lg-3">
+                      <div class="col-lg-3">
+
+                          <label for="codigo_seguridad">Codigo Traditum</label>
+
+                          <input type="text" class="form-control input-lg" id="codigo_traditum" name="codigo_traditum">
+
+                      </div>
+
+                    <div class="col-lg-4">
 
                         <label for="cantidad_solicitada">Cantidad Solicitada</label>
 
-                        <input type="text" class="form-control input-lg" name="cantidad_solicitada">
-
+                        <input type="text" class="form-control input-lg" name="cantidad_solicitada">                    
                     </div>
 
               </div>
@@ -710,6 +754,14 @@ MODAL EDITAR BENEFICIARIO
 
                       </div>
 
+                      <div class="col-lg-6">
+
+                          <label for="codigo_seguridad">Codigo Traditum</label>
+
+                          <input type="text" class="form-control input-lg" id="codigo_traditum" name="editar_codigo_traditum">
+
+                      </div>
+
                   </div>
 
               </div>
@@ -970,6 +1022,8 @@ MODAL HORARIO BENEFICIARIO
 
 <div id="modalHorarioBeneficiario" class="modal fade" role="dialog">
 
+    <input type="hidden" class="obra_social" name="obra_social" value="{{$obrasocial[0]->nombre}}">
+
     <div class="modal-dialog modal-lg">
 
         <div class="modal-content">
@@ -986,7 +1040,7 @@ MODAL HORARIO BENEFICIARIO
 
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
 
-                    <h4 class="modal-title">Horario beneficiario</h4>
+                    <h4 class="modal-title horarioBeneficiario"></h4>
 
                 </div>
 
@@ -998,6 +1052,23 @@ MODAL HORARIO BENEFICIARIO
 
                     <div class="box-body">
 
+                      <div class="alert alert-danger text-center alertBenef" style="display:none">
+                          <span id="errorBenef"></span>
+                      </div>
+
+                      <div class="row">
+                        <div class="form-group col-lg-12">
+                            <div class="input-group col-lg-12">
+                                <div class="col-lg-3" style="margin-left: 15px;">
+                                  <label for="tope">Tope</label>
+                                  <input type="text" class="form-control" name="tope" id="tope" placeholder="Tope">
+                                </div>
+
+                            </div>
+                        </div>
+                      </div>
+                      
+
                         <!-- Entrada para Obra Social-->
                         <div class="form-group col-lg-12">
 
@@ -1007,7 +1078,7 @@ MODAL HORARIO BENEFICIARIO
 
                                     <label for="dia">Dia</label>
 
-                                    <select type="text" class="form-control input-lg" id="dia" name="dia" required>
+                                    <select type="text" class="form-control input-lg" id="dia" name="dia[]" required multiple>
 
                                         <option value="">Seleccionar..</option>
                                         <option value="1">Lunes</option>
@@ -1211,7 +1282,7 @@ MODAL CLONAR BENEFICIARIO
 
                             <div class="input-group col-lg-12">
 
-                                <div class="col-lg-9">
+                                <div class="col-lg-5">
 
                                     <label for="obraSocial">Prestación</label>
 
@@ -1228,6 +1299,14 @@ MODAL CLONAR BENEFICIARIO
                                 </div>
 
                                 <div class="col-lg-3">
+
+                                  <label for="codigo_seguridad">Codigo Traditum</label>
+
+                                  <input type="text" class="form-control input-lg" id="codigo_traditum" name="codigo_traditum">
+
+                                </div>
+
+                                <div class="col-lg-4">
 
                                     <label for="cantidad_solicitada">Cantidad Solicitada</label>
 
@@ -1449,14 +1528,14 @@ MODAL CLONAR BENEFICIARIO
 
                     @endif
 
-                    <!-- Entrada para notas -->
+                        <!-- Entrada para notas -->
                         <div class="form-group col-lg-12">
 
                             <div class="input-group col-lg-12">
 
-                    <textarea type="text" name="notas" maxlength="255" rows="5" cols="130" id="notas_clon" placeholder="Notas..">
+                                <textarea type="text" name="notas" maxlength="255" rows="5" cols="130" id="notas_clon" placeholder="Notas..">
 
-                    </textarea>
+                                </textarea>
 
                             </div>
 

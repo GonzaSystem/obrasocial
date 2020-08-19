@@ -16,9 +16,12 @@ class SesionController extends Controller
     public function index(Request $request)
     {
         $id = $request->id;
-
-        $sesiones = Sesion::where('beneficiario_id', $id)->get();
-        return $sesiones;
+        $beneficiario = Beneficiario::where('id', $id)->first();
+        $sesiones = Sesion::where('beneficiario_id', $id)->with('beneficiario')->get();
+        return [
+            'sesiones' => $sesiones,
+            'beneficiario' => $beneficiario
+        ];
     }
 
     /**
@@ -39,25 +42,48 @@ class SesionController extends Controller
      */
     public function store(Request $request)
     {
+        $beneficiario_id = $request->beneficiario_id;
+        $beneficiario = Beneficiario::where('id', $beneficiario_id)->first();
+        $sesiones = Sesion::where('beneficiario_id', $beneficiario_id)->get();
+        // if($beneficiario->cantidad_solicitada == 4 && count($sesiones) < 1 || $beneficiario->cantidad_solicitada == 8 && count($sesiones) < 2 || $beneficiario->cantidad_solicitada == 12 && count($sesiones) < 4){
+
+        if(isset($request['tope']) && $request['tope'] > 0){
+            $beneficiario->tope = $request['tope'];
+            $beneficiario->save();
+        }
+
+        $validate = \Validator::make($request->all(), [
+            'dia' => 'required',
+            'hora' => 'required',
+            'tiempo' => 'required'
+        ]);
+
+        if($validate->fails()){
+            return [
+                'error' => 'Los campos día, hora y tiempo son obligatorios. Por favor completelos e intente nuevamente.'
+            ];
+        }
+
         $sesion = new Sesion;
         $obra_social = $request->obrasocial_id;
-
-        $beneficiario_id = $request->beneficiario_id;
         $dia = $request->dia;
         $hora = $request->hora;
         $tiempo = $request->tiempo;
-
         $sesion->beneficiario_id = $beneficiario_id;
         $sesion->dia = $dia;
         $sesion->hora = $hora;
-        $sesion->tiempo = $tiempo;
+        $sesion->tiempo = $tiempo; 
+        if($sesion->save()){
+          $sesiones = Sesion::where('beneficiario_id', $beneficiario_id)->get();
+          return json_encode(['error' => false,
+                              'sesiones' => $sesiones]);                   
+        }
 
-        $sesion->save();
+        // }else{
+        //     return json_encode(['error' => 'Hay un error con la cantidad solicitada y los días a cargar. Por favor verifiquelos e intente nuevamente.',
+        //                         'sesiones' => $sesiones]);
+        // }
 
-        $beneficiario = Beneficiario::find($beneficiario_id);
-
-        $sesiones = Sesion::where('beneficiario_id', $beneficiario_id)->get();
-        return $sesiones;
     }
 
     /**

@@ -55,7 +55,7 @@
 									<span class="form-prepend">dirección:</span>
 									<input id="address" type="text" class="form-input" value="{{ Auth::user()->direccion }}" />
 								</div>
-								<div class="form-group" style="width: 30%;">
+								<div class="form-group" style="width: 45%;">
 									<span class="form-prepend">Teléfono:</span>
 									<input id="phone" type="text" class="form-input" value="{{ Auth::user()->telefono }}"/>
 								</div>

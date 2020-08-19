@@ -1,3 +1,47 @@
+// Data tables
+$(document).ready(function(){
+
+   $.noConflict();
+    var table = $('.tablaBeneficiario').DataTable({
+      "deferRender": true,
+      "retrieve": true,
+      "order": [1, 'asc'],
+      "pageLength": 50,
+      "processing": true,
+         "language": {
+
+          "sProcessing":     "Procesando...",
+          "sLengthMenu":     "Mostrar _MENU_ registros",
+          "sZeroRecords":    "No se encontraron resultados",
+          "sEmptyTable":     "Ningún dato disponible en esta tabla",
+          "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_",
+          "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0",
+          "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+          "sInfoPostFix":    "",
+          "sSearch":         "Buscar:",
+          "sUrl":            "",
+          "sInfoThousands":  ",",
+          "sLoadingRecords": "Cargando...",
+          "oPaginate": {
+          "sFirst":    "Primero",
+          "sLast":     "Último",
+          "sNext":     "Siguiente",
+          "sPrevious": "Anterior"
+          },
+          "oAria": {
+            "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+          }
+
+      }
+   });
+
+    $("#searchbox").keyup(function() {
+        table.search(this.value).draw();
+    }); 
+})
+ 
+
 $('.sidebar-toggle').on('click',function(){
 
            var cls =  $('body').hasClass('sidebar-collapse');
@@ -44,7 +88,7 @@ $.ajax({
 });
 
 // Editar datos Prestador
-$(document).on('click', '.btnEditarPrestacion', function(){
+$(document).on('click', '.btnEditarPrestacion', function(){F
 
 var id = $(this).attr("idprest");
 
@@ -87,28 +131,29 @@ $.ajax({
 	dataType: "json",
 	type: "POST",
 	success: function(respuesta){
-		$("#id").val(respuesta[0]["id"]);
-		$("#editarNombre").val(respuesta[0]["nombre"]);
-		$("#editarApellido").val(respuesta[0]["apellido"]);
-		$("#editarCorreo").val(respuesta[0]["email"]);
-		$("#editarTelefono").val(respuesta[0]["telefono"]);
-		$("#editarDireccion").val(respuesta[0]["direccion"]);
-		$("#editarLocalidad").val(respuesta[0]["localidad"]);
-		$("#editarDireccionPrestacion").val(respuesta[0]["direccion_prestacion"]);
-		$("#editarLocalidadPrestacion").val(respuesta[0]["localidad_prestacion"]);
-		$("#editarCuit").val(respuesta[0]["cuit"]);
-		$("#editarDni").val(respuesta[0]["dni"]);
-		$("#editarKmIda").val(respuesta[0]["km_ida"]);
-		$("#editarKmVuelta").val(respuesta[0]["km_vuelta"]);
-		$("#editarViajesIda").val(respuesta[0]["viajes_ida"]);
-		$("#editarViajesVuelta").val(respuesta[0]["viajes_vuelta"]);
-		$("#editarTurno").val(respuesta[0]["turno"]);
-		$("#editarDependencia").val(respuesta[0]["dependencia"]);
-		$("#editarNotas").val(respuesta[0]["notas"]);
-		$("#editar_numero_afiliado").val(respuesta[0]['numero_afiliado']);
-		$("#editar_codigo_seguridad").val(respuesta[0]['codigo_seguridad']);
-		$("#editar_cantidad_solicitada").val(respuesta[0]['cantidad_solicitada']);
-
+    console.log("respuesta", respuesta);
+		$("#id").val(respuesta['beneficiario'][0]["id"]);
+		$("#editarNombre").val(respuesta['beneficiario'][0]["nombre"]);
+		$("#editarApellido").val(respuesta['beneficiario'][0]["apellido"]);
+		$("#editarCorreo").val(respuesta['beneficiario'][0]["email"]);
+		$("#editarTelefono").val(respuesta['beneficiario'][0]["telefono"]);
+		$("#editarDireccion").val(respuesta['beneficiario'][0]["direccion"]);
+		$("#editarLocalidad").val(respuesta['beneficiario'][0]["localidad"]);
+		$("#editarDireccionPrestacion").val(respuesta['beneficiario'][0]["direccion_prestacion"]);
+		$("#editarLocalidadPrestacion").val(respuesta['beneficiario'][0]["localidad_prestacion"]);
+		$("#editarCuit").val(respuesta['beneficiario'][0]["cuit"]);
+		$("#editarDni").val(respuesta['beneficiario'][0]["dni"]);
+		$("#editarKmIda").val(respuesta['beneficiario'][0]["km_ida"]);
+		$("#editarKmVuelta").val(respuesta['beneficiario'][0]["km_vuelta"]);
+		$("#editarViajesIda").val(respuesta['beneficiario'][0]["viajes_ida"]);
+		$("#editarViajesVuelta").val(respuesta['beneficiario'][0]["viajes_vuelta"]);
+		$("#editarTurno").val(respuesta['beneficiario'][0]["turno"]);
+		$("#editarDependencia").val(respuesta['beneficiario'][0]["dependencia"]);
+		$("#editarNotas").val(respuesta['beneficiario'][0]["notas"]);
+		$("#editar_numero_afiliado").val(respuesta['beneficiario'][0]['numero_afiliado']);
+		$("#editar_codigo_seguridad").val(respuesta['beneficiario'][0]['codigo_seguridad']);
+		$("#editar_cantidad_solicitada").val(respuesta['beneficiario'][0]['cantidad_solicitada']);
+    $("#codigo_traditum").val(respuesta['traditum'][0]['codigo']);
 		}
 	});
 });
@@ -136,9 +181,31 @@ $(document).on("click", ".btnEliminarBeneficiario", function(){
 
     }
 
-  })
+  });
 
-})
+});
+
+// Activar o desactivar beneficiario
+$(document).on('change', '.btnEstadoBeneficiario', function(){
+  var idBenef = $(this).attr('idBenef');
+  var idOs = $(this).attr('idOs');
+
+    $.ajaxSetup({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+  if(this.checked){
+    var status = 1;
+    window.location = "http://localhost/os/public/beneficiario/status/"+idBenef+"/"+idOs+'/'+status
+    
+  }else{
+    var status = 0;
+    window.location = "http://localhost/os/public/beneficiario/status/"+idBenef+"/"+idOs+'/'+status
+  }
+
+});
 
 // Traigo prestaciones segun OS
 $(document).on('change', '#obraSocial', function(){
@@ -275,7 +342,6 @@ $(document).on('click', '.btnClonarBeneficiario', function(){
             $("#kmVuelta_clon").empty();
             $("#viajesIda_clon").empty();
             $("#viajesVuelta_clon").empty();
-            $("#turno_clon").empty();
             $("#dependencia_clon").empty();
             $("#notas_clon").empty();
             $("#numero_afiliado_clon").empty();
@@ -283,36 +349,39 @@ $(document).on('click', '.btnClonarBeneficiario', function(){
             $("#cantidad_solicitada_clon").empty();
 
 
-            $("#nombre_clon").val(respuesta[0]["nombre"]);
-            $("#correo_clon").val(respuesta[0]["email"]);
-            $("#telefono_clon").val(respuesta[0]["telefono"]);
-            $("#direccion_clon").val(respuesta[0]["direccion"]);
-            $("#localidad_clon").val(respuesta[0]["localidad"]);
-            $("#prestacion_clon").val(respuesta[0]["prestador"]["id"]);
-            $("#direccionPrestacion_clon").val(respuesta[0]["direccion_prestacion"]);
-            $("#localidadPrestacion_clon").val(respuesta[0]["localidad_prestacion"]);
-            $("#cuit_clon").val(respuesta[0]["cuit"]);
-            $("#dni_clon").val(respuesta[0]["dni"]);
-            $("#KmIda_clon").val(respuesta[0]["km_ida"]);
-            $("#KmVuelta_clon").val(respuesta[0]["km_vuelta"]);
-            $("#ViajesIda_clon").val(respuesta[0]["viajes_ida"]);
-            $("#ViajesVuelta_clon").val(respuesta[0]["viajes_vuelta"]);
-            $("#turno_clon").val(respuesta[0]["turno"]);
-            $("#dependencia_clon").val(respuesta[0]["dependencia"]);
-            $("#notas_clon").val(respuesta[0]["notas"]);
-            $("#numero_afiliado_clon").val(respuesta[0]['numero_afiliado']);
-            $("#codigo_seguridad_clon").val(respuesta[0]['codigo_seguridad']);
-            $("#cantidad_solicitada_clon").val(respuesta[0]['cantidad_solicitada']);
+            $("#nombre_clon").val(respuesta['beneficiario'][0]["nombre"]);
+            $("#correo_clon").val(respuesta['beneficiario'][0]["email"]);
+            $("#telefono_clon").val(respuesta['beneficiario'][0]["telefono"]);
+            $("#direccion_clon").val(respuesta['beneficiario'][0]["direccion"]);
+            $("#localidad_clon").val(respuesta['beneficiario'][0]["localidad"]);
+            $("#prestacion_clon").val(respuesta['beneficiario'][0]["prestador"]["id"]);
+            $("#direccionPrestacion_clon").val(respuesta['beneficiario'][0]["direccion_prestacion"]);
+            $("#localidadPrestacion_clon").val(respuesta['beneficiario'][0]["localidad_prestacion"]);
+            $("#cuit_clon").val(respuesta['beneficiario'][0]["cuit"]);
+            $("#dni_clon").val(respuesta['beneficiario'][0]["dni"]);
+            $("#KmIda_clon").val(respuesta['beneficiario'][0]["km_ida"]);
+            $("#KmVuelta_clon").val(respuesta['beneficiario'][0]["km_vuelta"]);
+            $("#ViajesIda_clon").val(respuesta['beneficiario'][0]["viajes_ida"]);
+            $("#ViajesVuelta_clon").val(respuesta['beneficiario'][0]["viajes_vuelta"]);
+            $("#turno_clon").val(respuesta['beneficiario'][0]["turno"]);
+            $("#dependencia_clon").val(respuesta['beneficiario'][0]["dependencia"]);
+            $("#notas_clon").val(respuesta['beneficiario'][0]["notas"]);
+            $("#numero_afiliado_clon").val(respuesta['beneficiario'][0]['numero_afiliado']);
+            $("#codigo_seguridad_clon").val(respuesta['beneficiario'][0]['codigo_seguridad']);
+            $("#cantidad_solicitada_clon").val(respuesta['beneficiario'][0]['cantidad_solicitada']);
 
         }
     });
 });
 
 
+
 // Al presionar el boton de horarios traigo los resultados
 $(document).on('click', '.btnHorarioBeneficiario', function(){
+  $('.alertBenef').hide();
 	var id = $(this).attr("idBenef");
 	$("#horarioBenef").empty();
+  $("#tope").empty();
 
 	 $.ajaxSetup({
         headers: {
@@ -328,8 +397,10 @@ $(document).on('click', '.btnHorarioBeneficiario', function(){
         dataType: "json",
         type: "POST",
         success: function(respuesta){
-        	for (var i = 0; i < respuesta.length; i++) {
-        		switch( respuesta[i]["dia"]){
+          
+          $("#tope").val(respuesta['beneficiario']['tope']);
+        	for (var i = 0; i < respuesta['sesiones'].length; i++) {
+        		switch( respuesta['sesiones'][i]["dia"]){
         			case 1:
         				dia = 'Lunes';
         				break;
@@ -353,11 +424,24 @@ $(document).on('click', '.btnHorarioBeneficiario', function(){
         				break;
         		}
 
-        		$("#horarioBenef").append('<tr><td>'+dia+'</td><td>'+respuesta[i]["hora"]+'</td><td>'+respuesta[i]["tiempo"]+' minutos</td><td><button class="btn btn-danger btnEliminarSesion" idSesion="'+respuesta[i]["id"]+'"><i class="fa fa-trash"></i></button></td></tr>')
+        		$("#horarioBenef").append('<tr><td>'+dia+'</td><td>'+respuesta['sesiones'][i]["hora"]+'</td><td>'+respuesta['sesiones'][i]["tiempo"]+' minutos</td><td><button class="btn btn-danger btnEliminarSesion" idSesion="'+respuesta['sesiones'][i]["id"]+'"><i class="fa fa-trash"></i></button></td></tr>')
         	}
         }
     });
-});
+
+        var obrasocial = $('.obra_social').val(); 
+
+        $.ajax({
+        url: "http://localhost/os/public/beneficiario/list",
+        data: {id:id},
+        dataType: "json",
+        type: "POST",
+        success: function(respuesta){
+                $('.horarioBeneficiario').empty();
+                $('.horarioBeneficiario').append('Horario Beneficiario - '+respuesta['beneficiario'][0]['nombre']+ ' - '+respuesta['prestacion']+' - '+obrasocial);
+            }
+        });
+    });
 
 // Guardo Horario
 $(document).on('click', '#guardarHorario', function(){
@@ -368,17 +452,22 @@ $(document).on('click', '#guardarHorario', function(){
 	var tiempo = $("#tiempo").val();
 	var beneficiario_id = $("#beneficiario_id").val();
 	var obrasocial_id = $("#obrasocial_id").val();
+  var tope = $("#tope").val();
 
 	$("#horarioBenef").empty();
 
     $.ajax({
         url: "http://localhost/os/public/sesion/create",
-        data: {dia:dia, hora:hora, tiempo:tiempo, beneficiario_id:beneficiario_id, obrasocial_id:obrasocial_id},
+        data: {dia:dia, hora:hora, tiempo:tiempo, beneficiario_id:beneficiario_id, obrasocial_id:obrasocial_id, tope:tope},
         dataType: "json",
         type: "POST",
         success: function(respuesta){
-        	for (var i = 0; i < respuesta.length; i++) {
-        		switch( respuesta[i]["dia"]){
+            if(respuesta['error'] != false){
+                $('#errorBenef').html(respuesta['error']);
+                $('.alertBenef').show();
+            }
+        	for (var i = 0; i < respuesta['sesiones'].length; i++) {
+        		switch( respuesta['sesiones'][i]["dia"]){
         			case 1:
         				dia = 'Lunes';
         				break;
@@ -402,7 +491,7 @@ $(document).on('click', '#guardarHorario', function(){
         				break;
         		}
 
-        		$("#horarioBenef").append('<tr><td>'+dia+'</td><td>'+respuesta[i]["hora"]+'</td><td>'+respuesta[i]["tiempo"]+' minutos</td><td><button class="btn btn-danger btnEliminarSesion" idSesion="'+respuesta[i]["id"]+'"><i class="fa fa-trash"></i></button></td></tr>');
+                $("#horarioBenef").append('<tr><td>'+dia+'</td><td>'+respuesta['sesiones'][i]["hora"]+'</td><td>'+respuesta['sesiones'][i]["tiempo"]+' minutos</td><td><button class="btn btn-danger btnEliminarSesion" idSesion="'+respuesta['sesiones'][i]["id"]+'"><i class="fa fa-trash"></i></button></td></tr>');  
         		$("#dia").val('');
         		$("#hora").val('');
         		$("#tiempo").val('');
@@ -456,5 +545,106 @@ $(document).on('click', '.btnEliminarSesion', function(){
         error: function(response){
         	console.log('response', response);
         }
+    });
+});
+
+// Editar video
+$(document).on('click', '.btnEditarVideo', function(){
+    var id = $(this).attr('data-id');
+    $('#video_id').empty();
+    $('#video_description').empty();
+    $('#video_url_video').empty();
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+          url: "http://localhost/os/public/video/list",
+          data: {id:id},
+          dataType: "json",
+          type: "POST",
+          success: function(respuesta){
+              $('#video_id').val(respuesta['id']);
+              $('#video_description').val(respuesta['description']);
+              $('#video_url_video').val(respuesta['url_video']);
+          }
+        });
+});
+
+// Eliminar video
+$(document).on('click', '.btnEliminarVideo', function(){
+    var id = $(this).attr('data-id');
+
+      swal({
+        title: '¿Está seguro de borrar el video?',
+        text: "¡Una vez eliminado, la acción no se podrá deshacer!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          cancelButtonText: 'Cancelar',
+          confirmButtonText: 'Si, borrar video!'
+      }).then(function(result){
+
+        if(result.value){
+
+          window.location = "http://localhost/os/public/video/delete/"+id;
+
+        }
+
+      })
+
+})
+
+// Mes y año
+$(document).on('change', '.selectMes', function(){
+   var idOs = $(this).attr('idOs');
+   var idPrest = $(this).attr('idPrest');
+   var anio = $('.selectAnio').val();
+   var mes = $(this).val();
+
+  $.ajaxSetup({
+      headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+  });
+
+  $.ajax({
+    url: "http://localhost/os/public/user/month",
+    data: {mes:mes, idOs:idOs, idPrest:idPrest, anio:anio},
+    type: "POST",
+    success: function(respuesta){
+      if(respuesta == 1){
+       window.location = "http://localhost/os/public/beneficiarios/"+idPrest+"/"+idOs+"/"+mes+"/"+anio;
+      }
+    },
+    error: function(respuesta){
+      console.log('error', respuesta);
+    }
+  });
+});
+
+$(document).on('change', '#traditum', function(){
+    var benef_id = $(this).attr('beneficiario-id');
+    var tradit_id = $(this).attr('traditum-id');
+    var val = $(this).val();
+    console.log("val", val);
+
+    $.ajaxSetup({
+      headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+
+    $.ajax({
+      url: "http://localhost/os/public/beneficiario/traditum",
+      data: {beneficiario:benef_id, traditum: tradit_id, valor:val},
+      type: "POST",
+      success: function(respuesta){
+        console.log("respuesta", respuesta);      
+      }
     });
 });

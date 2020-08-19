@@ -36,6 +36,7 @@ class CreateBeneficiarioTable extends Migration
             $table->integer('numero_afiliado')->nullable();
             $table->integer('codigo_seguridad')->nullable();
             $table->integer('cantidad_solicitada')->nullable();
+            $table->tinyInteger('activo', 1)->default('1');
             $table->timestamps();
         });
     }
