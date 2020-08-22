@@ -301,9 +301,14 @@ class BeneficiarioController extends Controller
         $fechas = array();
         $fecha_fin = array();
         foreach ($sesiones as $key => $sesion) {
-            $cant_solicitada = $beneficiario[0]->cantidad_solicitada;
+            $cant_solicitada = $beneficiario[0]->tope;
             $totalDias = count($sesiones);
-            $avgSesion = $cant_solicitada / $totalDias; 
+            if($cant_solicitada == null){
+                $avgSesion = 99999;
+            }else{
+                $avgSesion = $cant_solicitada / $totalDias; 
+            }
+
 
             //Ver de pasar el horario a la funcion
              $fechas[] = $this->cuenta_dias($mes, $anio, $sesion['dia'], $sesion['hora'], $avgSesion, $sesion['tiempo']);

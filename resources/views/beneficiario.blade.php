@@ -1064,6 +1064,10 @@ MODAL HORARIO BENEFICIARIO
                                   <input type="text" class="form-control" name="tope" id="tope" placeholder="Tope">
                                 </div>
 
+                                <div class="col-lg-8 text-right" style="margin-top: 25px; margin-left: 42px;">
+                                  <button type="button" class="btn btn-sm btn-primary btnInasistencias" data-toggle="modal" data-target="#modalInasistenciasBeneficiario" idBenef>Inasistencias</button>
+                                </div>
+
                             </div>
                         </div>
                       </div>
@@ -1078,7 +1082,7 @@ MODAL HORARIO BENEFICIARIO
 
                                     <label for="dia">Dia</label>
 
-                                    <select type="text" class="form-control input-lg" id="dia" name="dia[]" required multiple>
+                                    <select type="text" class="form-control input-lg" id="dia" name="dia" required>
 
                                         <option value="">Seleccionar..</option>
                                         <option value="1">Lunes</option>
@@ -1165,6 +1169,8 @@ MODAL HORARIO BENEFICIARIO
 
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Salir</button>
 
+
+
                 </div>
 
 {{--  </form> --}}
@@ -1172,6 +1178,108 @@ MODAL HORARIO BENEFICIARIO
         </div>
 
     </div>
+
+</div>
+
+
+<!--=====================================
+MODAL INASISTENCIAS BENEFICIARIO
+======================================-->
+
+<div id="modalInasistenciasBeneficiario" class="modal fade" role="dialog">
+
+  <div class="modal-dialog modal-lg">
+
+      <div class="modal-content">
+
+{{--             <form role="form" method="POST" action="{{ route('sesion-create') }}">
+
+          @csrf --}}
+
+          <!--=====================================
+          CABEZA DEL MODAL
+          ======================================-->
+
+              <div class="modal-header" style="background:#3c8dbc; color:white">
+
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                  <h4 class="modal-title inasistenciaBeneficiario"></h4>
+
+              </div>
+
+              <!--=====================================
+              CUERPO DEL MODAL
+              ======================================-->
+
+              <div class="modal-body" style="margin-bottom: 40px;">
+                <div class="box-body">
+                  <div class="alert alert-danger text-center inasistenciaFail" style="display: none;">
+                    <span id="inasistenciaFail"></span>
+                  </div>
+
+                  <div class="alert alert-success text-center inasistenciaSuccess" style="display: none;">
+                    <span id="inasistenciaSuccess"></span>
+                  </div>
+
+                  <div class="col-lg-12">        
+                    <div class="row">
+                      <div class="col-lg-12">
+                        <button type="button" class="btn btn-sm btn-primary btnHorarioIndividual">Agregar horario individual</button>
+                        <button type="button" class="btn btn-sm btn-primary btnRangoHorario">Agregar rango de horario</button>
+                      </div>
+                    </div>
+                    <form class="formInasistencias">
+                      <div class="col-lg-6 horarioIndividual" style="margin-top: 20px; margin-bottom: 20px; display:none;">
+                          <div class="row">
+                            <div class="col-lg-5">
+                              <label for="fechas[]">Fecha</label>
+                              <input type="text" id="fechas[]" class="form-control input-sm fechasMask" name="fechas[]" placeholder="dd/mm/aaaa">
+                            </div>
+                            <div class="col-lg-1" style="padding-left: 0px; margin-top: 30px;">
+                              <button class="btn btn-xs btn-success btnAgregarHorario" type="button"><i class="fa fa-plus"></i></button>
+                              <input type="hidden" name="id_beneficiario" class="id_beneficiario" value>
+                              <input type="hidden" name="cantidad" value="individual">
+                            </div>
+                          </div>
+                        <div id="inputsAdicionales"></div>
+                        </form>
+                      </div>
+                      <form class="formRangoInasistencias">
+                      <div class="col-lg-6 rangoHorario" style="margin-top: 20px; margin-bottom: 20px; display:none;">
+                        <div class="row">
+                          <button type="button" class="btn btn-default pull-left" id="daterange-btn"> 
+                            <span>            
+                              <i class="fa fa-calendar"> Rango de Fecha </i>
+                              <i class="fa fa-caret-down"></i>
+                            </span>
+                          </button>
+                        </div>
+                      </div>
+                      <input type="hidden" name="id_beneficiario" class="id_beneficiario" value>
+                      <input type="hidden" name="cantidad" class="cantidad" value="rango">
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+              <!--=====================================
+              PIE DEL MODAL
+              ======================================-->
+
+              <div class="modal-footer">
+
+                  <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Salir</button>
+
+                  <button type="button" class="btn btn-primary btnGuardarInasistencias">Guardar Inasistencias</button>
+
+              </div>
+
+{{--  </form> --}}
+
+      </div>
+
+  </div>
 
 </div>
 

@@ -27,13 +27,6 @@
     <!-- Bootstrap 3.3.7 -->
     <script src="{{ asset('bower_components/bootstrap/dist/js/bootstrap.min.js') }}"></script>
 
-
-
-    <script>
-        $(document).ready(function(){
-            $('#dia').multiselect();
-        });
-    </script>
     <!-- AdminLTE -->
     <script src="{{ asset('js/adminlte.js')}}"></script>
 
@@ -69,7 +62,7 @@
       <!--ChartJS-->
     <script src="{{ asset('bower_components/chart.js/Chart.js') }}"></script>
 
-
+    <script src="{{ asset('bower_components/jquery-mask/jquery.mask.js') }}"></script>
     <!-- OS -->
     <script src="{{ asset('js/os.js') }}"></script>
     

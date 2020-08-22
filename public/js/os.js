@@ -382,6 +382,7 @@ $(document).on('click', '.btnHorarioBeneficiario', function(){
 	var id = $(this).attr("idBenef");
 	$("#horarioBenef").empty();
   $("#tope").empty();
+  $(".id_beneficiario").val(id);
 
 	 $.ajaxSetup({
         headers: {
@@ -438,7 +439,10 @@ $(document).on('click', '.btnHorarioBeneficiario', function(){
         type: "POST",
         success: function(respuesta){
                 $('.horarioBeneficiario').empty();
-                $('.horarioBeneficiario').append('Horario Beneficiario - '+respuesta['beneficiario'][0]['nombre']+ ' - '+respuesta['prestacion']+' - '+obrasocial);
+                $('.horarioBeneficiario').append('Horario de Beneficiario - '+respuesta['beneficiario'][0]['nombre']+ ' - '+respuesta['prestacion']+' - '+obrasocial);
+
+                $('.inasistenciaBeneficiario').empty();
+                $('.inasistenciaBeneficiario').append('Inasistencias de Beneficiario - '+respuesta['beneficiario'][0]['nombre']+ ' - '+respuesta['prestacion']+' - '+obrasocial);
             }
         });
     });
@@ -647,4 +651,91 @@ $(document).on('change', '#traditum', function(){
         console.log("respuesta", respuesta);      
       }
     });
+});
+
+// Inasistencias Beneficiario
+$(document).on('click', '.btnHorarioIndividual', function(){
+  $('.horarioIndividual').show();
+  $('.fechasMask').mask('00/00/0000');
+});
+
+$(document).on('click', '.btnAgregarHorario', function(){
+  $('#inputsAdicionales').append(`
+      <div class="row">
+        <div class="col-lg-5">
+          <label for="fechas[]">Fecha</label>
+          <input type="text" id="fechas[]" class="form-control input-sm fechasMask" name="fechas[]" placeholder="dd/mm/aaaa">
+        </div>
+        <div class="col-lg-1" style="padding-left: 0px; margin-top: 30px;">
+          <button class="btn btn-xs btn-success btnAgregarHorario" type="button"><i class="fa fa-plus"></i></button>
+        </div>
+  `);
+    $('.fechasMask').mask('00/00/0000');
+});
+
+$(document).on('click', '.btnGuardarInasistencias', function(){
+    var form = $('.formInasistencias');
+    
+     $.ajaxSetup({
+      headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+
+    $.ajax({
+      url: "http://localhost/os/public/beneficiario/inasistencias",
+      data: form.serialize(),
+      type: "POST",
+      success: function(respuesta){
+        if(respuesta.success){
+          $('.inasistenciaSuccess').show();
+          $('#inasistenciaSuccess').append(respuesta.message);
+        }else{
+          $('.inasistenciaFail').show();
+          $('#inasistenciaFail').append(respuesta.message);
+        }   
+      }
+    });
+});
+$(document).on('click', '.btnRangoHorario', function(){
+  $('.rangoHorario').show();
+  $('#daterange-btn').daterangepicker(
+      {
+        ranges   : {
+        },
+        startDate: moment(),
+        endDate  : moment()
+      },
+      function (start, end) {
+         $('#daterange-btn span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+         var fechaInicial = start.format('DD/MM/YYYY');
+         var fechaFinal = end.format('DD/MM/YYYY');
+         var capturarRango = $("#daterange-btn span").html();
+
+         // Valores para rango de sesion
+         var idBeneficiario = $('.id_beneficiario').val();
+         var cantidad = $('.cantidad').val();
+         var fechas = fechaInicial+'-'+fechaFinal;
+        $.ajaxSetup({
+          headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+        });
+
+        $.ajax({
+            url: "http://localhost/os/public/beneficiario/inasistencias",
+            data: {id_beneficiario:idBeneficiario, cantidad:cantidad, fechas:fechas},
+            type: "POST",
+            success: function(respuesta){
+              if(respuesta.success){
+                $('.inasistenciaSuccess').show();
+                $('#inasistenciaSuccess').append(respuesta.message);
+              }else{
+                $('.inasistenciaFail').show();
+                $('#inasistenciaFail').append(respuesta.message);
+              }   
+            }
+        });
+    }
+  )
 });

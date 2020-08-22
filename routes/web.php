@@ -47,7 +47,7 @@ Route::get('/beneficiario/form/{id}/{prestador_id}/{planilla}/{mes?}/{anio?}', '
 Route::get('/beneficiario/delete/{os_id}/{beneficiario_id}', 'BeneficiarioController@delete')->name('beneficiario-delete');
 Route::get('/beneficiario/status/{id}/{id_os}/{status}', 'BeneficiarioController@status')->name('beneficiario-status');
 Route::post('/beneficiario/traditum', 'BeneficiarioController@traditum')->name('beneficiario-traditum');
-
+Route::post('/beneficiario/inasistencias', 'InasistenciaController@store')->name('beneficiario-inasistencias');
 //Prestaciones
 Route::get('/prestaciones', 'ObraSocialController@lista_prestaciones')->name('prestaciones');
 Route::post('/prestacion/create', 'ObraSocialController@create_prestacion')->name('prestacion-create');
