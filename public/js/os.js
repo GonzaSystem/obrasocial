@@ -383,6 +383,7 @@ $(document).on('click', '.btnHorarioBeneficiario', function(){
 	$("#horarioBenef").empty();
   $("#tope").empty();
   $(".id_beneficiario").val(id);
+  $(".btnInasistencias").attr('idBenef', id);
 
 	 $.ajaxSetup({
         headers: {
@@ -442,7 +443,7 @@ $(document).on('click', '.btnHorarioBeneficiario', function(){
                 $('.horarioBeneficiario').append('Horario de Beneficiario - '+respuesta['beneficiario'][0]['nombre']+ ' - '+respuesta['prestacion']+' - '+obrasocial);
 
                 $('.inasistenciaBeneficiario').empty();
-                $('.inasistenciaBeneficiario').append('Inasistencias de Beneficiario - '+respuesta['beneficiario'][0]['nombre']+ ' - '+respuesta['prestacion']+' - '+obrasocial);
+                $('.inasistenciaBeneficiario').append('Fechas de Beneficiario - '+respuesta['beneficiario'][0]['nombre']+ ' - '+respuesta['prestacion']+' - '+obrasocial);
             }
         });
     });
@@ -654,29 +655,71 @@ $(document).on('change', '#traditum', function(){
 });
 
 // Inasistencias Beneficiario
+$(document).on('click', '.btnInasistencias', function(){
+    var id = $(this).attr('idBenef');
+    $.ajaxSetup({
+      headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+
+    $.ajax({
+      url: "http://localhost/os/public/beneficiario/inasistenciasBeneficiario",
+      data: {id:id},
+      type: "POST",
+      success: function(respuesta){
+        if(respuesta.success){
+          $(respuesta.inasistencias).each(function(i, v){
+            console.log(v);
+            $('.appended-inasistencias').append(`
+                <div class="row">
+                  <div class="col-lg-12" style="margin-top: 5px;">
+                    <div class="col-lg-3">
+                      `+v['rango_fechas']+`
+                    </div>
+                    <div class="col-lg-3">
+                      `+v['tipo']+`
+                    </div>
+                    <div class="col-lg-3">
+                      <button type="button" class="btn btn-danger btnEliminarInasistencia" idInasistencia="`+v['id']+`" idBenef="`+v['beneficiario_id']+`" style="padding: 3px 2px;"><i class="fa fa-trash"></i></button>
+                    </div>
+                  </div>
+                </div>
+            `);
+          });
+        }else{
+
+        }   
+      }
+    });
+});
+
+
 $(document).on('click', '.btnHorarioIndividual', function(){
   $('.horarioIndividual').show();
-  $('.fechasMask').mask('00/00/0000');
+  $('.rangoHorario').hide();
+  $('.rangoInasistencia').hide();
 });
+
+// $(document).on('click', '.btnAgregarHorario', function(){
+//   $('#inputsAdicionales').append(`
+//       <div class="row">
+//         <div class="col-lg-5">
+//           <label for="fechas[]">Fecha</label>
+//           <input type="text" id="fechas[]" class="form-control input-sm fechasMask" name="fechas[]" placeholder="dd/mm/aaaa">
+//         </div>
+//         <div class="col-lg-1" style="padding-left: 0px; margin-top: 30px;">
+//           <button class="btn btn-xs btn-success btnAgregarHorario" type="button"><i class="fa fa-plus"></i></button>
+//         </div>
+//   `);
+//     $('.fechasMask').mask('00/00/0000');
+// });
 
 $(document).on('click', '.btnAgregarHorario', function(){
-  $('#inputsAdicionales').append(`
-      <div class="row">
-        <div class="col-lg-5">
-          <label for="fechas[]">Fecha</label>
-          <input type="text" id="fechas[]" class="form-control input-sm fechasMask" name="fechas[]" placeholder="dd/mm/aaaa">
-        </div>
-        <div class="col-lg-1" style="padding-left: 0px; margin-top: 30px;">
-          <button class="btn btn-xs btn-success btnAgregarHorario" type="button"><i class="fa fa-plus"></i></button>
-        </div>
-  `);
-    $('.fechasMask').mask('00/00/0000');
-});
-
-$(document).on('click', '.btnGuardarInasistencias', function(){
     var form = $('.formInasistencias');
+    $("<input />").attr('type', 'hidden').attr('name', 'agregarToForm').attr('value', 'Agregar').appendTo(form);
     
-     $.ajaxSetup({
+    $.ajaxSetup({
       headers: {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       }
@@ -689,16 +732,84 @@ $(document).on('click', '.btnGuardarInasistencias', function(){
       success: function(respuesta){
         if(respuesta.success){
           $('.inasistenciaSuccess').show();
+          $('#inasistenciaSuccess').empty();
           $('#inasistenciaSuccess').append(respuesta.message);
+          $('.appended-inasistencias').empty();
+          $(respuesta.inasistencias).each(function(i, v){
+            $('.appended-inasistencias').append(`
+              <div class="row">
+                <div class="col-lg-12" style="margin-top: 5px;">
+                  <div class="col-lg-3">
+                    `+v['rango_fechas']+`
+                  </div>
+                  <div class="col-lg-3">
+                    `+v['tipo']+`
+                  </div>
+                  <div class="col-lg-3">
+                    <button type="button" class="btn btn-danger btnEliminarInasistencia" idInasistencia="`+v['id']+`" idBenef="`+v['beneficiario_id']+`" style="padding: 3px 2px;"><i class="fa fa-trash"></i></button>
+                  </div>
+                </div>
+              </div>
+            `);
+          });
         }else{
           $('.inasistenciaFail').show();
+          $('#inasistenciaFail').empty();
           $('#inasistenciaFail').append(respuesta.message);
         }   
       }
     });
 });
+
+$(document).on('click', '.btnRemoverHorario', function(){
+    var form = $('.formInasistencias');
+    $("<input />").attr('type', 'hidden').attr('name', 'agregarToForm').attr('value', 'Sacar').appendTo(form);
+    $.ajaxSetup({
+      headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+
+    $.ajax({
+      url: "http://localhost/os/public/beneficiario/inasistencias",
+      data: form.serialize(),
+      type: "POST",
+      success: function(respuesta){
+        if(respuesta.success){
+          $('.inasistenciaSuccess').show();
+          $('#inasistenciaSuccess').empty();
+          $('#inasistenciaSuccess').append(respuesta.message);
+          $('.appended-inasistencias').empty();
+          $(respuesta.inasistencias).each(function(i, v){
+            $('.appended-inasistencias').append(`
+              <div class="row">
+                <div class="col-lg-12" style="margin-top: 5px;">
+                  <div class="col-lg-3">
+                    `+v['rango_fechas']+`
+                  </div>
+                  <div class="col-lg-3">
+                    `+v['tipo']+`
+                  </div>
+                  <div class="col-lg-3">
+                    <button type="button" class="btn btn-danger btnEliminarInasistencia" idInasistencia="`+v['id']+`" idBenef="`+v['beneficiario_id']+`" style="padding: 3px 2px;"><i class="fa fa-trash"></i></button>
+                  </div>
+                </div>
+              </div>
+            `);
+          });
+        }else{
+          $('.inasistenciaFail').show();
+          $('#inasistenciaFail').empty();
+          $('#inasistenciaFail').append(respuesta.message);
+        }   
+      }
+    });
+});
+
 $(document).on('click', '.btnRangoHorario', function(){
   $('.rangoHorario').show();
+  $('.horarioIndividual').hide();
+  $('.rangoInasistencia').hide();
   $('#daterange-btn').daterangepicker(
       {
         ranges   : {
@@ -715,7 +826,9 @@ $(document).on('click', '.btnRangoHorario', function(){
          // Valores para rango de sesion
          var idBeneficiario = $('.id_beneficiario').val();
          var cantidad = $('.cantidad').val();
-         var fechas = fechaInicial+'-'+fechaFinal;
+         var fechas = fechaInicial+' - '+fechaFinal;
+         var tipo = 'Agregado';
+         var from = 'Calendar';
         $.ajaxSetup({
           headers: {
               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -724,12 +837,31 @@ $(document).on('click', '.btnRangoHorario', function(){
 
         $.ajax({
             url: "http://localhost/os/public/beneficiario/inasistencias",
-            data: {id_beneficiario:idBeneficiario, cantidad:cantidad, fechas:fechas},
+            data: {id_beneficiario:idBeneficiario, cantidad:cantidad, fechas:fechas, agregarToForm:tipo},
             type: "POST",
             success: function(respuesta){
               if(respuesta.success){
                 $('.inasistenciaSuccess').show();
+                $('#inasistenciaSuccess').empty();
                 $('#inasistenciaSuccess').append(respuesta.message);
+                $('.appended-inasistencias').empty();
+                $(respuesta.inasistencias).each(function(i, v){
+                  $('.appended-inasistencias').append(`
+                    <div class="row">
+                      <div class="col-lg-12" style="margin-top: 5px;">
+                        <div class="col-lg-3">
+                          `+v['rango_fechas']+`
+                        </div>
+                        <div class="col-lg-3">
+                          `+v['tipo']+`
+                        </div>
+                        <div class="col-lg-3">
+                          <button type="button" class="btn btn-danger btnEliminarInasistencia" idInasistencia="`+v['id']+`" idBenef="`+v['beneficiario_id']+`" style="padding: 3px 2px;"><i class="fa fa-trash"></i></button>
+                        </div>
+                      </div>
+                    </div>
+                  `);
+                });
               }else{
                 $('.inasistenciaFail').show();
                 $('#inasistenciaFail').append(respuesta.message);
@@ -738,4 +870,116 @@ $(document).on('click', '.btnRangoHorario', function(){
         });
     }
   )
+});
+
+$(document).on('click', '.btnRangoInasistencia', function(){
+  $('.rangoHorario').show();
+  $('.horarioIndividual').hide();
+  $('.rangoInasistencia').hide();
+  $('#daterange-btn').daterangepicker(
+      {
+        ranges   : {
+        },
+        startDate: moment(),
+        endDate  : moment()
+      },
+      function (start, end) {
+         $('#daterange-btn span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+         var fechaInicial = start.format('DD/MM/YYYY');
+         var fechaFinal = end.format('DD/MM/YYYY');
+         var capturarRango = $("#daterange-btn span").html();
+
+         // Valores para rango de sesion
+         var idBeneficiario = $('.id_beneficiario').val();
+         var cantidad = $('.cantidad').val();
+         var fechas = fechaInicial+' - '+fechaFinal;
+         var tipo = 'Inasistencia';
+         var from = 'Calendar';
+        $.ajaxSetup({
+          headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+        });
+
+        $.ajax({
+            url: "http://localhost/os/public/beneficiario/inasistencias",
+            data: {id_beneficiario:idBeneficiario, cantidad:cantidad, fechas:fechas, agregarToForm:tipo},
+            type: "POST",
+            success: function(respuesta){
+              if(respuesta.success){
+                $('.inasistenciaSuccess').show();
+                $('#inasistenciaSuccess').empty();
+                $('#inasistenciaSuccess').append(respuesta.message);
+                $('.appended-inasistencias').empty();
+                $(respuesta.inasistencias).each(function(i, v){
+                  $('.appended-inasistencias').append(`
+                    <div class="row">
+                      <div class="col-lg-12" style="margin-top: 5px;">
+                        <div class="col-lg-3">
+                          `+v['rango_fechas']+`
+                        </div>
+                        <div class="col-lg-3">
+                          `+v['tipo']+`
+                        </div>
+                        <div class="col-lg-3">
+                          <button type="button" class="btn btn-danger btnEliminarInasistencia" idInasistencia="`+v['id']+`" idBenef="`+v['beneficiario_id']+`" style="padding: 3px 2px;"><i class="fa fa-trash"></i></button>
+                        </div>
+                      </div>
+                    </div>
+                  `);
+                });
+              }else{
+                $('.inasistenciaFail').show();
+                $('#inasistenciaFail').empty();
+                $('#inasistenciaFail').append(respuesta.message);
+              }   
+            }
+        });
+    }
+  )
+});
+
+$(document).on('click', '.btnEliminarInasistencia', function(){
+    var idFecha = $(this).attr('idInasistencia');
+    idBenef = $(this).attr('idBenef');
+    $.ajaxSetup({
+      headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+
+     $.ajax({
+          url: "http://localhost/os/public/beneficiario/inasistencias/delete",
+          data: {id:idFecha, id_beneficiario:idBenef},
+          type: "POST",
+          success: function(respuesta){
+            if(respuesta.success){
+              $('.inasistenciaSuccess').show();
+              $('#inasistenciaSuccess').empty();
+              $('#inasistenciaSuccess').append(respuesta.message);
+               $('.appended-inasistencias').empty();
+                $(respuesta.inasistencias).each(function(i, v){
+                  $('.appended-inasistencias').append(`
+                    <div class="row">
+                      <div class="col-lg-12" style="margin-top: 5px;">
+                        <div class="col-lg-3">
+                          `+v['rango_fechas']+`
+                        </div>
+                        <div class="col-lg-3">
+                          `+v['tipo']+`
+                        </div>
+                        <div class="col-lg-3">
+                          <button type="button" class="btn btn-danger btnEliminarInasistencia" idInasistencia="`+v['id']+`" idBenef="`+v['beneficiario_id']+`" style="padding: 3px 2px;"><i class="fa fa-trash"></i></button>
+                        </div>
+                      </div>
+                    </div>
+                  `);
+                });
+            }else{
+              $('.inasistenciaFail').show();
+              $('#inasistenciaFail').empty();
+              $('#inasistenciaFail').append(respuesta.message);
+            }   
+          }
+      });
 });

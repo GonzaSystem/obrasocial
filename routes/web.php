@@ -48,6 +48,9 @@ Route::get('/beneficiario/delete/{os_id}/{beneficiario_id}', 'BeneficiarioContro
 Route::get('/beneficiario/status/{id}/{id_os}/{status}', 'BeneficiarioController@status')->name('beneficiario-status');
 Route::post('/beneficiario/traditum', 'BeneficiarioController@traditum')->name('beneficiario-traditum');
 Route::post('/beneficiario/inasistencias', 'InasistenciaController@store')->name('beneficiario-inasistencias');
+Route::post('/beneficiario/inasistenciasBeneficiario', 'InasistenciaController@show')->name('beneficiario-inasistencias-beneficiario');
+Route::post('/beneficiario/inasistencias/delete', 'InasistenciaController@destroy')->name('beneficiario-inasistencias-destroy');
+
 //Prestaciones
 Route::get('/prestaciones', 'ObraSocialController@lista_prestaciones')->name('prestaciones');
 Route::post('/prestacion/create', 'ObraSocialController@create_prestacion')->name('prestacion-create');

@@ -17,6 +17,7 @@ class CreateInasistenciasTable extends Migration
             $table->id();
             $table->integer('beneficiario_id');
             $table->string('rango_fechas', 255);
+            $table->string('tipo', 255);
             $table->timestamps();
         });
     }

@@ -1227,17 +1227,19 @@ MODAL INASISTENCIAS BENEFICIARIO
                       <div class="col-lg-12">
                         <button type="button" class="btn btn-sm btn-primary btnHorarioIndividual">Agregar horario individual</button>
                         <button type="button" class="btn btn-sm btn-primary btnRangoHorario">Agregar rango de horario</button>
+                        <button type="button" class="btn btn-sm btn-primary btnRangoInasistencia">Agregar rango de Inasistencia</button>
                       </div>
                     </div>
                     <form class="formInasistencias">
                       <div class="col-lg-6 horarioIndividual" style="margin-top: 20px; margin-bottom: 20px; display:none;">
                           <div class="row">
-                            <div class="col-lg-5">
+                            <div class="col-lg-4">
                               <label for="fechas[]">Fecha</label>
-                              <input type="text" id="fechas[]" class="form-control input-sm fechasMask" name="fechas[]" placeholder="dd/mm/aaaa">
+                              <input type="number" id="fechas[]" class="form-control input-sm fechasMask" name="fechas[]" placeholder="Dia" min="1" max="31">
                             </div>
-                            <div class="col-lg-1" style="padding-left: 0px; margin-top: 30px;">
+                            <div class="col-lg-2" style="padding-left: 0px; margin-top: 30px;">
                               <button class="btn btn-xs btn-success btnAgregarHorario" type="button"><i class="fa fa-plus"></i></button>
+                              <button class="btn btn-xs btn-danger btnRemoverHorario" type="button"><i class="fa fa-minus"></i></button>
                               <input type="hidden" name="id_beneficiario" class="id_beneficiario" value>
                               <input type="hidden" name="cantidad" value="individual">
                             </div>
@@ -1245,7 +1247,7 @@ MODAL INASISTENCIAS BENEFICIARIO
                         <div id="inputsAdicionales"></div>
                         </form>
                       </div>
-                      <form class="formRangoInasistencias">
+                      <form class="formRangoHorario">
                       <div class="col-lg-6 rangoHorario" style="margin-top: 20px; margin-bottom: 20px; display:none;">
                         <div class="row">
                           <button type="button" class="btn btn-default pull-left" id="daterange-btn"> 
@@ -1256,9 +1258,45 @@ MODAL INASISTENCIAS BENEFICIARIO
                           </button>
                         </div>
                       </div>
-                      <input type="hidden" name="id_beneficiario" class="id_beneficiario" value>
-                      <input type="hidden" name="cantidad" class="cantidad" value="rango">
-                    </form>
+                        <input type="hidden" name="id_beneficiario" class="id_beneficiario" value>
+                        <input type="hidden" name="cantidad" class="cantidad" value="rango">
+                      </form>
+
+                      <form class="formRangoInasistencia">
+                        <div class="col-lg-6 rangoInasistencia" style="margin-top: 20px; margin-bottom: 20px; display:none;">
+                          <div class="row">
+                            <button type="button" class="btn btn-default pull-left" id="daterange-btn"> 
+                              <span>            
+                                <i class="fa fa-calendar"> Rango de Fecha </i>
+                                <i class="fa fa-caret-down"></i>
+                              </span>
+                            </button>
+                          </div>
+                        </div>
+                          <input type="hidden" name="id_beneficiario" class="id_beneficiario" value>
+                          <input type="hidden" name="cantidad" class="cantidad" value="rango">
+                        </form>
+
+                    <div class="col-lg-12" style="padding-left: 0;">
+                      <div class="row" style="padding-left: 0;">
+                        <div class="col-lg-12" style="padding-left: 0;">
+                          <div class="row">
+                            <div class="col-lg-12" style="margin-left: 15px;">
+                              <div class="col-lg-3">
+                                <strong>Fechas</strong>
+                              </div>
+                              <div class="col-lg-3">
+                                <strong>Tipo</strong>
+                              </div>
+                              
+                            </div>
+                          </div>
+                          <div class="appended-inasistencias">
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1269,9 +1307,9 @@ MODAL INASISTENCIAS BENEFICIARIO
 
               <div class="modal-footer">
 
-                  <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Salir</button>
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Salir</button>
 
-                  <button type="button" class="btn btn-primary btnGuardarInasistencias">Guardar Inasistencias</button>
+                  {{-- <button type="button" class="btn btn-primary btnGuardarInasistencias">Guardar Inasistencias</button> --}}
 
               </div>
 

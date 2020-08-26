@@ -43,12 +43,26 @@ class InasistenciaController extends Controller
                     foreach ($request['fechas'] as $key => $value) {
                         $inasistencia = new Inasistencia;
                         $inasistencia->beneficiario_id = $request['id_beneficiario'];
-                        $inasistencia->rango_fechas = $value . '-' . $value;
+
+                        if($value < 10 && strlen($value) < 2){
+                            $inasistencia->rango_fechas = '0'. $value . '/' . date('m/Y');
+                        }else{
+                            $inasistencia->rango_fechas = $value . '/' . date('m/Y');
+                        }
+
+                        if($request['agregarToForm'] == "Agregar"){
+                            $inasistencia->tipo = 'Agregado';
+                        }else{
+                            $inasistencia->tipo = 'Inasistencia';
+                        }
                         $inasistencia->save();
+
+                        $inasistencias = Inasistencia::where('beneficiario_id', $request['id_beneficiario'])->get();
                     }
                         return [
                             'success' => true,
-                            'message' => 'Inasistencias cargadas correctamente.'
+                            'message' => 'Inasistencias cargadas correctamente.',
+                            'inasistencias' => $inasistencias
                         ];
                     break;
                 
@@ -56,11 +70,14 @@ class InasistenciaController extends Controller
                     $inasistencia = new Inasistencia;
                     $inasistencia->beneficiario_id = $request['id_beneficiario'];
                     $inasistencia->rango_fechas = $request['fechas'];
+                    $inasistencia->tipo = $request['agregarToForm'];
                     $inasistencia->save();
-
+                    
+                    $inasistencias = Inasistencia::where('beneficiario_id', $request['id_beneficiario'])->get();
                     return [
                         'success' => true,
-                        'message' => 'Rango de inasistencias cargadas correctamente.'
+                        'message' => 'Rango de inasistencias cargadas correctamente.',
+                        'inasistencias' => $inasistencias
                     ];
                     break;        
             }
@@ -79,9 +96,14 @@ class InasistenciaController extends Controller
      * @param  \App\Inasistencia  $inasistencia
      * @return \Illuminate\Http\Response
      */
-    public function show(Inasistencia $inasistencia)
+    public function show(Request $request)
     {
-        //
+        $inasistencias = Inasistencia::where('beneficiario_id', $request['id'])->get();
+        return [
+            'success' => true,
+            'inasistencias' => $inasistencias
+        ];
+
     }
 
     /**
@@ -113,8 +135,21 @@ class InasistenciaController extends Controller
      * @param  \App\Inasistencia  $inasistencia
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Inasistencia $inasistencia)
+    public function destroy(Request $request)
     {
-        //
+        $inasistencia = Inasistencia::find($request['id']);
+        if($inasistencia->delete()){
+            $inasistencias = Inasistencia::where('beneficiario_id', $request['id_beneficiario'])->get();
+            return [
+                'success' => true,
+                'message' => 'Inasistencia eliminada correctamente.',
+                'inasistencias' => $inasistencias
+            ];
+        }else{
+            return [
+                'success' => false,
+                'message' => 'Inasistencia eliminada correctamente.'
+            ];
+        }
     }
 }
