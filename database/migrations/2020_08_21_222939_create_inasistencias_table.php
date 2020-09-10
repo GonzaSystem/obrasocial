@@ -16,7 +16,9 @@ class CreateInasistenciasTable extends Migration
         Schema::create('inasistencias', function (Blueprint $table) {
             $table->id();
             $table->integer('beneficiario_id');
-            $table->string('rango_fechas', 255);
+			$table->string('rango_fechas', 255);
+			$table->tinyInteger('mes');
+			$table->integer('anio');
             $table->string('tipo', 255);
             $table->timestamps();
         });

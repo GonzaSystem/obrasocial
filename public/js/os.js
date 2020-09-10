@@ -374,24 +374,38 @@ $(document).on('click', '.btnClonarBeneficiario', function(){
     });
 });
 
-
-
 // Al presionar el boton de horarios traigo los resultados
 $(document).on('click', '.btnHorarioBeneficiario', function(){
-  $('.alertBenef').hide();
+	$('.alertBenef').hide();
 	var id = $(this).attr("idBenef");
 	$("#horarioBenef").empty();
-  $("#tope").empty();
-  $(".id_beneficiario").val(id);
-  $(".btnInasistencias").attr('idBenef', id);
+	$("#tope").empty();
+	$("#tope").attr('idBenef', id);
+	$(".id_beneficiario").val(id);
+	$(".btnInasistencias").attr('idBenef', id);
 
-	 $.ajaxSetup({
+	var fecha_tope = $(this).attr('cuenta-tope');
+	var fecha_original = $(this).attr('cuenta-original');
+	var fecha_agregados = $(this).attr('cuenta-agregados');
+	var suma = (Number(fecha_tope)+Number(fecha_agregados));
+	console.log('suma', suma); 
+
+	if(suma < fecha_original || suma == 0){
+		$('.btnHorarioIndividual').show();
+	}else{
+		$('.btnHorarioIndividual').hide();
+	}
+
+	$.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
 
 	$("#beneficiario_id").val(id);
+	$('#dia').select2({
+		closeOnSelect: false
+	});
 
     $.ajax({
         url: "http://localhost/os/public/sesion/horarios",
@@ -448,6 +462,8 @@ $(document).on('click', '.btnHorarioBeneficiario', function(){
         });
     });
 
+
+
 // Guardo Horario
 $(document).on('click', '#guardarHorario', function(){
 	
@@ -457,7 +473,7 @@ $(document).on('click', '#guardarHorario', function(){
 	var tiempo = $("#tiempo").val();
 	var beneficiario_id = $("#beneficiario_id").val();
 	var obrasocial_id = $("#obrasocial_id").val();
-  var tope = $("#tope").val();
+  	var tope = $("#tope").val();
 
 	$("#horarioBenef").empty();
 
@@ -467,8 +483,9 @@ $(document).on('click', '#guardarHorario', function(){
         dataType: "json",
         type: "POST",
         success: function(respuesta){
+			console.log('resp', respuesta);
             if(respuesta['error'] != false){
-                $('#errorBenef').html(respuesta['error']);
+                $('#errorBenef').html(respuesta['message']);
                 $('.alertBenef').show();
             }
         	for (var i = 0; i < respuesta['sesiones'].length; i++) {
@@ -656,6 +673,7 @@ $(document).on('change', '#traditum', function(){
 
 // Inasistencias Beneficiario
 $(document).on('click', '.btnInasistencias', function(){
+	$('.appended-inasistencias').empty();
     var id = $(this).attr('idBenef');
     $.ajaxSetup({
       headers: {
@@ -695,10 +713,14 @@ $(document).on('click', '.btnInasistencias', function(){
 });
 
 
-$(document).on('click', '.btnHorarioIndividual', function(){
-  $('.horarioIndividual').show();
+$(document).on('click', '.btnInasistenciaIndividual', function(){
+  $('.inasistenciaIndividual').show();
   $('.rangoHorario').hide();
   $('.rangoInasistencia').hide();
+});
+
+$(document).on('click', '.btnHorarioIndividual', function(){
+  $('.horarioIndividual').show();
 });
 
 // $(document).on('click', '.btnAgregarHorario', function(){
@@ -716,7 +738,7 @@ $(document).on('click', '.btnHorarioIndividual', function(){
 // });
 
 $(document).on('click', '.btnAgregarHorario', function(){
-    var form = $('.formInasistencias');
+    var form = $('.formHorarios');
     $("<input />").attr('type', 'hidden').attr('name', 'agregarToForm').attr('value', 'Agregar').appendTo(form);
     
     $.ajaxSetup({
@@ -731,9 +753,9 @@ $(document).on('click', '.btnAgregarHorario', function(){
       type: "POST",
       success: function(respuesta){
         if(respuesta.success){
-          $('.inasistenciaSuccess').show();
-          $('#inasistenciaSuccess').empty();
-          $('#inasistenciaSuccess').append(respuesta.message);
+          $('.horarioSuccess').show();
+          $('#horarioSuccess').empty();
+          $('#horarioSuccess').append(respuesta.message);
           $('.appended-inasistencias').empty();
           $(respuesta.inasistencias).each(function(i, v){
             $('.appended-inasistencias').append(`
@@ -753,11 +775,17 @@ $(document).on('click', '.btnAgregarHorario', function(){
             `);
           });
         }else{
-          $('.inasistenciaFail').show();
-          $('#inasistenciaFail').empty();
-          $('#inasistenciaFail').append(respuesta.message);
+          $('.horarioFail').show();
+          $('#horarioFail').empty();
+          $('#horarioFail').append(respuesta.message);
         }   
-      }
+      },
+	  error:function(respuesta){
+		  console.log(respuesta);
+			$('.horarioFail').show();
+			$('#horarioFail').empty();
+			$('#horarioFail').append(respuesta.responseJSON['message']);
+	  }
     });
 });
 
@@ -806,75 +834,75 @@ $(document).on('click', '.btnRemoverHorario', function(){
     });
 });
 
-$(document).on('click', '.btnRangoHorario', function(){
-  $('.rangoHorario').show();
-  $('.horarioIndividual').hide();
-  $('.rangoInasistencia').hide();
-  $('#daterange-btn').daterangepicker(
-      {
-        ranges   : {
-        },
-        startDate: moment(),
-        endDate  : moment()
-      },
-      function (start, end) {
-         $('#daterange-btn span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-         var fechaInicial = start.format('DD/MM/YYYY');
-         var fechaFinal = end.format('DD/MM/YYYY');
-         var capturarRango = $("#daterange-btn span").html();
+// $(document).on('click', '.btnRangoHorario', function(){
+//   $('.rangoHorario').show();
+//   $('.horarioIndividual').hide();
+//   $('.rangoInasistencia').hide();
+//   $('#daterange-btn').daterangepicker(
+//       {
+//         ranges   : {
+//         },
+//         startDate: moment(),
+//         endDate  : moment()
+//       },
+//       function (start, end) {
+//          $('#daterange-btn span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+//          var fechaInicial = start.format('DD/MM/YYYY');
+//          var fechaFinal = end.format('DD/MM/YYYY');
+//          var capturarRango = $("#daterange-btn span").html();
 
-         // Valores para rango de sesion
-         var idBeneficiario = $('.id_beneficiario').val();
-         var cantidad = $('.cantidad').val();
-         var fechas = fechaInicial+' - '+fechaFinal;
-         var tipo = 'Agregado';
-         var from = 'Calendar';
-        $.ajaxSetup({
-          headers: {
-              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-          }
-        });
+//          // Valores para rango de sesion
+//          var idBeneficiario = $('.id_beneficiario').val();
+//          var cantidad = $('.cantidad').val();
+//          var fechas = fechaInicial+' - '+fechaFinal;
+//          var tipo = 'Agregado';
+//          var from = 'Calendar';
+//         $.ajaxSetup({
+//           headers: {
+//               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+//           }
+//         });
 
-        $.ajax({
-            url: "http://localhost/os/public/beneficiario/inasistencias",
-            data: {id_beneficiario:idBeneficiario, cantidad:cantidad, fechas:fechas, agregarToForm:tipo},
-            type: "POST",
-            success: function(respuesta){
-              if(respuesta.success){
-                $('.inasistenciaSuccess').show();
-                $('#inasistenciaSuccess').empty();
-                $('#inasistenciaSuccess').append(respuesta.message);
-                $('.appended-inasistencias').empty();
-                $(respuesta.inasistencias).each(function(i, v){
-                  $('.appended-inasistencias').append(`
-                    <div class="row">
-                      <div class="col-lg-12" style="margin-top: 5px;">
-                        <div class="col-lg-3">
-                          `+v['rango_fechas']+`
-                        </div>
-                        <div class="col-lg-3">
-                          `+v['tipo']+`
-                        </div>
-                        <div class="col-lg-3">
-                          <button type="button" class="btn btn-danger btnEliminarInasistencia" idInasistencia="`+v['id']+`" idBenef="`+v['beneficiario_id']+`" style="padding: 3px 2px;"><i class="fa fa-trash"></i></button>
-                        </div>
-                      </div>
-                    </div>
-                  `);
-                });
-              }else{
-                $('.inasistenciaFail').show();
-                $('#inasistenciaFail').append(respuesta.message);
-              }   
-            }
-        });
-    }
-  )
-});
+//         $.ajax({
+//             url: "http://localhost/os/public/beneficiario/inasistencias",
+//             data: {id_beneficiario:idBeneficiario, cantidad:cantidad, fechas:fechas, agregarToForm:tipo},
+//             type: "POST",
+//             success: function(respuesta){
+//               if(respuesta.success){
+//                 $('.inasistenciaSuccess').show();
+//                 $('#inasistenciaSuccess').empty();
+//                 $('#inasistenciaSuccess').append(respuesta.message);
+//                 $('.appended-inasistencias').empty();
+//                 $(respuesta.inasistencias).each(function(i, v){
+//                   $('.appended-inasistencias').append(`
+//                     <div class="row">
+//                       <div class="col-lg-12" style="margin-top: 5px;">
+//                         <div class="col-lg-3">
+//                           `+v['rango_fechas']+`
+//                         </div>
+//                         <div class="col-lg-3">
+//                           `+v['tipo']+`
+//                         </div>
+//                         <div class="col-lg-3">
+//                           <button type="button" class="btn btn-danger btnEliminarInasistencia" idInasistencia="`+v['id']+`" idBenef="`+v['beneficiario_id']+`" style="padding: 3px 2px;"><i class="fa fa-trash"></i></button>
+//                         </div>
+//                       </div>
+//                     </div>
+//                   `);
+//                 });
+//               }else{
+//                 $('.inasistenciaFail').show();
+//                 $('#inasistenciaFail').append(respuesta.message);
+//               }   
+//             }
+//         });
+//     }
+//   )
+// });
 
 $(document).on('click', '.btnRangoInasistencia', function(){
   $('.rangoHorario').show();
-  $('.horarioIndividual').hide();
+  $('.inasistenciaIndividual').hide();
   $('.rangoInasistencia').hide();
   $('#daterange-btn').daterangepicker(
       {
@@ -885,8 +913,8 @@ $(document).on('click', '.btnRangoInasistencia', function(){
       },
       function (start, end) {
          $('#daterange-btn span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-         var fechaInicial = start.format('DD/MM/YYYY');
-         var fechaFinal = end.format('DD/MM/YYYY');
+         var fechaInicial = start.format('DD/MM/YY');
+         var fechaFinal = end.format('DD/MM/YY');
          var capturarRango = $("#daterange-btn span").html();
 
          // Valores para rango de sesion
@@ -895,6 +923,8 @@ $(document).on('click', '.btnRangoInasistencia', function(){
          var fechas = fechaInicial+' - '+fechaFinal;
          var tipo = 'Inasistencia';
          var from = 'Calendar';
+		 var mes = start.format('MM');
+		 var anio = start.format('YYYY');
         $.ajaxSetup({
           headers: {
               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -903,7 +933,7 @@ $(document).on('click', '.btnRangoInasistencia', function(){
 
         $.ajax({
             url: "http://localhost/os/public/beneficiario/inasistencias",
-            data: {id_beneficiario:idBeneficiario, cantidad:cantidad, fechas:fechas, agregarToForm:tipo},
+            data: {id_beneficiario:idBeneficiario, cantidad:cantidad, fechas:fechas, agregarToForm:tipo, mes:mes, anio:anio},
             type: "POST",
             success: function(respuesta){
               if(respuesta.success){
@@ -933,7 +963,13 @@ $(document).on('click', '.btnRangoInasistencia', function(){
                 $('#inasistenciaFail').empty();
                 $('#inasistenciaFail').append(respuesta.message);
               }   
-            }
+            },
+			 error:function(respuesta){
+					console.log(respuesta);
+						$('.inasistenciaFail').show();
+						$('#inasistenciaFail').empty();
+						$('#inasistenciaFail').append(respuesta.responseJSON['message']);
+				}
         });
     }
   )
@@ -982,4 +1018,32 @@ $(document).on('click', '.btnEliminarInasistencia', function(){
             }   
           }
       });
+});
+
+$(document).on('click', '.btnTope', function(){
+	var idBenef = $('.topeBenef').attr('idBenef');
+	var value = $('.topeBenef').val();
+
+	$.ajaxSetup({
+		headers: {
+			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+		}
+	});
+
+	$.ajax({
+		url: "http://localhost/os/public/beneficiario/tope",
+		data: {id:idBenef, tope:value},
+		type: "POST",
+		success: function(respuesta){
+			$('.topeBenef').val(value);
+		}
+	});
+});
+
+$(document).on('hidden.bs.modal', '#modalHorarioBeneficiario', function(){
+	console.log('closed');
+	$('#tope').empty();
+	$('.appended-inasistencias').empty();
+	$('.inasistenciaFail').empty();
+	$('.inasistenciaSuccess').empty();
 });

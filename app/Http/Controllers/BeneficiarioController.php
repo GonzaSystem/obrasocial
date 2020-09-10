@@ -10,18 +10,27 @@ use App\Beneficiario;
 use App\ObraSocial;
 use App\Sesion;
 use App\Traditum;
+use App\Helpers\OSUtil;
 
 class BeneficiarioController extends Controller
 {
 	public function __construct()
     {
         $this->middleware('auth');
-    }
+	}
+
 
     public function index($prest_id, $os_id, $mes = null, $anio = null)
     {
         // Muestro beneficiarios
+        if($mes == null){
+            $mes = date('m');           
+        }
 
+        if($anio == null){
+            $anio = date('Y');           
+		}
+		
     	// Declaro objeto de usuario
     	$user = \Auth::user()->id;
 
@@ -39,10 +48,10 @@ class BeneficiarioController extends Controller
         // Traigo beneficiarios segun prestador y obra social
         $beneficiarios = Prestador::where('user_id', $user)
          ->where('os_id', $os_id)
-         ->with('prestacion', 'beneficiario')
+         ->with('prestacion', 'beneficiario.inasistencia', 'beneficiario.agregado', 'beneficiario.sesion')
          ->orderBy('id', 'desc')
-         ->get();
-
+		 ->get();
+		 $fechas = array();
          $traditums = array();
          foreach($beneficiarios as $beneficiario){
             foreach($beneficiario->beneficiario as $k => $benef){
@@ -50,19 +59,48 @@ class BeneficiarioController extends Controller
                 if(empty($traditums[$benef->id])){
                     $traditums[$benef->id][0]['codigo'] = null;
                     $traditums[$benef->id][0]['id'] = null;
-                }
+				}
+				
+				// Sesiones
+				$inasistencias = $benef->inasistencia;
+				$adicionales = $benef->agregado;
+				$sesiones = $benef->sesion;
+				$cant_solicitada = $benef->tope;
+				$totalDias = count($sesiones);
+				$fechas['total'][$benef->id] = OSUtil::cuenta_dias($mes, $anio, $sesiones, $cant_solicitada, $inasistencias);
+				$fechas['inasistencias'][$benef->id] = OSUtil::cuenta_inasistencias($mes, $anio, $sesiones, $inasistencias);
+				$fechas['agregado'][$benef->id] = OSUtil::cuenta_agregado($mes, $anio, $sesiones, $adicionales);
+				$fechas['total_agregado'][$benef->id] = count($benef->agregado);
             }
-         }
+		 }
+        // Sumario de fechas
+		$cuenta = array();
+		foreach ($fechas['total'] ?? [] as $key => $fecha) {
+            $cuenta[$key] = 0;
+			foreach($fecha as $k => $v){
+				$cuenta[$key]++;
+				$fecha_individual = explode('/', $v);
+				foreach($fechas['inasistencias'][$key] as $inasistencia){
+					$inasistencia_individual = explode('/', $inasistencia);	
+					if($fecha_individual[0].'/'.$fecha_individual[1].'/'.$fecha_individual[2] == $inasistencia_individual[0].'/'.$inasistencia_individual[1].'/'.$inasistencia_individual[2]){
+						$cuenta[$key]--;
+					}
+				}			
+			}
+			$fechas['tope'][$key] = $cuenta;
+		}
 
     	// Objeto Obra Social
     	$obraSocial = ObraSocial::where('id', $os_id)->get();
+		$data['beneficiarios'] = $beneficiarios;
+		$data['obrasocial'] = $obraSocial;
+		$data['prestador_menu'] = $prestador_menu;
+		$data['prestacion'] = $prestacion;
+        $data['traditums'] = $traditums;
+        $data['fechas'] = $fechas;
 
     	return view('beneficiario',[
-    		"beneficiarios" => $beneficiarios,
-    		"obrasocial" => $obraSocial,
-            "prestador_menu" => $prestador_menu,
-            "prestacion" => $prestacion,
-            "traditums" => $traditums,
+    		'data' => $data
     	]);
     }
 
@@ -157,12 +195,12 @@ class BeneficiarioController extends Controller
 
     public function delete($os_id, $beneficiario_id)
     {
-        // Borro beneficiario
-        $beneficiario = Beneficiario::find($beneficiario_id);
-        $beneficiario->delete();
-
-         return redirect()->route('beneficiarios', ['prestador_id' => \Auth::user()->id, 'obrasocial_id' => $os_id])
-            ->with(['message' => 'El beneficiario ha sido eliminado correctamente']);
+		// Borro beneficiario
+		$beneficiario = Beneficiario::find($beneficiario_id);
+		if($beneficiario->delete()){
+			return redirect()->route('beneficiarios', ['prestador_id' => \Auth::user()->id, 'obrasocial_id' => $os_id])
+			->with(['message' => 'El beneficiario ha sido eliminado correctamente']);
+		}    
     }
 
     public function presupuesto($prestador_id, $beneficiario_id)
@@ -256,26 +294,6 @@ class BeneficiarioController extends Controller
             ->with(['message' => 'Los datos de beneficiario han sido actualizados correctamente']);
     }
 
-    public function cuenta_dias($mes,$anio,$numero_dia, $horario, $tope_dias, $tiempo)
-    {
-        $count=0;
-        $dias_mes=cal_days_in_month(CAL_GREGORIAN, $mes, $anio);
-        $coincidencia = array();
-
-        for($i=1;$i<=$dias_mes && $count < $tope_dias;$i++){
-                if(date('N',strtotime($anio.'-'.$mes.'-'.$i))==$numero_dia){
-
-                    $hor=new \DateTime($horario);
-                    $fin=$hor->add( new \DateInterval( 'PT' . ( (integer) $tiempo ) . 'M' ) );
-                    $fecha_fin = $fin->format( 'H:i' );
-
-                    $count++;
-                    $coincidencia[$i] = date($i.'/'.$mes.'/'.substr($anio, -2)). '/' . $horario.'/'.$fecha_fin;
-                }
-        }     
-        return $coincidencia;
-    }
-
     public function formulario($bene_id, $prestador_id, $planilla, $mes = null, $anio = null)
     {
         if( $planilla == 1 ){
@@ -295,28 +313,51 @@ class BeneficiarioController extends Controller
             $anio = date('Y');           
         }
 
-        $beneficiario = Beneficiario::where('id', $beneficiario_id)->with('prestador')->get();
-        $prestador = Prestador::where('id', $prestador_id)->with('prestacion')->get();
-        $sesiones = Sesion::where('beneficiario_id', $beneficiario_id)->get();
-        $fechas = array();
-        $fecha_fin = array();
-        foreach ($sesiones as $key => $sesion) {
-            $cant_solicitada = $beneficiario[0]->tope;
-            $totalDias = count($sesiones);
-            if($cant_solicitada == null){
-                $avgSesion = 99999;
-            }else{
-                $avgSesion = $cant_solicitada / $totalDias; 
-            }
+        // $beneficiario = Beneficiario::where('id', $beneficiario_id)->with('prestador')->get();
+        // $prestador = Prestador::where('id', $prestador_id)->with('prestacion')->get();
+        // $sesiones = Sesion::where('beneficiario_id', $beneficiario_id)->get();
+        // $fechas = array();
+        // $fecha_fin = array();
+        // foreach ($sesiones as $key => $sesion) {
+        //     $cant_solicitada = $beneficiario[0]->tope;
+        //     $totalDias = count($sesiones);
+        //     if($cant_solicitada == null){
+        //         $avgSesion = 99999;
+        //     }else{
+        //         $avgSesion = $cant_solicitada / $totalDias; 
+        //     }
 
 
-            //Ver de pasar el horario a la funcion
-             $fechas[] = $this->cuenta_dias($mes, $anio, $sesion['dia'], $sesion['hora'], $avgSesion, $sesion['tiempo']);
-        }
+        //     //Ver de pasar el horario a la funcion
+        //      $fechas[] = $this->cuenta_dias($mes, $anio, $sesion['dia'], $sesion['hora'], $avgSesion, $sesion['tiempo']);
+        // }
+
+
+		
+		// Fechas V2
+		$beneficiario = Beneficiario::where('id', $beneficiario_id)->with(['prestador', 'sesion', 'inasistencia'])->get();
+		$prestador = Prestador::where('id', $prestador_id)->with('prestacion')->get();
+
+		$fechas = array();
+		foreach ($beneficiario as $key => $benef) {
+			$inasistencias = $benef->inasistencia;
+			$sesiones = $benef->sesion;
+			$cant_solicitada = $benef->tope;
+			$totalDias = count($sesiones);
+
+			if($cant_solicitada == null){
+				$avgSesion = 99999;
+			}else{
+				$avgSesion = $cant_solicitada / $totalDias; 
+			}
+			
+			$fechas[] = $this->cuenta_dias($mes, $anio, $sesiones, $avgSesion, $inasistencias);
+		}
+		
 
         $merged = array_merge(...$fechas);
-        sort($merged, SORT_NUMERIC);
-
+		sort($merged, SORT_NUMERIC);
+		dd($merged);
         // Traigo mes actual
         $mes = date('m');
             switch ($mes){
@@ -360,7 +401,6 @@ class BeneficiarioController extends Controller
 
         return view($view, [
             'fechas' => $merged,
-            'fecha_fin' => $fecha_fin,
             'prestador' => $prestador,
             'beneficiario' => $beneficiario,
             'mes' => $mes,
@@ -391,6 +431,23 @@ class BeneficiarioController extends Controller
             $traditum->mes = date('m');
             $traditum->anio = date('Y');
             $traditum->save();
+        }
+    }
+
+    public function tope(Request $request)
+    {
+        $beneficiario = Beneficiario::where('id', $request['id'])->first();
+        $beneficiario->tope = $request['tope'];
+        if($beneficiario->save()){
+            return [
+                'success' => true,
+                'message' => 'Tope cargado correctamente.'
+            ];
+        }else{
+            return [
+                'success' => false,
+                'message' => 'El tope no ha podido ser cargado. Por favor intente nuevamente.'
+            ];
         }
     }
 }

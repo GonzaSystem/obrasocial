@@ -50,6 +50,7 @@ Route::post('/beneficiario/traditum', 'BeneficiarioController@traditum')->name('
 Route::post('/beneficiario/inasistencias', 'InasistenciaController@store')->name('beneficiario-inasistencias');
 Route::post('/beneficiario/inasistenciasBeneficiario', 'InasistenciaController@show')->name('beneficiario-inasistencias-beneficiario');
 Route::post('/beneficiario/inasistencias/delete', 'InasistenciaController@destroy')->name('beneficiario-inasistencias-destroy');
+Route::post('/beneficiario/tope', 'BeneficiarioController@tope')->name('beneficiario-tope');
 
 //Prestaciones
 Route::get('/prestaciones', 'ObraSocialController@lista_prestaciones')->name('prestaciones');
@@ -74,3 +75,11 @@ Route::post('/video/create', 'VideoController@store')->name('video-create');
 Route::post('/video/update', 'VideoController@update')->name('video-update');
 Route::post('/video/list', 'VideoController@list')->name('video-list');
 Route::get('/video/delete/{id}', 'VideoController@destroy')->name('video-destroy');
+
+
+// Sys
+Route::get('/updateapp', function()
+{
+    \Artisan::call('dump-autoload');
+    echo 'dump-autoload complete';
+});

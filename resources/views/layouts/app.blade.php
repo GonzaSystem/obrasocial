@@ -15,9 +15,6 @@
     <script src="{{ asset('js/app.js') }}" defer></script>
 
 
-    <!-- Multi Select -->
-    <link rel="stylesheet" href="{{ asset('css/multi-select.css') }}">
-
     <!-- jQuery 3 -->
     <script src="{{ asset('bower_components/jquery/dist/jquery.min.js') }}"></script>
 
@@ -40,31 +37,34 @@
      <!-- SweetAlert 2 -->
     <script src="{{ asset('plugins/sweetalert2/sweetalert2.all.js') }}"></script>
 
-      <!-- InputMask -->
+	<!-- InputMask -->
     <script src="{{ asset('plugins/input-mask/jquery.inputmask.js') }}"></script>
     <script src="{{ asset('plugins/input-mask/jquery.inputmask.date.extensions.js') }}"></script>
     <script src="{{ asset('plugins/input-mask/jquery.inputmask.extensions.js') }}"></script>
 
-      <!-- jQueryNumber -->
+	<!-- jQueryNumber -->
     <script src="{{ asset('plugins/jQueryNumber/jquery-number.js') }}"></script>
 
-      <!-- By default SweetAlert2 doesn't support IE. To enable IE 11 support, include Promise polyfill:-->
+	<!-- By default SweetAlert2 doesn't support IE. To enable IE 11 support, include Promise polyfill:-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js"></script>
 
-      <!--DatePicker-->
+	<!--DatePicker-->
     <script src="{{ asset('bower_components/moment/min/moment.min.js') }}"></script>
     <script src="{{ asset('bower_components/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
 
-      <!--Morris chart-->
+	<!--Morris chart-->
     <script src="{{ asset('bower_components/raphael/raphael.min.js') }}"></script>
     <script src="{{ asset('bower_components/morris.js/morris.min.js') }}"></script>
 
-      <!--ChartJS-->
+	<!--ChartJS-->
     <script src="{{ asset('bower_components/chart.js/Chart.js') }}"></script>
 
     <script src="{{ asset('bower_components/jquery-mask/jquery.mask.js') }}"></script>
     <!-- OS -->
-    <script src="{{ asset('js/os.js') }}"></script>
+	<script src="{{ asset('js/os.js') }}"></script>
+	
+	<!-- Select2 -->
+	<script src="{{ asset('bower_components/select2/dist/js/select2.min.js') }}"></script>
     
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -95,7 +95,10 @@
     <link rel="stylesheet" href="{{ asset('bower_components/bootstrap-daterangepicker/daterangepicker.css') }}">
 
     <!--Morris chart-->
-    <link rel="stylesheet" href="{{ asset('bower_components/morris.js/morris.css') }}">
+	<link rel="stylesheet" href="{{ asset('bower_components/morris.js/morris.css') }}">
+	
+	<!-- Select2 -->
+	<link rel="stylesheet" href="{{ asset('bower_components/select2/dist/css/select2.css') }}">
 
 </head>
 <body class="hold-transition skin-purple sidebar-collapse sidebar-mini">
