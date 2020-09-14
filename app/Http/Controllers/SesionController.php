@@ -17,10 +17,20 @@ class SesionController extends Controller
     {
         $id = $request->id;
         $beneficiario = Beneficiario::where('id', $id)->first();
-        $sesiones = Sesion::where('beneficiario_id', $id)->with('beneficiario')->get();
+		$sesiones = Sesion::where('beneficiario_id', $id)->with('beneficiario')->get()->toArray();
+		$fin_sesion = array();
+		foreach ($sesiones as $k => $sesion) {
+			$horario = $sesion['hora'];
+			$tiempo = $sesion['tiempo'];
+			$hor=new \DateTime($horario);
+			$fin=$hor->add( new \DateInterval( 'PT' . ( (integer) $tiempo ) . 'M' ) );
+			$fecha_fin = $fin->format( 'H:i' );
+			$fin_sesion[$k] = $fecha_fin;
+		}
         return [
             'sesiones' => $sesiones,
-            'beneficiario' => $beneficiario
+			'beneficiario' => $beneficiario,
+			'fin_sesion' => $fin_sesion,
         ];
     }
 

@@ -6,6 +6,9 @@ class OSUtil{
 
 	static public function cuenta_dias($mes, $anio, $sesiones, $tope_dias = null, $inasistencias = null)
     {
+		if($tope_dias == null || $tope_dias == 0){
+			$tope_dias = 999999;
+		}
         $count=0;
         $dias_mes=cal_days_in_month(CAL_GREGORIAN, $mes, $anio);
         $coincidencia = array();

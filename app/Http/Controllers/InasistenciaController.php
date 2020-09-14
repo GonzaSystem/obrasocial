@@ -71,7 +71,7 @@ class InasistenciaController extends Controller
 					}
 					$fechas['tope'][$key] = $cuenta;
 				}
-				if((count($fechas['total'][$benef->id]) - count($fechas['inasistencias'][$benef->id]) + $totalAgregado) < $cant_solicitada){
+				if($request['agregarToForm'] == "Sacar"){
 					switch ($request['cantidad']) {
 						case 'individual':
 							foreach ($request['fechas'] as $key => $value) {
@@ -131,10 +131,74 @@ class InasistenciaController extends Controller
 								'inasistencias' => $inasistencias
 							];
 							break;        
-					}							
+					}
 				}else{
-					Throw new \Exception('Limite de fechas alcanzado.');
+					if((count($fechas['total'][$benef->id]) - count($fechas['inasistencias'][$benef->id]) + $totalAgregado) < $cant_solicitada){
+						switch ($request['cantidad']) {
+							case 'individual':
+								foreach ($request['fechas'] as $key => $value) {
+									
+									$inasistencia = new Inasistencia;
+									$inasistencia->beneficiario_id = $request['id_beneficiario'];
+			
+									if($value < 10 && strlen($value) < 2){
+										$inasistencia->rango_fechas = '0'. $value . '/' . date('m/y');
+										$filter_inasistencia = Inasistencia::where('rango_fechas', '0'. $value . '/' . date('m/y'))->first();
+										if($filter_inasistencia){
+											throw new \Exception('La fecha a cargar ya existe'); 
+										}
+									}else{
+										$inasistencia->rango_fechas = $value . '/' . date('m/y');
+										$filter_inasistencia = Inasistencia::where('rango_fechas', $value . '/' . date('m/y'))->first();
+										if($filter_inasistencia){
+											throw new \Exception('La fecha a cargar ya existe'); 
+										}
+									}
+			
+									if($request['agregarToForm'] == "Agregar"){
+										$inasistencia->tipo = 'Agregado';
+									}else{
+										$inasistencia->tipo = 'Inasistencia';
+									}
+									$inasistencia->mes = date('m');
+									$inasistencia->anio = date('Y');
+									$inasistencia->save();
+									\DB::commit();
+									$inasistencias = Inasistencia::where('beneficiario_id', $request['id_beneficiario'])->get();
+								}
+									return [
+										'success' => true,
+										'message' => 'Fecha cargada correctamente.',
+										'inasistencias' => $inasistencias
+									];
+								break;
+							
+							case 'rango':
+								$filter_inasistencia = Inasistencia::where('rango_fechas', $request['fechas'])->first();
+								if($filter_inasistencia){
+									throw new \Exception('La fecha a cargar ya existe'); 
+								}
+								$inasistencia = new Inasistencia;
+								$inasistencia->beneficiario_id = $request['id_beneficiario'];
+								$inasistencia->rango_fechas = $request['fechas'];
+								$inasistencia->tipo = $request['agregarToForm'];
+								$inasistencia->mes = $request['mes'];
+								$inasistencia->anio = $request['anio'];
+								$inasistencia->save();
+								\DB::commit();
+								$inasistencias = Inasistencia::where('beneficiario_id', $request['id_beneficiario'])->get();
+								return [
+									'success' => true,
+									'message' => 'Rango de fechas cargadas correctamente.',
+									'inasistencias' => $inasistencias
+								];
+								break;        
+						}							
+					}else{
+						Throw new \Exception('Limite de fechas alcanzado.');
+					}
 				}
+				
 			}
         }catch(Exception $e){
 			\DB::rollBack();

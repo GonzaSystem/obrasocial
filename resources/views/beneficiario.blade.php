@@ -99,7 +99,7 @@
            <tr>
 
              <th style="text-align: center">Clonar</th>
-             <th>Nombre y Apellido</th>
+             <th>Apellido y Nombre</th>
              <th style="text-align: center">N° de Beneficiario</th>
              <th style="text-align: center">Cod. Seguridad</th>
              <th style="text-align: center">Cod. Modulo</th>
@@ -752,13 +752,13 @@ MODAL EDITAR BENEFICIARIO
 
                       </div>
 
-                      <div class="col-lg-6">
+					  <div class="col-lg-6">
 
-                          <label for="codigo_seguridad">Codigo Traditum</label>
+                        <label for="editarDni">Editar DNI</label>
 
-                          <input type="text" class="form-control input-lg" id="codigo_traditum" name="editar_codigo_traditum">
+                        <input type="text" class="form-control input-lg" id="editarDni" name="editarDni" placeholder="Ingresar DNI">
 
-                      </div>
+					  </div>   
 
                   </div>
 
@@ -768,15 +768,7 @@ MODAL EDITAR BENEFICIARIO
 
               <div class="form-group col-lg-12">
 
-                <div class="input-group col-lg-12">
-
-                  <div class="col-lg-6">
-
-                        <label for="editarDni">Editar DNI</label>
-
-                        <input type="text" class="form-control input-lg" id="editarDni" name="editarDni" placeholder="Ingresar DNI">
-
-                  </div>                  
+                <div class="input-group col-lg-12">       
 
                   <div class="col-lg-6">
 
@@ -784,7 +776,15 @@ MODAL EDITAR BENEFICIARIO
 
                         <input type="text" class="form-control input-lg" id="editarCuit" name="editarCuit" placeholder="Ingresar CUIT">
 
-                  </div>
+				  </div>
+				  
+				  <div class="col-lg-6">
+
+					<label for="editarTelefono">Editar Telefono</label>
+
+					<input type="text" class="form-control input-lg" id="editarTelefono" name="editarTelefono" placeholder="Ingresar Telefono">
+
+			  		</div>  
 
                 </div>
 
@@ -797,22 +797,21 @@ MODAL EDITAR BENEFICIARIO
 
                 <div class="input-group col-lg-12">
 
-                 <div class="col-lg-6">
-
-                        <label for="editarTelefono">Editar Telefono</label>
-
-                        <input type="text" class="form-control input-lg" id="editarTelefono" name="editarTelefono" placeholder="Ingresar Telefono">
-
-                  </div>                  
-
                   <div class="col-lg-6">
 
                         <label for="editarCorreo">Editar Correo</label>
 
                         <input type="email" class="form-control input-lg" id="editarCorreo" name="editarCorreo" placeholder="Ingresar correo">
 
-                  </div>
+				  </div>
+				  
+                  <div class="col-lg-6">
 
+					<label for="editarDireccion">Editar Dirección del Beneficiario</label>
+
+					<input type="text" class="form-control input-lg" id="editarDireccion" name="editarDireccion" placeholder="Ingresar Dirección">
+
+			  		</div>
 
                 </div>
 
@@ -826,19 +825,19 @@ MODAL EDITAR BENEFICIARIO
 
                   <div class="col-lg-6">
 
-                        <label for="editarDireccion">Editar Dirección del Beneficiario</label>
-
-                        <input type="text" class="form-control input-lg" id="editarDireccion" name="editarDireccion" placeholder="Ingresar Dirección">
-
-                  </div>
-
-                  <div class="col-lg-6">
-
                         <label for="editarLocalidad">Editar Localidad del Beneficiario</label>
 
                         <input type="text" class="form-control input-lg" id="editarLocalidad" name="editarLocalidad" placeholder="Ingresar Localidad">
 
-                  </div>
+				  </div>
+				  
+				  <div class="col-lg-6">
+
+					<label for="editarDireccionPrestacion">Editar Dirección de Prestación</label>
+
+					<input type="text" class="form-control input-lg" id="editarDireccionPrestacion" name="editarDireccionPrestacion" placeholder="Ingresar Dirección de Prestación">
+
+					</div>
 
                 </div>
 
@@ -852,20 +851,24 @@ MODAL EDITAR BENEFICIARIO
 
                   <div class="col-lg-6">
 
-                        <label for="editarDireccionPrestacion">Editar Dirección de Prestación</label>
-
-                        <input type="text" class="form-control input-lg" id="editarDireccionPrestacion" name="editarDireccionPrestacion" placeholder="Ingresar Dirección de Prestación">
-
-                  </div>
-
-                  <div class="col-lg-6">
-
                         <label for="editarLocalidadPrestacion">Editar Localidad de Prestación</label>
 
                         <input type="text" class="form-control input-lg" id="editarLocalidadPrestacion" name="editarLocalidadPrestacion" placeholder="Ingresar Localidad de Prestación">
 
                   </div>
 
+
+				  <div class="col-lg-6">
+
+					<label for="editarTurno">Turno</label>
+
+					<select type="text" class="form-control input-lg" id="editarTurno" name="editarTurno">
+						  <option value="Mañana">Mañana</option>
+						  <option value="Tarde">Tarde</option>
+						  <option value="Noche">Noche</option>
+					</select>
+
+			  		</div>
 
                 </div>
 
@@ -929,27 +932,6 @@ MODAL EDITAR BENEFICIARIO
 
               @endif
 
-              <!-- Entrada para Turno y Dependencia -->
-
-              <div class="form-group col-lg-12">
-
-                <div class="input-group col-lg-12">
-
-                  <div class="col-lg-6">
-
-                        <label for="editarTurno">Turno</label>
-
-                        <select type="text" class="form-control input-lg" id="editarTurno" name="editarTurno">
-                              <option value="Mañana">Mañana</option>
-                              <option value="Tarde">Tarde</option>
-                              <option value="Noche">Noche</option>
-                        </select>
-
-                  </div>
-
-                </div>
-
-              </div>
 
               @if(Auth::user()->role == 'Traslado')
 
@@ -1066,8 +1048,8 @@ MODAL HORARIO BENEFICIARIO
                         <div class="form-group col-lg-12">
                             <div class="input-group col-lg-12">
                                 <div class="col-lg-3" style="margin-left: 15px;">
-                                  <label for="tope">Tope</label>
-                                  <input type="text" class="form-control topeBenef" name="tope" id="tope" idBenef placeholder="Tope">
+                                  <label for="tope">Tope Dias mensuales</label>
+                                  <input type="text" class="form-control topeBenef" name="tope" id="tope" idBenef placeholder="Sin tope">
                                 </div>
                                 <div class="col-lg-3">
                                   <label for="btnTope">Cargar Tope</label><br>
@@ -1147,7 +1129,8 @@ MODAL HORARIO BENEFICIARIO
                                         <option value="135">135</option>
                                         <option value="180">180</option>
                                         <option value="210">210</option>
-                                        <option value="240">240</option>
+										<option value="240">240</option>
+										<option value="300">300</option>
                                     </select>
 
                                 </div>
@@ -1264,13 +1247,13 @@ MODAL INASISTENCIAS BENEFICIARIO
                           <div class="row">
                             <div class="col-lg-4">
                               <label for="fechas[]">Fecha</label>
-                              <input type="number" id="fechas[]" class="form-control input-sm fechasMask" name="fechas[]" placeholder="Dia" min="1" max="31">
+							<input type="number" id="fechas[]" class="form-control input-sm fechasMask" name="fechas[]" placeholder="Dia" min="1" max="31" value="{{ date('d') }}">
                             </div>
                             <div class="col-lg-2" style="padding-left: 0px; margin-top: 30px;">
                               {{-- <button class="btn btn-xs btn-success btnAgregarHorario" type="button"><i class="fa fa-plus"></i></button> --}}
                               <button class="btn btn-xs btn-danger btnRemoverHorario" type="button"><i class="fa fa-plus"></i></button>
                               <input type="hidden" name="id_beneficiario" class="id_beneficiario" value>
-                              <input type="hidden" name="cantidad" value="individual">
+							  <input type="hidden" name="cantidad" value="individual">
                             </div>
                           </div>
                         	<div id="inputsAdicionales"></div>                

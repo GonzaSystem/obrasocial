@@ -413,7 +413,7 @@ $(document).on('click', '.btnHorarioBeneficiario', function(){
         dataType: "json",
         type: "POST",
         success: function(respuesta){
-          
+          console.log(respuesta);
           $("#tope").val(respuesta['beneficiario']['tope']);
         	for (var i = 0; i < respuesta['sesiones'].length; i++) {
         		switch( respuesta['sesiones'][i]["dia"]){
@@ -440,7 +440,7 @@ $(document).on('click', '.btnHorarioBeneficiario', function(){
         				break;
         		}
 
-        		$("#horarioBenef").append('<tr><td>'+dia+'</td><td>'+respuesta['sesiones'][i]["hora"]+'</td><td>'+respuesta['sesiones'][i]["tiempo"]+' minutos</td><td><button class="btn btn-danger btnEliminarSesion" idSesion="'+respuesta['sesiones'][i]["id"]+'"><i class="fa fa-trash"></i></button></td></tr>')
+        		$("#horarioBenef").append('<tr><td>'+dia+'</td><td>'+respuesta['sesiones'][i]["hora"]+ ' - ' + respuesta['fin_sesion'][i] +'</td><td>'+respuesta['sesiones'][i]["tiempo"]+' minutos</td><td><button class="btn btn-danger btnEliminarSesion" idSesion="'+respuesta['sesiones'][i]["id"]+'"><i class="fa fa-trash"></i></button></td></tr>')
         	}
         }
     });
@@ -513,7 +513,7 @@ $(document).on('click', '#guardarHorario', function(){
         				break;
         		}
 
-                $("#horarioBenef").append('<tr><td>'+dia+'</td><td>'+respuesta['sesiones'][i]["hora"]+'</td><td>'+respuesta['sesiones'][i]["tiempo"]+' minutos</td><td><button class="btn btn-danger btnEliminarSesion" idSesion="'+respuesta['sesiones'][i]["id"]+'"><i class="fa fa-trash"></i></button></td></tr>');  
+                $("#horarioBenef").append('<tr><td>'+dia+'</td><td>'+respuesta['sesiones'][i]["hora"]+ ' - ' + respuesta['fin_sesion'][i] +'</td><td>'+respuesta['sesiones'][i]["tiempo"]+' minutos</td><td><button class="btn btn-danger btnEliminarSesion" idSesion="'+respuesta['sesiones'][i]["id"]+'"><i class="fa fa-trash"></i></button></td></tr>');  
         		$("#dia").val('');
         		$("#hora").val('');
         		$("#tiempo").val('');

@@ -340,25 +340,40 @@ class BeneficiarioController extends Controller
 
 		$fechas = array();
 		foreach ($beneficiario as $key => $benef) {
-			$inasistencias = $benef->inasistencia;
-			$sesiones = $benef->sesion;
-			$cant_solicitada = $benef->tope;
-			$totalDias = count($sesiones);
-
-			if($cant_solicitada == null){
-				$avgSesion = 99999;
-			}else{
-				$avgSesion = $cant_solicitada / $totalDias; 
+				// Sesiones
+				$inasistencias = $benef->inasistencia;
+				$adicionales = $benef->agregado;
+				$sesiones = $benef->sesion;
+				$cant_solicitada = $benef->tope;
+				$totalDias = count($sesiones);
+				$fechas['total'][$benef->id] = OSUtil::cuenta_dias($mes, $anio, $sesiones, $cant_solicitada, $inasistencias);
+				$fechas['inasistencias'][$benef->id] = OSUtil::cuenta_inasistencias($mes, $anio, $sesiones, $inasistencias);
+				$fechas['agregado'][$benef->id] = OSUtil::cuenta_agregado($mes, $anio, $sesiones, $adicionales);
+				$fechas['total_agregado'][$benef->id] = count($benef->agregado);
+            }
+        // Sumario de fechas
+		$cuenta = array();
+		foreach ($fechas['total'] ?? [] as $key => $fecha) {
+            $cuenta[$key] = 0;
+			foreach($fecha as $k => $v){
+				$cuenta[$key]++;
+				$fecha_individual = explode('/', $v);
+				foreach($fechas['inasistencias'][$key] as $inasistencia){
+					$inasistencia_individual = explode('/', $inasistencia);	
+					if($fecha_individual[0].'/'.$fecha_individual[1].'/'.$fecha_individual[2] == $inasistencia_individual[0].'/'.$inasistencia_individual[1].'/'.$inasistencia_individual[2]){
+						$cuenta[$key]--;
+					}
+				}			
 			}
-			
-			$fechas[] = $this->cuenta_dias($mes, $anio, $sesiones, $avgSesion, $inasistencias);
+			$fechas['tope'][$key] = $cuenta;
 		}
 		
 
-        $merged = array_merge(...$fechas);
-		sort($merged, SORT_NUMERIC);
-		dd($merged);
-        // Traigo mes actual
+        // $merged = array_merge(...$fechas);
+		// sort($merged, SORT_NUMERIC);
+		// dd($merged);
+		// Traigo mes actual
+		dd($fechas);
         $mes = date('m');
             switch ($mes){
         case '1':
@@ -400,7 +415,7 @@ class BeneficiarioController extends Controller
     }
 
         return view($view, [
-            'fechas' => $merged,
+            'fechas' => $fechas,
             'prestador' => $prestador,
             'beneficiario' => $beneficiario,
             'mes' => $mes,
