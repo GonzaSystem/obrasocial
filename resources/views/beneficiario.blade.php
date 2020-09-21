@@ -26,13 +26,10 @@
   <section class="content-header">
 
     <h1>
-
           Módulo de beneficiarios - {{ $data['obrasocial'][0]->nombre }} <br>
           <h4>
             Prestador: {{ Auth::user()->name . ' ' . Auth::user()->surname }}
-          </h4>
-
-
+		  </h4>
     </h1>
 
      <div style="padding-top: 15px">
@@ -123,24 +120,22 @@
                   $prestador_id = $beneficiario->id;
               ?>
 
-            @foreach($beneficiario->beneficiario as $key => $benefval)
-            <tr>
-
-              <td style="text-align: center"> <button class="btn btn-success btnClonarBeneficiario" data-toggle="modal" data-target="#modalClonarBeneficiario" idBenef="{{ $benefval->id }}"><i class="fa fa-users"></i></button></td>
-
-              @if($data['obrasocial'][0]->nombre == "OSECAC")
-                <td style="text-align: center"><a href="{{ route('beneficiario-presupuesto', ['prestador_id' => $benefval->prestador_id, 'beneficiario_id' => $benefval->id]) }}" target="_BLANK"><button class="btn btn-success">8.4</button></a></td>
-              @endif
-
-              <td>{{ $benefval->nombre . ' ' . $benefval->apellido }}</td>
-              <td style="text-align: center">{{ $benefval->numero_afiliado }}</td>
-              <td style="text-align: center">{{ $benefval->codigo_seguridad }}</td>
-              <td style="text-align: center">{{ $codigo_prestacion }}</td>
-              <td style="text-align: center">{{ $benefval->cantidad_solicitada }}</td>
-              <td>{{ substr($benefval->notas,0,10).'...' }}</td>
-              <td style="text-align: center;">
-                  <input {{Auth::user()->mes != date('m') || Auth::user()->anio != date('Y') ? 'disabled' : ''}} type="text" name="traditum" id="traditum" beneficiario-id="{{$benefval->id}}" traditum-id="{{ $data['traditums'][$benefval->id][0]['id'] }}" value="{{ $data['traditums'][$benefval->id][0]['codigo']}}" style="border: none; text-align: center; background: transparent;">
-              </td>
+			@foreach($beneficiario->beneficiario as $key => $benefval)
+			
+            <tr style="{{ (Session::has('ModificacionBeneficiario') && Session::get('ModificacionBeneficiario') == $benefval->id) ? 'font-weight:bold;' : ''}}">
+				<td style="text-align: center"> <button class="btn btn-success btnClonarBeneficiario" data-toggle="modal" data-target="#modalClonarBeneficiario" idBenef="{{ $benefval->id }}"><i class="fa fa-users"></i></button></td>
+					@if($data['obrasocial'][0]->nombre == "OSECAC")
+						<td style="text-align: center"><a href="{{ route('beneficiario-presupuesto', ['prestador_id' => $benefval->prestador_id, 'beneficiario_id' => $benefval->id]) }}" target="_BLANK"><button class="btn btn-success">8.4</button></a></td>
+					@endif
+				<td>{{ $benefval->nombre . ' ' . $benefval->apellido }}</td>
+				<td style="text-align: center">{{ $benefval->numero_afiliado }}</td>
+				<td style="text-align: center">{{ $benefval->codigo_seguridad }}</td>
+				<td style="text-align: center">{{ $codigo_prestacion }}</td>
+				<td style="text-align: center">{{ $benefval->cantidad_solicitada }}</td>
+				<td>{{ substr($benefval->notas,0,10).'...' }}</td>
+				<td style="text-align: center;">
+					<input {{Auth::user()->mes != date('m') || Auth::user()->anio != date('Y') ? 'disabled' : ''}} type="text" name="traditum" id="traditum" beneficiario-id="{{$benefval->id}}" traditum-id="{{ $data['traditums'][$benefval->id][0]['id'] }}" value="{{ $data['traditums'][$benefval->id][0]['codigo']}}" style="border: none; text-align: center; background: transparent;">
+				</td>
 				<td style="width: 200px">
 					<div class="btn-group">		
 						<a target="_BLANK" href="{{ route('formulario-beneficiario', ['id' => $benefval->id, 'prestador_id' => $prestador_id ,'planilla' => $planilla, 'mes' => Auth::user()->mes, 'anio' => Auth::user()->anio]) }}" class="btn btn-primary" style="color: white; background-color: #605CA8"><i class="fa fa-address-card"></i></a>
@@ -151,11 +146,9 @@
 
 						<button class="btn btn-danger btnEliminarBeneficiario" idOs="{{ $os_id }}" idBenef="{{ $benefval->id }}"><i class="fa fa-trash"></i></button>
 
-						<button type="button" class="btn {{ $benefval->activo == 1 ? 'btn-success' : 'btn-secondary' }}"><input type="checkbox" class="btnEstadoBeneficiario" name="btnActivarUsuario" {{ $benefval->activo == 1 ? 'checked' : '' }} value="{{ $benefval->activo }}" idBenef="{{ $benefval->id }}" idOs={{ $os_id}} style="margin-top: 1px"></button>
+						<button type="button" class="btn {{ $benefval->activo == 1 ? 'btn-success' : 'btn-secondary' }}"><input type="checkbox" class="btnEstadoBeneficiario" name="btnActivarUsuario" {{ $benefval->activo == 1 ? 'checked' : '' }} value="{{ $benefval->activo }}" idBenef="{{ $benefval->id }}" idOs={{ $os_id }} style="margin-top: 1px"></button>
 					</div>
-
 				</td>
-
             </tr>
 
             @endforeach
@@ -1052,8 +1045,22 @@ MODAL HORARIO BENEFICIARIO
                                   <input type="text" class="form-control topeBenef" name="tope" id="tope" idBenef placeholder="Sin tope">
                                 </div>
                                 <div class="col-lg-3">
-                                  <label for="btnTope">Cargar Tope</label><br>
-                                  <button type="button" class="btn btn-success btnTope" id="btnTope"><i class="fa fa-check"></i></button>
+								  <label for="btnTope">Activar Tope</label><br>
+								  <div class="btn-group">
+									  {{-- <div class="input-group"><button type="button" class="btn btn-success btnTope" id="btnTope"><i class="fa fa-check"></i></button></div> --}}
+										<div class="radio" style="margin-top: 0px; margin-bottom: 2px;">
+											<label>
+												<input type="radio" class="topeRadio" name="optionRadios" id="optionsRadios1" value="sinTope">
+												Sin activar
+											</label>
+										</div>
+										<div class="radio">
+											<label>
+												<input type="radio" class="topeRadio" name="optionRadios" id="optionsRadios2" value="conTope">
+												Tope activado
+											</label>
+										</div>
+								  </div>
                                 </div>
 
 								<div class="col-lg-12">

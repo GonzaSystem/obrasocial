@@ -164,9 +164,9 @@ class BeneficiarioController extends Controller
         $beneficiario->codigo_seguridad = $codigo_seguridad;
         $beneficiario->cantidad_solicitada = $cantidad_solicitada;
 
-        // Guardo en DB
+		// Guardo en DB
         $beneficiario->save();
-
+		\Session::flash('ModificacionBeneficiario', $beneficiario->id);
         // Traditum
         $traditum = new Traditum;
         $traditum->beneficiario_id = $beneficiario['id'];
@@ -272,7 +272,7 @@ class BeneficiarioController extends Controller
 
         // Guardo en DB
         $beneficiario->save();
-
+		\Session::flash('ModificacionBeneficiario', $beneficiario->id);
         // Traditum
         $traditum = Traditum::where('beneficiario_id', $request->id)->first();
         if($traditum == null){

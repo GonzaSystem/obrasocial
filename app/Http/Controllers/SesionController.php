@@ -54,15 +54,25 @@ class SesionController extends Controller
     {
 		$beneficiario_id = $request->beneficiario_id;
 		$beneficiario = Beneficiario::where('id', $beneficiario_id)->first();
-
+		$fin_sesion = array();
 		foreach($request->dia as $k => $v){	
 			$sesiones = Sesion::where('beneficiario_id', $beneficiario_id)->get();
+			$sess = $sesiones;
+			foreach ($sess as $k => $sesion2) {
+				$horario = $sesion2['hora'];
+				$tiempo = $sesion2['tiempo'];
+				$hor=new \DateTime($horario);
+				$fin=$hor->add( new \DateInterval( 'PT' . ( (integer) $tiempo ) . 'M' ) );
+				$fecha_fin = $fin->format( 'H:i' );
+				$fin_sesion[$k] = $fecha_fin;
+			}	
 			foreach ($sesiones as $key => $sesion) {
 				if($v == $sesion->dia){
 					return json_encode([
 						'error' => true,
 						'message' => 'Una de las fechas seleccionadas ya se encuentra cargada en el sistema. Por favor intente nuevamente.',
-						'sesiones' => $sesiones
+						'sesiones' => $sesiones,
+						'fin_sesion' => $fin_sesion
 					]);					
 				}
 			}
@@ -81,7 +91,9 @@ class SesionController extends Controller
 	
 			if($validate->fails()){
 				return [
-					'error' => 'Los campos día, hora y tiempo son obligatorios. Por favor completelos e intente nuevamente.'
+					'error' => 'Los campos día, hora y tiempo son obligatorios. Por favor completelos e intente nuevamente.',
+					'sesiones' => $sesiones,
+					'fin_sesion' => $fin_sesion
 				];
 			}
 	
@@ -95,11 +107,20 @@ class SesionController extends Controller
 			$sesion->hora = $hora;
 			$sesion->tiempo = $tiempo; 
 			if($sesion->save()){
-			  $sesiones = Sesion::where('beneficiario_id', $beneficiario_id)->get();	                     
+				$sesiones = Sesion::where('beneficiario_id', $beneficiario_id)->get();
+				foreach ($sesiones as $k => $sesion) {
+					$horario = $sesion['hora'];
+					$tiempo = $sesion['tiempo'];
+					$hor=new \DateTime($horario);
+					$fin=$hor->add( new \DateInterval( 'PT' . ( (integer) $tiempo ) . 'M' ) );
+					$fecha_fin = $fin->format( 'H:i' );
+					$fin_sesion[$k] = $fecha_fin;
+				}	                     
 			}
 		}
 		return json_encode(['error' => false,
-							'sesiones' => $sesiones]);
+							'sesiones' => $sesiones,
+							'fin_sesion' => $fin_sesion]);
         // }else{
         //     return json_encode(['error' => 'Hay un error con la cantidad solicitada y los días a cargar. Por favor verifiquelos e intente nuevamente.',
         //                         'sesiones' => $sesiones]);

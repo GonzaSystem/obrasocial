@@ -415,6 +415,11 @@ $(document).on('click', '.btnHorarioBeneficiario', function(){
         success: function(respuesta){
           console.log(respuesta);
           $("#tope").val(respuesta['beneficiario']['tope']);
+		  if(respuesta['beneficiario']['tope'] == null){
+			  $('#optionsRadios1').prop('checked', true);
+		  }else{
+			  $('#optionsRadios2').prop('checked', true);
+		  }
         	for (var i = 0; i < respuesta['sesiones'].length; i++) {
         		switch( respuesta['sesiones'][i]["dia"]){
         			case 1:
@@ -1041,9 +1046,58 @@ $(document).on('click', '.btnTope', function(){
 });
 
 $(document).on('hidden.bs.modal', '#modalHorarioBeneficiario', function(){
-	console.log('closed');
 	$('#tope').empty();
 	$('.appended-inasistencias').empty();
 	$('.inasistenciaFail').empty();
 	$('.inasistenciaSuccess').empty();
 });
+
+$(document).on('click', '.topeRadio', function(){
+	var val = $(this).val();
+	if(val == "conTope"){
+		var idBenef = $('#tope').attr('idBenef');
+		var value = $('#tope').val();
+		if(value == '' || value == null){
+			$('.horarioSuccess').hide();
+			$('.alertBenef').empty();
+			$('.alertBenef').html('El tope no puede estar vacío. Por favor intente nuevamente.').show();
+		}else{
+			$.ajaxSetup({
+				headers: {
+					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				}
+			});
+
+			$.ajax({
+				url: "http://localhost/os/public/beneficiario/tope",
+				data: {id:idBenef, tope:value},
+				type: "POST",
+				success: function(respuesta){
+					$('.topeBenef').val(value);
+					$('.alertBenef').empty().hide();
+					$('.horarioSuccess').show();
+					$('#horarioSuccess').html('El tope ha sido cargado correctamente.');
+				}
+			});
+		}
+
+	}else{
+		var idBenef = $('#tope').attr('idBenef');
+		var value = null;
+		$.ajaxSetup({
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			}
+		});
+
+		$.ajax({
+			url: "http://localhost/os/public/beneficiario/tope",
+			data: {id:idBenef, tope:value},
+			type: "POST",
+			success: function(respuesta){
+				$('.topeBenef').val('');
+				$('.topeBenef').prop('placeholder', 'Sin tope');
+			}
+		});
+	}
+})
