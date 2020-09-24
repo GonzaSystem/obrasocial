@@ -81,7 +81,7 @@
 
         </button>
 
-          Buscar: <input type="text" id="searchbox">
+	Buscar: <input type="text" id="searchbox" value="{{ Session::has('BeneficiarioNombre') ? Session::get('BeneficiarioNombre') : ''}}"><button type="button" class="btn btn-sm btn-danger" id="btnClearSearchbox" style="margin-left: 5px; margin-bottom: 6px;"><i class="fa fa-times"></i></button>
 
       </div>
 
@@ -122,7 +122,7 @@
 
 			@foreach($beneficiario->beneficiario as $key => $benefval)
 			
-            <tr style="{{ (Session::has('ModificacionBeneficiario') && Session::get('ModificacionBeneficiario') == $benefval->id) ? 'font-weight:bold;' : ''}}">
+            <tr class="beneficiarioBold" idBenef="{{$benefval->id}}" style="{{ (Session::has('ModificacionBeneficiario') && Session::get('ModificacionBeneficiario') == $benefval->id) ? 'font-weight:bold;' : ''}}">
 				<td style="text-align: center"> <button class="btn btn-success btnClonarBeneficiario" data-toggle="modal" data-target="#modalClonarBeneficiario" idBenef="{{ $benefval->id }}"><i class="fa fa-users"></i></button></td>
 					@if($data['obrasocial'][0]->nombre == "OSECAC")
 						<td style="text-align: center"><a href="{{ route('beneficiario-presupuesto', ['prestador_id' => $benefval->prestador_id, 'beneficiario_id' => $benefval->id]) }}" target="_BLANK"><button class="btn btn-success">8.4</button></a></td>
@@ -650,7 +650,7 @@ MODAL EDITAR BENEFICIARIO
 
           <button type="button" class="close" data-dismiss="modal">&times;</button>
 
-          <h4 class="modal-title">Editar beneficiario</h4>
+          <h4 class="modal-title">Editar Nombre/Prestacion/Obra Social</h4>
 
         </div>
 
@@ -995,7 +995,8 @@ MODAL HORARIO BENEFICIARIO
 
 <div id="modalHorarioBeneficiario" class="modal fade" role="dialog">
 
-    <input type="hidden" class="obra_social" name="obra_social" value="{{$data['obrasocial'][0]->nombre}}">
+	<input type="hidden" class="obra_social" name="obra_social" value="{{$data['obrasocial'][0]->nombre}}">
+	<input type="hidden" id="benefNombre" name="benef_nombre" value="">
 
     <div class="modal-dialog modal-lg">
 
@@ -1115,7 +1116,7 @@ MODAL HORARIO BENEFICIARIO
 
                                
 
-                                <div class="col-lg-4">
+                                <div class="col-lg-3">
 
                                     <label for="dia">Hora</label>
 
@@ -1123,26 +1124,31 @@ MODAL HORARIO BENEFICIARIO
 
                                 </div>
 
-                                <div class="col-lg-4">
-
-                                    <label for="tiempo">Duracion en minutos</label>
-
-                                    <select type="number" class="form-control input-lg" id="tiempo" name="tiempo" required>
+                                <div class="col-lg-3">
+                                    <label for="tiempo">Tiempo por Sesión</label>
+                                    <select type="number" class="form-control input-lg selectTiempo" id="tiempoSesion" name="tiempo[]" required>
                                         <option value="">Seleccionar..</option>
-                                        <option value="45">45</option>
-                                        <option value="60">60</option>
-                                        <option value="90">90</option>
-                                        <option value="120">120</option>
-                                        <option value="135">135</option>
-                                        <option value="180">180</option>
-                                        <option value="210">210</option>
-										<option value="240">240</option>
-										<option value="300">300</option>
+                                        <option value="45">1</option>
+                                        <option value="90">2</option>
+                                        <option value="135">3</option>
+                                        <option value="210">4</option>
+										<option value="255">5</option>
                                     </select>
-
+								</div>
+								
+								<div class="col-lg-3">
+                                    <label for="tiempo">Tiempo en horas</label>
+                                    <select type="number" class="form-control input-lg selectTiempo" id="tiempoHoras" name="tiempo[]" required>
+                                        <option value="">Seleccionar..</option>
+                                        <option value="60">1</option>
+                                        <option value="120">2</option>
+                                        <option value="180">3</option>
+										<option value="240">4</option>
+										<option value="300">5</option>
+                                    </select>
                                 </div>
 
-                                <div class="col-lg-4">
+                                <div class="col-lg-3">
 
                                     <label for="guardar">Guardar horario</label>
 
@@ -1447,7 +1453,7 @@ MODAL CLONAR BENEFICIARIO
 
                             <div class="input-group col-lg-12">
 
-                                <div class="col-lg-5">
+                                <div class="col-lg-6">
 
                                     <label for="obraSocial">Prestación</label>
 
@@ -1463,15 +1469,7 @@ MODAL CLONAR BENEFICIARIO
 
                                 </div>
 
-                                <div class="col-lg-3">
-
-                                  <label for="codigo_seguridad">Codigo Traditum</label>
-
-                                  <input type="text" class="form-control input-lg" id="codigo_traditum" name="codigo_traditum">
-
-                                </div>
-
-                                <div class="col-lg-4">
+                                <div class="col-lg-6">
 
                                     <label for="cantidad_solicitada">Cantidad Solicitada</label>
 

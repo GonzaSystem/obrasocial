@@ -165,7 +165,8 @@ class BeneficiarioController extends Controller
         $beneficiario->cantidad_solicitada = $cantidad_solicitada;
 
 		// Guardo en DB
-        $beneficiario->save();
+		$beneficiario->save();
+		\Session::flash('BeneficiarioNombre', $beneficiario->nombre);
 		\Session::flash('ModificacionBeneficiario', $beneficiario->id);
         // Traditum
         $traditum = new Traditum;
@@ -271,7 +272,8 @@ class BeneficiarioController extends Controller
         $beneficiario->cantidad_solicitada = $cantidad_solicitada;
 
         // Guardo en DB
-        $beneficiario->save();
+		$beneficiario->save();
+		\Session::flash('BeneficiarioNombre', $beneficiario->nombre);
 		\Session::flash('ModificacionBeneficiario', $beneficiario->id);
         // Traditum
         $traditum = Traditum::where('beneficiario_id', $request->id)->first();

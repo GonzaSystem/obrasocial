@@ -1,6 +1,5 @@
 // Data tables
 $(document).ready(function(){
-
    $.noConflict();
     var table = $('.tablaBeneficiario').DataTable({
       "deferRender": true,
@@ -36,11 +35,24 @@ $(document).ready(function(){
       }
    });
 
-    $("#searchbox").keyup(function() {
-        table.search(this.value).draw();
-    }); 
-})
+	if($("#searchbox").val() != ''){
+		table.search($('#searchbox').val()).draw();
+	}
+
+	$("#searchbox").keyup(function() {
+		table.search(this.value).draw();
+	}); 
+
+	$(document).on('change', '#searchbox', function(){
+		table.search($('#searchbox').val()).draw();
+	});
+
+	$(document).on('click', '#btnClearSearchbox', function(){
+		$('#searchbox').val('').trigger('change');
+	});
+});
  
+
 
 $('.sidebar-toggle').on('click',function(){
 
@@ -401,7 +413,6 @@ $(document).on('click', '.btnHorarioBeneficiario', function(){
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-
 	$("#beneficiario_id").val(id);
 	$('#dia').select2({
 		closeOnSelect: false
@@ -463,6 +474,7 @@ $(document).on('click', '.btnHorarioBeneficiario', function(){
 
                 $('.inasistenciaBeneficiario').empty();
                 $('.inasistenciaBeneficiario').append('Fechas de Beneficiario - '+respuesta['beneficiario'][0]['nombre']+ ' - '+respuesta['prestacion']+' - '+obrasocial);
+				$('#benefNombre').val(respuesta['beneficiario'][0]['nombre']);
             }
         });
     });
@@ -472,10 +484,16 @@ $(document).on('click', '.btnHorarioBeneficiario', function(){
 // Guardo Horario
 $(document).on('click', '#guardarHorario', function(){
 	
+	 $('.alertBenef').hide();
 	// Obtengo valores
 	var dia = $("#dia").val();
 	var hora = $("#hora").val();
-	var tiempo = $("#tiempo").val();
+	var tiempo = $(".selectTiempo");
+	$.each(tiempo, function(ind, el){
+		if(el.value != ''){
+			tiempo = el;
+		}
+	})
 	var beneficiario_id = $("#beneficiario_id").val();
 	var obrasocial_id = $("#obrasocial_id").val();
   	var tope = $("#tope").val();
@@ -484,7 +502,7 @@ $(document).on('click', '#guardarHorario', function(){
 
     $.ajax({
         url: "http://localhost/os/public/sesion/create",
-        data: {dia:dia, hora:hora, tiempo:tiempo, beneficiario_id:beneficiario_id, obrasocial_id:obrasocial_id, tope:tope},
+        data: {dia:dia, hora:hora, tiempo:tiempo.value, beneficiario_id:beneficiario_id, obrasocial_id:obrasocial_id, tope:tope},
         dataType: "json",
         type: "POST",
         success: function(respuesta){
@@ -1046,10 +1064,16 @@ $(document).on('click', '.btnTope', function(){
 });
 
 $(document).on('hidden.bs.modal', '#modalHorarioBeneficiario', function(){
+	var idBenef = $('#tope').attr('idBenef');
+	var benefNombre = $('#benefNombre').val();
 	$('#tope').empty();
 	$('.appended-inasistencias').empty();
 	$('.inasistenciaFail').empty();
 	$('.inasistenciaSuccess').empty();
+	$('.beneficiarioBold').css('font-weight', 'normal');
+	$('.beneficiarioBold[idBenef="'+idBenef+'"]').css('font-weight', 'bold');
+	$('#searchbox').val(benefNombre).trigger('change');
+	$('#dia').val(null).trigger('change');
 });
 
 $(document).on('click', '.topeRadio', function(){
@@ -1100,4 +1124,13 @@ $(document).on('click', '.topeRadio', function(){
 			}
 		});
 	}
-})
+});
+
+$(document).on('change', '.selectTiempo', function(){
+	var tiempoNombre = $(this).attr('id')
+	if(tiempoNombre == "tiempoSesion"){
+		$('#tiempoHoras').val('');
+	}else{
+		$('#tiempoSesion').val('');
+	}
+});
