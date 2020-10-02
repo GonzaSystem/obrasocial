@@ -39,13 +39,16 @@ Route::post('/obrasocial/list', 'ObraSocialController@list')->name('os-list');
 
 // Beneficiario
 Route::get('/beneficiarios/{prestador_id}/{obrasocial_id}/{mes?}/{anio?}', 'BeneficiarioController@index')->name('beneficiarios');
+Route::get('/beneficiarios-inactivos/{prestador_id}', 'BeneficiarioController@beneficiariosInactivos')->name('beneficiarios.inactivos');
 Route::post('/beneficiarios/create', 'BeneficiarioController@create')->name('beneficiario-create');
 Route::post('beneficiario/list', 'BeneficiarioController@list')->name('beneficiario-list');
 Route::get('beneficiario/presupuesto/{prestador_id}/{beneficiario_id}', 'BeneficiarioController@presupuesto')->name('beneficiario-presupuesto');
 Route::post('beneficiario/update', 'BeneficiarioController@update')->name('beneficiario-update');
 Route::get('/beneficiario/form/{id}/{prestador_id}/{planilla}/{mes?}/{anio?}', 'BeneficiarioController@formulario')->name('formulario-beneficiario');
 Route::get('/beneficiario/delete/{os_id}/{beneficiario_id}', 'BeneficiarioController@delete')->name('beneficiario-delete');
+Route::get('/beneficiario-inactivo/delete/{os_id}/{beneficiario_id}', 'BeneficiarioController@beneficiarioInactivoDelete')->name('beneficiario-inactivo-delete');
 Route::get('/beneficiario/status/{id}/{id_os}/{status}', 'BeneficiarioController@status')->name('beneficiario-status');
+Route::get('/beneficiario-inactivo/status/{id}/{id_os}/{status}', 'BeneficiarioController@inactiveStatus')->name('beneficiario-inactivo-status');
 Route::post('/beneficiario/traditum', 'BeneficiarioController@traditum')->name('beneficiario-traditum');
 Route::post('/beneficiario/inasistencias', 'InasistenciaController@store')->name('beneficiario-inasistencias');
 Route::post('/beneficiario/inasistenciasBeneficiario', 'InasistenciaController@show')->name('beneficiario-inasistencias-beneficiario');

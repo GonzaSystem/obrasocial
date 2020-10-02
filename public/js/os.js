@@ -35,13 +35,14 @@ $(document).ready(function(){
       }
    });
 
-	if($("#searchbox").val() != ''){
+	if($("#searchbox").val() != '' && $('#searchbox').val() != undefined){
 		table.search($('#searchbox').val()).draw();
 	}
 
 	$("#searchbox").keyup(function() {
 		table.search(this.value).draw();
 	}); 
+
 
 	$(document).on('change', '#searchbox', function(){
 		table.search($('#searchbox').val()).draw();
@@ -100,7 +101,7 @@ $.ajax({
 });
 
 // Editar datos Prestador
-$(document).on('click', '.btnEditarPrestacion', function(){F
+$(document).on('click', '.btnEditarPrestacion', function(){
 
 var id = $(this).attr("idprest");
 
@@ -143,7 +144,6 @@ $.ajax({
 	dataType: "json",
 	type: "POST",
 	success: function(respuesta){
-    console.log("respuesta", respuesta);
 		$("#id").val(respuesta['beneficiario'][0]["id"]);
 		$("#editarNombre").val(respuesta['beneficiario'][0]["nombre"]);
 		$("#editarApellido").val(respuesta['beneficiario'][0]["apellido"]);
@@ -165,7 +165,8 @@ $.ajax({
 		$("#editar_numero_afiliado").val(respuesta['beneficiario'][0]['numero_afiliado']);
 		$("#editar_codigo_seguridad").val(respuesta['beneficiario'][0]['codigo_seguridad']);
 		$("#editar_cantidad_solicitada").val(respuesta['beneficiario'][0]['cantidad_solicitada']);
-    $("#codigo_traditum").val(respuesta['traditum'][0]['codigo']);
+    	$("#codigo_traditum").val(respuesta['traditum'][0]['codigo']);
+		$("#tituloEditarBeneficiario").empty().html('Editar Beneficiario - ' + respuesta['beneficiario'][0]["nombre"] + ' - ' + respuesta['prestacion'] +' - ' +respuesta['prestacion_completa'][0]['obrasocial'][0]['nombre']);
 		}
 	});
 });
@@ -197,6 +198,33 @@ $(document).on("click", ".btnEliminarBeneficiario", function(){
 
 });
 
+// Eliminar beneficiario
+$(document).on("click", ".btnEliminarBeneficiarioInactivo", function(){
+
+  var idBenef = $(this).attr("idBenef");
+  var idOs = $(this).attr("idOs");
+
+  swal({
+    title: '¿Está seguro de borrar el beneficiario?',
+    text: "¡Una vez eliminado, la acción no se podrá deshacer!",
+    type: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      cancelButtonText: 'Cancelar',
+      confirmButtonText: 'Si, borrar beneficiario!'
+  }).then(function(result){
+
+    if(result.value){
+
+      window.location = "http://localhost/os/public/beneficiario-inactivo/delete/"+idOs+"/"+idBenef+"";
+
+    }
+
+  });
+
+});
+
 // Activar o desactivar beneficiario
 $(document).on('change', '.btnEstadoBeneficiario', function(){
   var idBenef = $(this).attr('idBenef');
@@ -217,6 +245,21 @@ $(document).on('change', '.btnEstadoBeneficiario', function(){
     window.location = "http://localhost/os/public/beneficiario/status/"+idBenef+"/"+idOs+'/'+status
   }
 
+});
+
+// Activar o desactivar beneficiario
+$(document).on('change', '.btnEstadoBeneficiarioInactivo', function(){
+  var idBenef = $(this).attr('idBenef');
+  var idOs = $(this).attr('idOs');
+
+    $.ajaxSetup({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    var status = 1;
+    window.location = "http://localhost/os/public/beneficiario-inactivo/status/"+idBenef+"/"+idOs+'/'+status
 });
 
 // Traigo prestaciones segun OS

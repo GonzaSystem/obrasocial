@@ -102,11 +102,39 @@ class BeneficiarioController extends Controller
     	return view('beneficiario',[
     		'data' => $data
     	]);
-    }
+	}
+	
+	public function beneficiariosInactivos($user_id)
+	{
+		// Prestador con beneficiarios
+		$beneficiarios = Prestador::with(['beneficiario' => function($q){
+			$q->where('beneficiario.activo', 0);
+		}])
+		->where('prestador.user_id', $user_id)->get();
+
+		// Objeto Menu prestador
+		$prestador_menu = \DB::select("SELECT obrasocial.nombre, obrasocial.id FROM obrasocial LEFT JOIN prestador on prestador.os_id = obrasocial.id WHERE prestador.user_id = " . $user_id . " GROUP BY obrasocial.id, obrasocial.nombre");
+
+		return view('beneficiarios-inactivos', [
+			'beneficiarios' => $beneficiarios,
+			'prestador_menu' => $prestador_menu
+		]);
+	}
+
+	public function inactiveStatus($id, $id_os, $status)
+	{
+		$obra_social = ObraSocial::where('id', $id_os)->first();
+        $beneficiario = Beneficiario::where('id', $id)->first();
+        $beneficiario->activo = $status;
+
+        if($beneficiario->save()){
+            return redirect()->route('beneficiarios.inactivos', ['prestador_id' => \Auth::user()->id, 'obrasocial_id' => $obra_social])
+            ->with(['message' => 'El estado del beneficiario ha sido actualizado correctamente']);
+        }
+	}
 
     public function create(Request $request)
     {
-
         // Objeto de beneficiario
         $beneficiario = new Beneficiario;
 
@@ -186,12 +214,12 @@ class BeneficiarioController extends Controller
         $beneficiario = Beneficiario::where('id', '=', $request->id)->with('prestador')->get();
 
         // Obtengo prestacion
-        $prestacion = Prestador::where('id', $beneficiario[0]->prestador->id)->with('prestacion')->get();
+        $prestacion = Prestador::where('id', $beneficiario[0]->prestador->id)->with(['prestacion', 'obrasocial'])->get();
 
         // Traditum
         $traditum = Traditum::where('beneficiario_id', '=', $request->id)->get();
         
-        return json_encode(['beneficiario' => $beneficiario, 'prestacion' => $prestacion[0]->prestacion[0]->nombre, 'traditum' => $traditum]);
+        return json_encode(['beneficiario' => $beneficiario, 'prestacion' => $prestacion[0]->prestacion[0]->nombre, 'traditum' => $traditum, 'prestacion_completa' => $prestacion]);
     }
 
     public function delete($os_id, $beneficiario_id)
@@ -200,6 +228,16 @@ class BeneficiarioController extends Controller
 		$beneficiario = Beneficiario::find($beneficiario_id);
 		if($beneficiario->delete()){
 			return redirect()->route('beneficiarios', ['prestador_id' => \Auth::user()->id, 'obrasocial_id' => $os_id])
+			->with(['message' => 'El beneficiario ha sido eliminado correctamente']);
+		}    
+	}
+	
+	public function beneficiarioInactivoDelete($os_id, $beneficiario_id)
+    {
+		// Borro beneficiario
+		$beneficiario = Beneficiario::find($beneficiario_id);
+		if($beneficiario->delete()){
+			return redirect()->route('beneficiarios.inactivos', ['prestador_id' => \Auth::user()->id, 'obrasocial_id' => $os_id])
 			->with(['message' => 'El beneficiario ha sido eliminado correctamente']);
 		}    
     }

@@ -186,7 +186,13 @@
                                             <span>{{ $prest->nombre }}</span>
                                         </a>
                                     </li>
-                                @endforeach
+								@endforeach
+								<li>
+									<a href="{{ route('beneficiarios.inactivos', ['prestador_id' => Auth::user()->id]) }}">
+										<i class="fa fa-circle-o"></i>
+										<span>Beneficiarios Inactivos</span>
+									</a>
+								</li>
                             </ul>
                         </li>
                         @endif

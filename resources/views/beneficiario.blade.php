@@ -650,7 +650,7 @@ MODAL EDITAR BENEFICIARIO
 
           <button type="button" class="close" data-dismiss="modal">&times;</button>
 
-          <h4 class="modal-title">Editar Nombre/Prestacion/Obra Social</h4>
+          <h4 class="modal-title" id="tituloEditarBeneficiario">Editar Nombre/Prestacion/Obra Social</h4>
 
         </div>
 
