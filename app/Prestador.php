@@ -37,14 +37,7 @@ class Prestador extends Model
 	
 	public function beneficiarioInactivo()
     {
-
-        return $this->hasMany('App\Beneficiario', 'prestador_id', 'id')->where(\DB::raw('DATE_FORMAT(CAST(created_at as DATE), "%Y-%m")'), '<=', \Auth::user()->anio.'-'.\Auth::user()->mes)->where(function($query){
-			$query->where(\DB::raw('DATE_FORMAT(CAST(deleted_at as DATE), "%Y-%m")'), '>', \Auth::user()->anio.'-'.\Auth::user()->mes)
-				->orWhereNull('deleted_at');
-				
-		})->where('activo', 0)
-		->withTrashed()->orderBy('nombre', 'desc');
-
+        return $this->hasMany('App\Beneficiario', 'prestador_id', 'id')->where('activo', 0)->orderBy('nombre', 'desc');
     }
 
     public function prestacion()

@@ -51,7 +51,7 @@
 					$prestacion = $beneficiario->prestacion[0]->nombre;
 					$os = $beneficiario->obrasocial[0]->nombre;
 				@endphp
-				@foreach($beneficiario->beneficiario as $benef)
+				@foreach($beneficiario->beneficiarioInactivo as $benef)
 					<tr>
 						<td>{{ $benef->nombre }}</td>
 						<td>{{ $prestacion }}</td>
