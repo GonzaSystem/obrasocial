@@ -71,7 +71,7 @@ class InasistenciaController extends Controller
 					}
 					$fechas['tope'][$key] = $cuenta;
 				}
-				if($request['agregarToForm'] == "Sacar"){
+				if($request['agregarToForm'] == "Sacar" || $request['agregarToForm'] == "Inasistencia"){
 					switch ($request['cantidad']) {
 						case 'individual':
 							foreach ($request['fechas'] as $key => $value) {

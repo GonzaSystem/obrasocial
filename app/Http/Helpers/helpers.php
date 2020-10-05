@@ -41,20 +41,40 @@ class OSUtil{
         $coincidencia = array();
 		$fechas_inasistencia = array();
 		foreach($inasistencias as $inasistencia){
-			foreach($sesiones as $sesion){
-				$tiempo = $sesion->tiempo;
-				$numero_dia = $sesion->dia;
-				$horario = $sesion->hora; 
-				for($i=1;$i<=$dias_mes;$i++){
-					if(date($i.'/'.$mes.'/'.substr($anio, -2)) == $inasistencia->rango_fechas){
-						$hor=new \DateTime($horario);
-						$fin=$hor->add( new \DateInterval( 'PT' . ( (integer) $tiempo ) . 'M' ) );
-						$fecha_fin = $fin->format( 'H:i' );
-						$count++;
-						$coincidencia[$i] = date($i.'/'.$mes.'/'.substr($anio, -2)). '/' . $horario.'/'.$fecha_fin;
+			// Si es de tipo individual
+			if(strlen($inasistencia->rango_fechas) < 9){
+				foreach($sesiones as $sesion){
+					$tiempo = $sesion->tiempo;
+					$numero_dia = $sesion->dia;
+					for($i=1;$i<=$dias_mes;$i++){
+						if($i < 10){
+							$i = '0'.$i;
+						}
+						if(date($i.'/'.$mes.'/'.substr($anio, -2)) == $inasistencia->rango_fechas){
+							$count++;
+							$coincidencia[$i] = date($i.'/'.$mes.'/'.substr($anio, -2));	
+						}
 					}
-				} 
-			}	
+				}	
+			}else{
+				// Rango de inasistencias
+				$rangoFechas = explode('-', str_replace(' ', '', $inasistencia->rango_fechas));
+				$fechaInicial = $rangoFechas[0];
+				$fechaFinal = $rangoFechas[1];
+				foreach($sesiones as $sesion){
+					$tiempo = $sesion->tiempo;
+					$numero_dia = $sesion->dia;
+					for($i=1;$i<=$dias_mes;$i++){
+						if($i < 10){
+							$i = '0'.$i;
+						}
+						if(date($i.'/'.$mes.'/'.substr($anio, -2)) >= $fechaInicial && date($i.'/'.$mes.'/'.substr($anio, -2)) <= $fechaFinal){
+							$count++;
+							$coincidencia[$i] = date($i.'/'.$mes.'/'.substr($anio, -2));	
+						}
+					}
+				}
+			}
 		}
 		return $coincidencia;
 	}

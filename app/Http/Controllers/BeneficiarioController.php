@@ -107,9 +107,7 @@ class BeneficiarioController extends Controller
 	public function beneficiariosInactivos($user_id)
 	{
 		// Prestador con beneficiarios
-		$beneficiarios = Prestador::with(['beneficiario' => function($q){
-			$q->where('beneficiario.activo', 0);
-		}])
+		$beneficiarios = Prestador::with('beneficiarioInactivo', 'obrasocial', 'prestacion')
 		->where('prestador.user_id', $user_id)->get();
 
 		// Objeto Menu prestador
@@ -380,19 +378,20 @@ class BeneficiarioController extends Controller
 
 		$fechas = array();
 		foreach ($beneficiario as $key => $benef) {
-				// Sesiones
-				$inasistencias = $benef->inasistencia;
-				$adicionales = $benef->agregado;
-				$sesiones = $benef->sesion;
-				$cant_solicitada = $benef->tope;
-				$totalDias = count($sesiones);
-				$fechas['total'][$benef->id] = OSUtil::cuenta_dias($mes, $anio, $sesiones, $cant_solicitada, $inasistencias);
-				$fechas['inasistencias'][$benef->id] = OSUtil::cuenta_inasistencias($mes, $anio, $sesiones, $inasistencias);
-				$fechas['agregado'][$benef->id] = OSUtil::cuenta_agregado($mes, $anio, $sesiones, $adicionales);
-				$fechas['total_agregado'][$benef->id] = count($benef->agregado);
-            }
+			// Sesiones
+			$inasistencias = $benef->inasistencia;
+			$adicionales = $benef->agregado;
+			$sesiones = $benef->sesion;
+			$cant_solicitada = $benef->tope;
+			$totalDias = count($sesiones);
+			$fechas['total'][$benef->id] = OSUtil::cuenta_dias($mes, $anio, $sesiones, $cant_solicitada, $inasistencias);
+			$fechas['inasistencias'][$benef->id] = OSUtil::cuenta_inasistencias($mes, $anio, $sesiones, $inasistencias);
+			$fechas['agregado'][$benef->id] = OSUtil::cuenta_agregado($mes, $anio, $sesiones, $adicionales);
+			$fechas['total_agregado'][$benef->id] = count($benef->agregado);
+		}
         // Sumario de fechas
 		$cuenta = array();
+		$fechasParaBorrar = array();
 		foreach ($fechas['total'] ?? [] as $key => $fecha) {
             $cuenta[$key] = 0;
 			foreach($fecha as $k => $v){
@@ -402,18 +401,25 @@ class BeneficiarioController extends Controller
 					$inasistencia_individual = explode('/', $inasistencia);	
 					if($fecha_individual[0].'/'.$fecha_individual[1].'/'.$fecha_individual[2] == $inasistencia_individual[0].'/'.$inasistencia_individual[1].'/'.$inasistencia_individual[2]){
 						$cuenta[$key]--;
+						$fechasParaBorrar[$k] = $key; 
 					}
-				}			
+				}	
+				foreach ($fechas['agregado'] as $keyAgregado => $fechaAgregado) {
+					foreach($fechaAgregado as $diaAgregado => $fechaAgr){
+						$fechas['total'][$keyAgregado][$diaAgregado] = $fechaAgr;
+					}
+				}		
 			}
 			$fechas['tope'][$key] = $cuenta;
 		}
-		
-
+		foreach ($fechasParaBorrar as $ind => $benefId) {
+			unset($fechas['total'][$benefId][$ind]);
+			ksort($fechas['total'][$benefId]);
+		}
         // $merged = array_merge(...$fechas);
 		// sort($merged, SORT_NUMERIC);
 		// dd($merged);
 		// Traigo mes actual
-		dd($fechas);
         $mes = date('m');
             switch ($mes){
         case '1':

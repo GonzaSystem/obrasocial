@@ -102,37 +102,38 @@
 								</thead>
 								<tbody>
 									<?php $indices = array(); ?>
-									@foreach($fechas as $key => $fecha)
+									@foreach($fechas['total'] as $key => $fecha)
+										@foreach($fecha as $dia => $fechaFinal)
+											<?php $fechas = explode('/', $fechaFinal); ?>
+												<tr>
+													<td>
+														<div>
+															<input style="font-size: 12px" type="text" value="{{ $fechas[0] }}">
+															/
+															<input style="font-size: 12px" type="text" value="{{ $fechas[1] }}">
+															/
+															<input style="font-size: 12px" type="text" value="{{ $fechas[2] }}">
+														</div>
+													</td>
 
-										<?php $fechas = explode('/', $fecha); ?>
-										<tr>
-											<td>
-												<div>
-													<input style="font-size: 12px" type="text" value="{{ $fechas[0] }}">
-													/
-													<input style="font-size: 12px" type="text" value="{{ $fechas[1] }}">
-													/
-													<input style="font-size: 12px" type="text" value="{{ $fechas[2] }}">
-												</div>
-											</td>
+													<td>
+														<input style="text-align: center" type="text" value="{{ $fechas[3] }}">
+													</td>
 
-											<td>
-												<input style="text-align: center" type="text" value="{{ $fechas[3] }}">
-											</td>
+													<td>
+														<input style="text-align: center" type="text" value="{{ $fechas[4] }}">
+													</td>
 
-											<td>
-												<input style="text-align: center" type="text" value="{{ $fechas[4] }}">
-											</td>
+													<td>
+														<input type="text">
+													</td>
 
-											<td>
-												<input type="text">
-											</td>
-
-											<td>
-												<input type="text">
-											</td>
-										</tr>	
-									<?php $indices[]++ ?>	
+													<td>
+														<input type="text">
+													</td>
+												</tr>	
+											<?php $indices[]++ ?>	
+										@endforeach
 									@endforeach
 
 									@for ($i = count($indices); $i < 17; $i++)

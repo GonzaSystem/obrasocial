@@ -36,7 +36,9 @@
         <thead>
 
          <tr>
-           <th>Apellido y Nombre</th>
+		   <th>Apellido y Nombre</th>
+		   <th>Prestacion</th>
+		   <th>Obra Social</th>
            <th>Acctiones</th>
          </tr>
 
@@ -46,10 +48,14 @@
 			@foreach ($beneficiarios as $beneficiario)
 				@php
 					$os_id = $beneficiario->os_id;
+					$prestacion = $beneficiario->prestacion[0]->nombre;
+					$os = $beneficiario->obrasocial[0]->nombre;
 				@endphp
 				@foreach($beneficiario->beneficiario as $benef)
 					<tr>
-						<td>{{$benef->nombre}}</td>
+						<td>{{ $benef->nombre }}</td>
+						<td>{{ $prestacion }}</td>
+						<td>{{ $os }}</td>
 						<td>
 							<div class="btn-group">
 								<button class="btn btn-danger btnEliminarBeneficiarioInactivo" idOs="{{ $os_id }}" idBenef="{{ $benef->id }}"><i class="fa fa-trash"></i></button>
