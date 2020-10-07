@@ -536,7 +536,7 @@ $(document).on('click', '#guardarHorario', function(){
 		if(el.value != ''){
 			tiempo = el;
 		}
-	})
+	});
 	var beneficiario_id = $("#beneficiario_id").val();
 	var obrasocial_id = $("#obrasocial_id").val();
   	var tope = $("#tope").val();

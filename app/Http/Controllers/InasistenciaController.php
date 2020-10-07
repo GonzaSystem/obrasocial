@@ -81,13 +81,13 @@ class InasistenciaController extends Controller
 		
 								if($value < 10 && strlen($value) < 2){
 									$inasistencia->rango_fechas = '0'. $value . '/' . date('m/y');
-									$filter_inasistencia = Inasistencia::where('rango_fechas', '0'. $value . '/' . date('m/y'))->first();
+									$filter_inasistencia = Inasistencia::where('rango_fechas', '0'. $value . '/' . date('m/y'))->where('beneficiario_id', $request['id_beneficiario'])->first();
 									if($filter_inasistencia){
 										throw new \Exception('La fecha a cargar ya existe'); 
 									}
 								}else{
 									$inasistencia->rango_fechas = $value . '/' . date('m/y');
-									$filter_inasistencia = Inasistencia::where('rango_fechas', $value . '/' . date('m/y'))->first();
+									$filter_inasistencia = Inasistencia::where('rango_fechas', $value . '/' . date('m/y'))->where('beneficiario_id', $request['id_beneficiario'])->first();
 									if($filter_inasistencia){
 										throw new \Exception('La fecha a cargar ya existe'); 
 									}
@@ -112,7 +112,7 @@ class InasistenciaController extends Controller
 							break;
 						
 						case 'rango':
-							$filter_inasistencia = Inasistencia::where('rango_fechas', $request['fechas'])->first();
+							$filter_inasistencia = Inasistencia::where('rango_fechas', $request['fechas'])->where('beneficiario_id', $request['id_beneficiario'])->first();
 							if($filter_inasistencia){
 								throw new \Exception('La fecha a cargar ya existe'); 
 							}
@@ -143,13 +143,13 @@ class InasistenciaController extends Controller
 			
 									if($value < 10 && strlen($value) < 2){
 										$inasistencia->rango_fechas = '0'. $value . '/' . date('m/y');
-										$filter_inasistencia = Inasistencia::where('rango_fechas', '0'. $value . '/' . date('m/y'))->first();
+										$filter_inasistencia = Inasistencia::where('rango_fechas', '0'. $value . '/' . date('m/y'))->where('beneficiario_id', $request['id_beneficiario'])->first();
 										if($filter_inasistencia){
 											throw new \Exception('La fecha a cargar ya existe'); 
 										}
 									}else{
 										$inasistencia->rango_fechas = $value . '/' . date('m/y');
-										$filter_inasistencia = Inasistencia::where('rango_fechas', $value . '/' . date('m/y'))->first();
+										$filter_inasistencia = Inasistencia::where('rango_fechas', $value . '/' . date('m/y'))->where('beneficiario_id', $request['id_beneficiario'])->first();
 										if($filter_inasistencia){
 											throw new \Exception('La fecha a cargar ya existe'); 
 										}
@@ -174,7 +174,7 @@ class InasistenciaController extends Controller
 								break;
 							
 							case 'rango':
-								$filter_inasistencia = Inasistencia::where('rango_fechas', $request['fechas'])->first();
+								$filter_inasistencia = Inasistencia::where('rango_fechas', $request['fechas'])->where('beneficiario_id', $request['id_beneficiario'])->first();
 								if($filter_inasistencia){
 									throw new \Exception('La fecha a cargar ya existe'); 
 								}

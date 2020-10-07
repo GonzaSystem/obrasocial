@@ -416,6 +416,7 @@ class BeneficiarioController extends Controller
 			unset($fechas['total'][$benefId][$ind]);
 			ksort($fechas['total'][$benefId]);
 		}
+
         // $merged = array_merge(...$fechas);
 		// sort($merged, SORT_NUMERIC);
 		// dd($merged);
