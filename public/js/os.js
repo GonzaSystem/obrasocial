@@ -780,13 +780,16 @@ $(document).on('click', '.btnInasistencias', function(){
 
 
 $(document).on('click', '.btnInasistenciaIndividual', function(){
-  $('.inasistenciaIndividual').show();
-  $('.rangoHorario').hide();
-  $('.rangoInasistencia').hide();
+	$('.inasistenciaIndividual').show();
+	$('.horarioIndividual').hide();
+	$('.rangoInasistencia').hide();
+	$('.rangoHorario').hide();
 });
 
 $(document).on('click', '.btnHorarioIndividual', function(){
-  $('.horarioIndividual').show();
+	$('.horarioIndividual').show();
+	$('.inasistenciaIndividual').hide();
+	$('.rangoInasistencia').hide();
 });
 
 // $(document).on('click', '.btnAgregarHorario', function(){
@@ -970,6 +973,7 @@ $(document).on('click', '.btnRangoInasistencia', function(){
   $('.rangoHorario').show();
   $('.inasistenciaIndividual').hide();
   $('.rangoInasistencia').hide();
+  $('.horarioIndividual').hide();
   $('#daterange-btn').daterangepicker(
       {
         ranges   : {

@@ -49,10 +49,10 @@ class InasistenciaController extends Controller
 				$inasistencias = $benef->inasistencia;
 				$adicionales = $benef->agregado;
 				$sesiones = $benef->sesion;
-				$cant_solicitada = $benef->tope;
+				$cant_solicitada = ($benef->tope != null ? $benef->tope : 999999);
 				$totalDias = count($sesiones);
 				$totalAgregado = count($benef->agregado);
-				$fechas['total'][$benef->id] = OSUtil::cuenta_dias($mes, $anio, $sesiones, $cant_solicitada, $inasistencias);
+				$fechas['total'][$benef->id] = OSUtil::cuenta_dias($mes, $anio, $sesiones, $cant_solicitada);
 				$fechas['inasistencias'][$benef->id] = OSUtil::cuenta_inasistencias($mes, $anio, $sesiones, $inasistencias);
 				$fechas['agregado'][$benef->id] = OSUtil::cuenta_agregado($mes, $anio, $sesiones, $adicionales);
 

@@ -4,16 +4,18 @@ namespace App\Helpers;
 
 class OSUtil{
 
-	static public function cuenta_dias($mes, $anio, $sesiones, $tope_dias = null, $inasistencias = null)
+	static public function cuenta_dias($mes, $anio, $sesiones, $tope_dias = null, $inasistencias = [])
     {
 		if($tope_dias == null || $tope_dias == 0){
 			$tope_dias = 999999;
 		}
+		$fechasInasistencia = array();
+		foreach($inasistencias as $inasistencia){
+			$fechasInasistencia[] = $inasistencia->rango_fechas;
+		}
         $count=0;
         $dias_mes=cal_days_in_month(CAL_GREGORIAN, $mes, $anio);
         $coincidencia = array();
-		$fechas_inasistencia = array();
-		$fechas_adicionales = array();
 		foreach($sesiones as $sesion){
 			$tiempo = $sesion->tiempo;
 			$numero_dia = $sesion->dia;
@@ -22,12 +24,14 @@ class OSUtil{
                 if(date('N',strtotime($anio.'-'.$mes.'-'.$i))==$numero_dia){
                     $hor=new \DateTime($horario);
                     $fin=$hor->add( new \DateInterval( 'PT' . ( (integer) $tiempo ) . 'M' ) );
-                    $fecha_fin = $fin->format( 'H:i' );
-					$count++;
+					$fecha_fin = $fin->format( 'H:i' );
 					if($i < 10){
 						$i = 0 .$i;
 					}
-                    $coincidencia[$i] = date($i.'/'.$mes.'/'.substr($anio, -2)). '/' . $horario.'/'.$fecha_fin;
+					if(!in_array(date($i.'/'.$mes.'/'.substr($anio, -2)), $fechasInasistencia)){
+						$count++;
+						$coincidencia[$i] = date($i.'/'.$mes.'/'.substr($anio, -2)). '/' . $horario.'/'.$fecha_fin;
+					}
                 }
 			} 
 		}	

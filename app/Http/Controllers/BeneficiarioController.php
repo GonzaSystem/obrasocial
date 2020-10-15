@@ -67,7 +67,7 @@ class BeneficiarioController extends Controller
 				$sesiones = $benef->sesion;
 				$cant_solicitada = $benef->tope;
 				$totalDias = count($sesiones);
-				$fechas['total'][$benef->id] = OSUtil::cuenta_dias($mes, $anio, $sesiones, $cant_solicitada, $inasistencias);
+				$fechas['total'][$benef->id] = OSUtil::cuenta_dias($mes, $anio, $sesiones, $cant_solicitada);
 				$fechas['inasistencias'][$benef->id] = OSUtil::cuenta_inasistencias($mes, $anio, $sesiones, $inasistencias);
 				$fechas['agregado'][$benef->id] = OSUtil::cuenta_agregado($mes, $anio, $sesiones, $adicionales);
 				$fechas['total_agregado'][$benef->id] = count($benef->agregado);

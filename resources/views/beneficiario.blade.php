@@ -89,7 +89,7 @@
 
       @if($data['obrasocial'][0]->nombre == "APROSS")
 
-         <table class="table table-bordered table-striped dt-responsive tablaBeneficiario">
+         <table class="table table-bordered table-striped dt-responsive tablaBeneficiario" style="width: 100% !important;">
 
           <thead>
 
@@ -1041,11 +1041,11 @@ MODAL HORARIO BENEFICIARIO
                       <div class="row">
                         <div class="form-group col-lg-12">
                             <div class="input-group col-lg-12">
-                                <div class="col-lg-3" style="margin-left: 15px;">
+                                <div class="col-lg-4" style="padding-left: 30px;">
                                   <label for="tope">Tope Dias mensuales</label>
                                   <input type="text" class="form-control topeBenef" name="tope" id="tope" idBenef placeholder="Sin tope">
                                 </div>
-                                <div class="col-lg-3">
+                                <div class="col-lg-4">
 								  <label for="btnTope">Activar Tope</label><br>
 								  <div class="btn-group">
 									  {{-- <div class="input-group"><button type="button" class="btn btn-success btnTope" id="btnTope"><i class="fa fa-check"></i></button></div> --}}
@@ -1062,10 +1062,13 @@ MODAL HORARIO BENEFICIARIO
 											</label>
 										</div>
 								  </div>
-                                </div>
+								</div>
+								<div class="col-lg-4 text-right" style="padding-right: 30px;">
+									<button type="button" class="btn btn-primary btnInasistencias" data-toggle="modal" data-target="#modalInasistenciasBeneficiario" idBenef>Inasistencias</button>
+								</div>
 
 								<div class="col-lg-12">
-									<div class="col-lg-9" style="margin-top: 25px;">
+									{{-- <div class="col-lg-9" style="margin-top: 25px;">
 										<button type="button" class="btn btn-primary btnHorarioIndividual">Agregar Horario</button>
 										<form class="formHorarios">
 											<div class="horarioIndividual" style="display: none;">
@@ -1075,7 +1078,6 @@ MODAL HORARIO BENEFICIARIO
 												</div>
 	
 												<div class="col-lg-2" style="margin-top: 45px;">
-													{{-- <button class="btn btn-xs btn-success btnAgregarHorario" type="button"><i class="fa fa-plus"></i></button> --}}
 													<button class="btn btn-xs btn-success btnAgregarHorario" type="button"><i class="fa fa-plus"></i></button>
 													<input type="hidden" name="id_beneficiario" class="id_beneficiario" value>
 													<input type="hidden" name="cantidad" value="individual">
@@ -1083,13 +1085,9 @@ MODAL HORARIO BENEFICIARIO
 												<div id="inputsAdicionales"></div>                
 											</div>
 										  </form>
-									</div>
+									</div> --}}
 
 									
-
-									<div class="col-lg-3 text-right" style="margin-top: 25px;">
-										<button type="button" class="btn btn-primary btnInasistencias" data-toggle="modal" data-target="#modalInasistenciasBeneficiario" idBenef>Inasistencias</button>
-									</div>
 								</div>
                             </div>
                         </div>
@@ -1250,17 +1248,34 @@ MODAL INASISTENCIAS BENEFICIARIO
                   <div class="col-lg-12">        
                     <div class="row">
                       <div class="col-lg-12">
+						<button type="button" class="btn btn-primary btnHorarioIndividual">Agregar Horario Individual</button>
                         <button type="button" class="btn btn-primary btnInasistenciaIndividual">Agregar Inasistencia individual</button>
-                        {{-- <button type="button" class="btn btn-primary btnRangoHorario">Agregar rango de horario</button> --}}
-                        <button type="button" class="btn btn-primary btnRangoInasistencia">Agregar rango de Inasistencia</button>
+						<button type="button" class="btn btn-primary btnRangoInasistencia">Agregar rango de Inasistencia</button>
+						
                       </div>
-                    </div>
+					</div>
+					<form class="formHorarios" style="margin-bottom: 0px;">
+						<div class="col-lg-6 horarioIndividual" style="margin-top: 20px; margin-bottom: 20px; display: none;">
+							<div class="row">
+								<div class="col-lg-4">
+									<label for="fechas[]">Fecha</label>
+									<input type="number" id="fechas[]" class="form-control input-sm fechasMask" name="fechas[]" value="{{ date('d') }}" placeholder="Dia" min="1" max="31">
+								</div>
+								<div class="col-lg-2" style="padding-left: 0px; margin-top: 30px;">
+									<button class="btn btn-xs btn-success btnAgregarHorario" type="button"><i class="fa fa-plus"></i></button>
+									<input type="hidden" name="id_beneficiario" class="id_beneficiario" value>
+									<input type="hidden" name="cantidad" value="individual">
+								</div>
+							</div>	
+							<div id="inputsAdicionales"></div>  
+						</div>	
+					  </form>
                     <form class="formInasistencias">
                       <div class="col-lg-6 inasistenciaIndividual" style="margin-top: 20px; margin-bottom: 20px; display:none;">
                           <div class="row">
                             <div class="col-lg-4">
-                              <label for="fechas[]">Fecha</label>
-							<input type="number" id="fechas[]" class="form-control input-sm fechasMask" name="fechas[]" placeholder="Dia" min="1" max="31" value="{{ date('d') }}">
+								<label for="fechas[]">Fecha</label>
+								<input type="number" id="fechas[]" class="form-control input-sm fechasMask" name="fechas[]" placeholder="Dia" min="1" max="31" value="{{ date('d') }}">
                             </div>
                             <div class="col-lg-2" style="padding-left: 0px; margin-top: 30px;">
                               {{-- <button class="btn btn-xs btn-success btnAgregarHorario" type="button"><i class="fa fa-plus"></i></button> --}}
