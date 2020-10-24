@@ -75,13 +75,15 @@
 
       <div class="box-header with-border">
 
-        <button class="btn btn-primary" style="margin-right: 15px; {{Auth::user()->mes != date('m') || Auth::user()->anio != date('Y') ? 'display:none' : ''}}" data-toggle="modal" data-target="#modalAgregarBeneficiario">
+		<button class="btn btn-primary" style="margin-right: 15px; {{Auth::user()->mes != date('m') || Auth::user()->anio != date('Y') ? 'display:none' : ''}}" data-toggle="modal" data-target="#modalAgregarBeneficiario">
 
-          Agregar Beneficiario
+			Agregar Beneficiario
 
-        </button>
+		</button>
 
-	Buscar: <input type="text" id="searchbox" value="{{ Session::has('BeneficiarioNombre') ? Session::get('BeneficiarioNombre') : ''}}"><button type="button" class="btn btn-sm btn-danger" id="btnClearSearchbox" style="margin-left: 5px; margin-bottom: 6px;"><i class="fa fa-times"></i></button>
+		Buscar: <input type="text" id="searchbox" value="{{ Session::has('BeneficiarioNombre') ? Session::get('BeneficiarioNombre') : ''}}"><button type="button" class="btn btn-sm btn-danger" id="btnClearSearchbox" style="margin-left: 5px; margin-bottom: 6px;"><i class="fa fa-times"></i></button>
+
+		<a target="_BLANK" href="{{ route('beneficiario-planilla-facturacion', ['prestador_id' => Auth::user()->id, 'mes' => Auth::user()->mes, 'anio' => Auth::user()->anio]) }}" class="btn btn-success" style="float: right;">Planilla de Facturacion</a>
 
       </div>
 
@@ -227,7 +229,7 @@
 
             </tr>
 
-            <?php $i++ ?>
+            <?php // $i++ ?>
 
             @endforeach
 
@@ -1026,14 +1028,6 @@ MODAL HORARIO BENEFICIARIO
 
                     <div class="box-body">
 
-					<div class="alert alert-danger text-center horarioFail" style="display: none;">
-						<span id="horarioFail"></span>
-					</div>
-	
-					<div class="alert alert-success text-center horarioSuccess" style="display: none;">
-						<span id="horarioSuccess"></span>
-					</div>
-
                       <div class="alert alert-danger text-center alertBenef" style="display:none">
                           <span id="errorBenef"></span>
                       </div>
@@ -1064,7 +1058,7 @@ MODAL HORARIO BENEFICIARIO
 								  </div>
 								</div>
 								<div class="col-lg-4 text-right" style="padding-right: 30px;">
-									<button type="button" class="btn btn-primary btnInasistencias" data-toggle="modal" data-target="#modalInasistenciasBeneficiario" idBenef>Inasistencias</button>
+									<button type="button" class="btn btn-primary btnInasistencias" data-toggle="modal" data-target="#modalInasistenciasBeneficiario" idBenef>Fechas</button>
 								</div>
 
 								<div class="col-lg-12">
@@ -1243,14 +1237,22 @@ MODAL INASISTENCIAS BENEFICIARIO
 
                   <div class="alert alert-success text-center inasistenciaSuccess" style="display: none;">
                     <span id="inasistenciaSuccess"></span>
-                  </div>
+				  </div>
+				  
+				  <div class="alert alert-danger text-center horarioFail" style="display: none;">
+					<span id="horarioFail"></span>
+				</div>
+
+				<div class="alert alert-success text-center horarioSuccess" style="display: none;">
+					<span id="horarioSuccess"></span>
+				</div>
 
                   <div class="col-lg-12">        
                     <div class="row">
                       <div class="col-lg-12">
-						<button type="button" class="btn btn-primary btnHorarioIndividual">Agregar Horario Individual</button>
-                        <button type="button" class="btn btn-primary btnInasistenciaIndividual">Agregar Inasistencia individual</button>
-						<button type="button" class="btn btn-primary btnRangoInasistencia">Agregar rango de Inasistencia</button>
+						<button type="button" class="btn btn-success btnHorarioIndividual">Agregar Horario Individual</button>
+                        <button type="button" class="btn btn-danger btnInasistenciaIndividual">Agregar Inasistencia individual</button>
+						<button type="button" class="btn btn-danger btnRangoInasistencia">Agregar rango de Inasistencia</button>
 						
                       </div>
 					</div>

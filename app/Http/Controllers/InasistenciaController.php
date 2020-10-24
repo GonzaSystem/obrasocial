@@ -52,10 +52,9 @@ class InasistenciaController extends Controller
 				$cant_solicitada = ($benef->tope != null ? $benef->tope : 999999);
 				$totalDias = count($sesiones);
 				$totalAgregado = count($benef->agregado);
-				$fechas['total'][$benef->id] = OSUtil::cuenta_dias($mes, $anio, $sesiones, $cant_solicitada);
+				$fechas['total'][$benef->id] = OSUtil::cuenta_dias($mes, $anio, $sesiones, $cant_solicitada, $inasistencias);
 				$fechas['inasistencias'][$benef->id] = OSUtil::cuenta_inasistencias($mes, $anio, $sesiones, $inasistencias);
 				$fechas['agregado'][$benef->id] = OSUtil::cuenta_agregado($mes, $anio, $sesiones, $adicionales);
-
 				$cuenta = array();
 				foreach ($fechas['total'] as $key => $fecha) {
 					$cuenta[$key] = 0;
@@ -133,7 +132,8 @@ class InasistenciaController extends Controller
 							break;        
 					}
 				}else{
-					if((count($fechas['total'][$benef->id]) - count($fechas['inasistencias'][$benef->id]) + $totalAgregado) < $cant_solicitada){
+					// if((count($fechas['total'][$benef->id]) - count($fechas['inasistencias'][$benef->id]) + $totalAgregado) < $cant_solicitada){
+					if((count($fechas['total'][$benef->id]) + $totalAgregado) < $cant_solicitada){
 						switch ($request['cantidad']) {
 							case 'individual':
 								foreach ($request['fechas'] as $key => $value) {

@@ -53,7 +53,11 @@ $(document).ready(function(){
 	});
 });
  
-
+function hideAlerts(){
+	setTimeout(() => {
+		$('.alert').hide();
+	}, 5000);
+}
 
 $('.sidebar-toggle').on('click',function(){
 
@@ -443,13 +447,12 @@ $(document).on('click', '.btnHorarioBeneficiario', function(){
 	var fecha_original = $(this).attr('cuenta-original');
 	var fecha_agregados = $(this).attr('cuenta-agregados');
 	var suma = (Number(fecha_tope)+Number(fecha_agregados));
-	console.log('suma', suma); 
 
-	if(suma < fecha_original || suma == 0){
-		$('.btnHorarioIndividual').show();
-	}else{
-		$('.btnHorarioIndividual').hide();
-	}
+	// if(suma < fecha_original || suma == 0){
+	// 	$('.btnHorarioIndividual').show();
+	// }else{
+	// 	$('.btnHorarioIndividual').hide();
+	// }
 
 	$.ajaxSetup({
         headers: {
@@ -586,6 +589,8 @@ $(document).on('click', '#guardarHorario', function(){
         	}
         }
     });
+
+	hideAlerts();
 });
 
 //Eliminar sesion
@@ -789,7 +794,7 @@ $(document).on('click', '.btnInasistenciaIndividual', function(){
 $(document).on('click', '.btnHorarioIndividual', function(){
 	$('.horarioIndividual').show();
 	$('.inasistenciaIndividual').hide();
-	$('.rangoInasistencia').hide();
+	$('.rangoHorario').hide();
 });
 
 // $(document).on('click', '.btnAgregarHorario', function(){
@@ -856,6 +861,8 @@ $(document).on('click', '.btnAgregarHorario', function(){
 			$('#horarioFail').append(respuesta.responseJSON['message']);
 	  }
     });
+
+	hideAlerts();
 });
 
 $(document).on('click', '.btnRemoverHorario', function(){
@@ -1171,6 +1178,7 @@ $(document).on('click', '.topeRadio', function(){
 			}
 		});
 	}
+	hideAlerts();
 });
 
 $(document).on('change', '.selectTiempo', function(){

@@ -95,6 +95,9 @@ class OSUtil{
 				$numero_dia = $sesion->dia;
 				$horario = $sesion->hora; 
 				for($i=1;$i<=$dias_mes;$i++){
+					if($i < 10){
+						$i = '0'.$i;
+					}
 					if(date($i.'/'.$mes.'/'.substr($anio, -2)) == $agregado->rango_fechas){
 						$hor=new \DateTime($horario);
 						$fin=$hor->add( new \DateInterval( 'PT' . ( (integer) $tiempo ) . 'M' ) );
@@ -106,5 +109,11 @@ class OSUtil{
 			}	
 		}
 		return $coincidencia;
-    }
+	}
+
+	static public function ordenarBeneficiarios($beneficiarios){
+		usort($beneficiarios, function($a, $b){ 
+			return $a->nombre < $b->nombre;
+		});
+	}
 }

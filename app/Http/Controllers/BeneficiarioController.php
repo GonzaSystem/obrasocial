@@ -11,6 +11,7 @@ use App\ObraSocial;
 use App\Sesion;
 use App\Traditum;
 use App\Helpers\OSUtil;
+use Auth;
 
 class BeneficiarioController extends Controller
 {
@@ -416,7 +417,7 @@ class BeneficiarioController extends Controller
 			unset($fechas['total'][$benefId][$ind]);
 			ksort($fechas['total'][$benefId]);
 		}
-
+		ksort($fechas['total'][$beneficiario[0]->id]);
         // $merged = array_merge(...$fechas);
 		// sort($merged, SORT_NUMERIC);
 		// dd($merged);
@@ -511,5 +512,39 @@ class BeneficiarioController extends Controller
                 'message' => 'El tope no ha podido ser cargado. Por favor intente nuevamente.'
             ];
         }
-    }
+	}
+
+	
+	public function planillaFacturacion($prestador_id, $mes, $anio){
+		$user = Auth::user();
+		$prestador = Prestador::select('id', 'prestacion_id')->with(['prestacion', 'beneficiario' => function($q) use ($user){
+			$q->with(['traditum' => function($query) use ($user){
+				$query->where('traditum.mes', $user->mes)->where('traditum.anio', $user->anio);
+			}]);
+		}])->where('user_id', $user->id)->get();
+
+		// Agrupando beneficiarios
+		$beneficiarios = array();
+		foreach($prestador as $k => $v){
+			$codigo_modulo = $v->prestacion[0]->codigo_modulo;
+			foreach($v->beneficiario as $k2 => $v2){
+				$v2->codigo_modulo = $codigo_modulo;
+				$beneficiarios[] = $v2;
+			}
+		}
+
+		// Paginando de a 17
+		$grupo = 0;
+		$indice = 0;
+		$beneficiariosAgrupados = array();
+		foreach($beneficiarios as $ind => $benef){
+			if($indice > 16){
+				$grupo++;
+				$indice = 0;
+			}
+			$beneficiariosAgrupados[$grupo][] = $benef;
+			$indice++;
+		}
+		return view('beneficiarios-facturacion', ['informacion' => $beneficiariosAgrupados]);
+	}
 }

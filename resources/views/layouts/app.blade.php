@@ -238,7 +238,7 @@
     @auth
         {{-- Footer --}}
         <footer class="main-footer">
-            <strong>Copyright &copy; 2020 <a href="mailto:gonzaloholzmeister@gmail.com?Subject=Sistema" target="_top">Gonzalo Ivan Gomez</a> - gonzaloholzmeister@gmail.com</strong> .
+            <strong>Copyright &copy; 2020 Porcal Adrian Martin</strong> .
 
             Todos los derechos reservados.
         </footer>

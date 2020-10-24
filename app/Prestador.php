@@ -31,7 +31,7 @@ class Prestador extends Model
 				->orWhereNull('deleted_at');
 				
 		})->where('activo', 1)
-		->withTrashed()->orderBy('nombre', 'desc');
+		->withTrashed()->orderBy('nombre');
 
 	}
 	
