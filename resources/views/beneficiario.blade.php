@@ -83,7 +83,7 @@
 
 		Buscar: <input type="text" id="searchbox" value="{{ Session::has('BeneficiarioNombre') ? Session::get('BeneficiarioNombre') : ''}}"><button type="button" class="btn btn-sm btn-danger" id="btnClearSearchbox" style="margin-left: 5px; margin-bottom: 6px;"><i class="fa fa-times"></i></button>
 
-		<a target="_BLANK" href="{{ route('beneficiario-planilla-facturacion', ['prestador_id' => Auth::user()->id, 'mes' => Auth::user()->mes, 'anio' => Auth::user()->anio]) }}" class="btn btn-success" style="float: right;">Planilla de Facturacion</a>
+		<a target="_BLANK" href="{{ route('beneficiario-planilla-facturacion', ['prestador_id' => Auth::user()->id, 'os' => $data['obrasocial'][0]->id, 'mes' => Auth::user()->mes, 'anio' => Auth::user()->anio]) }}" class="btn btn-success" style="float: right;">Planilla de Facturacion</a>
 
       </div>
 

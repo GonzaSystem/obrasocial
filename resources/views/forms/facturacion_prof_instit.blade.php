@@ -21,9 +21,7 @@
 					<div class='salto'></div>
 					<div id="d_periodo">
 						<label for="periodo1">PERIODO:</label>
-						<input type="text" name="periodo1" class="d_periodo1" maxlength="6">
-						<span class="barra">/</span>
-						<input type="text" name="periodo2" class="d_preiodo2" maxlength="6"></div>
+						<input type="text" name="periodo1" class="d_periodo1" maxlength="10">
 					<div class='salto'></div>
 				</div>
 
@@ -45,7 +43,7 @@
 							<div class='nombre'><input type='text' name='nombre_0' value="{{$beneficiario->nombre}}"></div>
 							<div class="cantidad"><input type="text" name='cantidad_0' value="{{$beneficiario->cantidad_solicitada}}"></div>
 							<div class='modulo'><input type='text' name='modulo_0' value="{{$beneficiario->codigo_modulo}}"></div>
-							<div class='svi'><input type='text' name='svi_0' value="{{isset($beneficiario->traditum->codigo) ? $beneficiario->traditum[0]->codigo : ''}}"></div>
+							<div class='svi'><input type='text' name='svi_0' value="{{isset($beneficiario->traditum->codigo) ? $beneficiario->traditum->codigo : ''}}"></div>
 							<div class='importe'><input type='text' name='importe_0'></div>
 							<div class='firma'><input type='text' name='firma_0'></div>
 							<div class='salto'></div>

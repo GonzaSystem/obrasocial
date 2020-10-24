@@ -320,15 +320,14 @@ class BeneficiarioController extends Controller
             $traditum->codigo = $request->input('editar_codigo_traditum');   
             $traditum->mes = date('m');
             $traditum->anio = date('Y');
-            $traditum->save();  
-        }else{
-            $traditum->codigo = $request->input('editar_codigo_traditum');   
-            $traditum->mes = date('m');
-            $traditum->anio = date('Y');
-            $traditum->save();
-        }
-
-
+			$traditum->save();
+		}  
+        // }else{
+        //     $traditum->codigo = $request->input('editar_codigo_traditum');   
+        //     $traditum->mes = date('m');
+        //     $traditum->anio = date('Y');
+        //     $traditum->save();
+        // }
         return redirect()->route('beneficiarios', ['prestador_id' => \Auth::user()->id, 'obrasocial_id' => $obra_social])
             ->with(['message' => 'Los datos de beneficiario han sido actualizados correctamente']);
     }
@@ -515,13 +514,11 @@ class BeneficiarioController extends Controller
 	}
 
 	
-	public function planillaFacturacion($prestador_id, $mes, $anio){
+	public function planillaFacturacion($prestador_id, $os, $mes, $anio){
 		$user = Auth::user();
-		$prestador = Prestador::select('id', 'prestacion_id')->with(['prestacion', 'beneficiario' => function($q) use ($user){
-			$q->with(['traditum' => function($query) use ($user){
-				$query->where('traditum.mes', $user->mes)->where('traditum.anio', $user->anio);
-			}]);
-		}])->where('user_id', $user->id)->get();
+		$prestador = Prestador::select('id', 'prestacion_id')->with(['prestacion', 'beneficiario'])
+		->where('os_id', $os)
+		->where('user_id', $user->id)->get();
 
 		// Agrupando beneficiarios
 		$beneficiarios = array();
@@ -529,6 +526,7 @@ class BeneficiarioController extends Controller
 			$codigo_modulo = $v->prestacion[0]->codigo_modulo;
 			foreach($v->beneficiario as $k2 => $v2){
 				$v2->codigo_modulo = $codigo_modulo;
+				$v2->traditum = Traditum::select('codigo')->where('beneficiario_id', $v2->id)->where('mes', $mes)->where('anio', $anio)->first();		
 				$beneficiarios[] = $v2;
 			}
 		}
@@ -537,7 +535,10 @@ class BeneficiarioController extends Controller
 		$grupo = 0;
 		$indice = 0;
 		$beneficiariosAgrupados = array();
-		foreach($beneficiarios as $ind => $benef){
+		$sortBenefs = usort($beneficiarios, function($a, $b){
+			return strcmp($a->nombre, $b->nombre);
+		});
+		foreach($beneficiarios as $benef){	
 			if($indice > 16){
 				$grupo++;
 				$indice = 0;
