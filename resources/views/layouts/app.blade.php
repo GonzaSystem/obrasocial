@@ -210,7 +210,14 @@
                                     <i class="fa fa-ambulance"></i>
                                     <span>Prestaciones</span>
                                 </a>
-                            </li>
+							</li>
+							
+							<li>
+								<a href="{{ route('feriados') }}">
+									<i class="fa fa-calendar"></i>
+									<span>Feriados</span>
+								</a>
+							</li>
 
                             <li>
                                 <a href="{{ route('admin-users') }}">

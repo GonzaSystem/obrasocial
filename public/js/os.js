@@ -51,8 +51,53 @@ $(document).ready(function(){
 	$(document).on('click', '#btnClearSearchbox', function(){
 		$('#searchbox').val('').trigger('change');
 	});
+
+	// Feriados
+	var feriado = $('.feriadoInput');
+	$.each(feriado, function (indexInArray, valueOfElement) { 
+		$(valueOfElement).daterangepicker({
+			singleDatePicker: true,
+			showDropdowns: true,
+			minYear: 1901,
+			startDate: moment().format('DD/MM/YYYY'),
+			locale: {
+				format: 'DD/MM/YYYY'
+			}
+		});
+	});	
 });
  
+// Editar Feriado
+$(document).on('click', '.btnEditarFeriado', function(){
+	var id = $(this).attr('data-id');
+	$('#feriado_id').val(id);
+});
+
+// Eliminar Feriado
+$(document).on("click", ".btnEliminarFeriado", function(){
+  var id = $(this).attr("data-id");
+
+  swal({
+    title: '¿Está seguro de borrar el feriado?',
+    text: "¡Una vez eliminado, la acción no se podrá deshacer!",
+    type: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      cancelButtonText: 'Cancelar',
+      confirmButtonText: 'Si, borrar feriado!'
+  }).then(function(result){
+
+    if(result.value){
+
+      window.location = "http://localhost/os/public/feriado/delete/"+id;
+
+    }
+
+  });
+
+});
+
 function hideAlerts(){
 	setTimeout(() => {
 		$('.alert').hide();
@@ -60,15 +105,13 @@ function hideAlerts(){
 }
 
 $('.sidebar-toggle').on('click',function(){
-
-           var cls =  $('body').hasClass('sidebar-collapse');
-           if(cls == true){
-                $('body').removeClass('sidebar-collapse');
-           } else {
-                $('body').addClass('sidebar-collapse');
-           }
-
-    });
+	var cls =  $('body').hasClass('sidebar-collapse');
+	if(cls == true){
+		$('body').removeClass('sidebar-collapse');
+	} else {
+		$('body').addClass('sidebar-collapse');
+	}
+});
 
 
 // Info de OS

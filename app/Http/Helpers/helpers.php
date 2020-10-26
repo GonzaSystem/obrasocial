@@ -37,6 +37,37 @@ class OSUtil{
 		}	
 		return $coincidencia;
 	}
+
+	static public function cuenta_feriados($mes, $anio, $sesiones, $feriados = [])
+    {
+        $count=0;
+        $dias_mes=cal_days_in_month(CAL_GREGORIAN, $mes, $anio);
+        $coincidencia = array();
+		foreach($feriados as $feriado){
+			foreach($sesiones as $sesion){
+				$tiempo = $sesion->tiempo;
+				$numero_dia = $sesion->dia;
+				$horario = $sesion->hora; 
+				for($i=1;$i<=$dias_mes;$i++){
+					if($i < 10){
+						$i = 0 .$i;
+					}
+					if(date($i.'/'.$mes.'/'.$anio) == $feriado->fecha){
+						$dia = ($i+1);
+						if($dia < 10){
+							$dia = 0 . $dia;
+						}
+						$hor=new \DateTime($horario);
+						$fin=$hor->add( new \DateInterval( 'PT' . ( (integer) $tiempo ) . 'M' ) );
+						$fecha_fin = $fin->format( 'H:i' );
+						$count++;
+						$coincidencia[$i] = date($dia.'/'.$mes.'/'.substr($anio, -2)). '/' . $horario.'/'.$fecha_fin;	
+					}
+				}
+			}	
+		}
+		return $coincidencia;
+	}
 	
 	static public function cuenta_inasistencias($mes, $anio, $sesiones, $inasistencias = [])
     {

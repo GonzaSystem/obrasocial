@@ -80,6 +80,11 @@ Route::post('/video/update', 'VideoController@update')->name('video-update');
 Route::post('/video/list', 'VideoController@list')->name('video-list');
 Route::get('/video/delete/{id}', 'VideoController@destroy')->name('video-destroy');
 
+// Feriados
+Route::get('/feriados', 'FeriadoController@index')->name('feriados');
+Route::post('/feriado/create', 'FeriadoController@store')->name('feriado-store');
+Route::post('/feriado/update', 'FeriadoController@update')->name('feriado-update');
+Route::get('/feriado/delete/{id}', 'FeriadoController@destroy')->name('feriado-delete');
 
 // Sys
 Route::get('/updateapp', function()

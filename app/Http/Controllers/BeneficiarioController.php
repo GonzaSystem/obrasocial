@@ -10,6 +10,7 @@ use App\Beneficiario;
 use App\ObraSocial;
 use App\Sesion;
 use App\Traditum;
+use App\Feriado;
 use App\Helpers\OSUtil;
 use Auth;
 
@@ -375,7 +376,6 @@ class BeneficiarioController extends Controller
 		// Fechas V2
 		$beneficiario = Beneficiario::where('id', $beneficiario_id)->with(['prestador', 'sesion', 'inasistencia'])->get();
 		$prestador = Prestador::where('id', $prestador_id)->with('prestacion')->get();
-
 		$fechas = array();
 		foreach ($beneficiario as $key => $benef) {
 			// Sesiones
@@ -384,12 +384,32 @@ class BeneficiarioController extends Controller
 			$sesiones = $benef->sesion;
 			$cant_solicitada = $benef->tope;
 			$totalDias = count($sesiones);
+			if($prestador[0]->quitar_feriado == 'Si'){
+				$feriados = Feriado::get();
+				$fechas['feriados'][$benef->id] = OSUtil::cuenta_feriados($mes, $anio, $sesiones, $feriados);
+			}
 			$fechas['total'][$benef->id] = OSUtil::cuenta_dias($mes, $anio, $sesiones, $cant_solicitada, $inasistencias);
 			$fechas['inasistencias'][$benef->id] = OSUtil::cuenta_inasistencias($mes, $anio, $sesiones, $inasistencias);
 			$fechas['agregado'][$benef->id] = OSUtil::cuenta_agregado($mes, $anio, $sesiones, $adicionales);
 			$fechas['total_agregado'][$benef->id] = count($benef->agregado);
 		}
-        // Sumario de fechas
+
+		// Sumario de fechas
+		if($prestador[0]->quitar_feriado == 'Si'){
+			foreach($fechas['feriados'] ?? [] as $k => $fch){
+				foreach($fch as $k2 => $fch2){
+					foreach($fechas['total'] as $k3 => $fch3){
+						foreach($fch3 as $k4 => $fch4){
+							if($k4 == $k2){
+								unset($fechas['total'][$k3][$k4]);
+								$fechas['total'][$k3][$k4] = $fch2;
+							}
+						}
+					}
+				}
+			}
+		}
+
 		$cuenta = array();
 		$fechasParaBorrar = array();
 		foreach ($fechas['total'] ?? [] as $key => $fecha) {

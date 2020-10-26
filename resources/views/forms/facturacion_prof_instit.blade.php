@@ -21,7 +21,7 @@
 					<div class='salto'></div>
 					<div id="d_periodo">
 						<label for="periodo1">PERIODO:</label>
-						<input type="text" name="periodo1" class="d_periodo1" maxlength="10">
+						<input type="text" name="periodo1" class="d_periodo1" maxlength="10" value="{{Auth::user()->mes . ' / ' . Auth::user()->anio}}">
 					<div class='salto'></div>
 				</div>
 

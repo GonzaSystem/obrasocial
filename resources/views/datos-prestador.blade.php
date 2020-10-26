@@ -372,11 +372,11 @@ MODAL AGREGAR PRESTACION
 
               <div class="input-group col-lg-12">
 
-                <div class="col-lg-6">
+                <div class="col-lg-6" style="margin-top: 10px;">
 
                       <label for="editarNumeroPrestador">Editar número de Prestador</label>
 
-                      <input type="text" class="form-control input-lg" name="editarNumeroPrestador" id="editarNumeroPrestador" placeholder="Ingresar numero" required>
+                      <input type="text" class="form-control" name="editarNumeroPrestador" id="editarNumeroPrestador" placeholder="Ingresar numero" required>
 
                 </div>
 
