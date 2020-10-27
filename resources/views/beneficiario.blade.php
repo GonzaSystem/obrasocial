@@ -483,7 +483,8 @@ MODAL AGREGAR BENEFICIARIO
 
 						</textarea>
 					</div>
-                </div>
+				</div>
+			</div>
 			</div>
 		  
         </div>
