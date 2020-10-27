@@ -45,7 +45,7 @@
 
       <div class="box-body">
 
-       <table class="table table-bordered table-striped dt-responsive tablas text-center">
+       <table class="table table-bordered table-striped dt-responsive tablaFeriados text-center w-100">
 
         <thead>
 
@@ -58,25 +58,23 @@
         </thead>
 
         <tbody>
-
-          @foreach ($feriados as $key => $feriado)
-
-          <tr>
-            <td>{{ ($key+1) }}</td>
-            <td>{{ $feriado->fecha }}</td>
-            
-            @if(Auth::user()->role == "Administrador")
-              <td>
-                <div class="btn-group">
-                  <button class="btn btn-warning btnEditarFeriado" data-toggle="modal" data-target="#modalEditarFeriado" data-id="{{$feriado->id}}"><i class="fa fa-pencil"></i></button>
-                  <button class="btn btn-danger btnEliminarFeriado" data-id="{{$feriado->id}}"><i class="fa fa-times"></i></button>
-                </div>
-              </td>
-            @endif
-          </tr>
-
-          @endforeach
-
+			@foreach ($feriados as $key => $feriado)
+				@php
+					$filterFeriado = explode('/', $feriado->fecha);
+				@endphp
+				<tr>
+					<td>{{ ($key+1) }}</td>
+					<td><span style="display:none;">{{$filterFeriado[2].$filterFeriado[1].$filterFeriado[0]}}</span>{{ $feriado->fecha }}</td>
+					@if(Auth::user()->role == "Administrador")
+						<td>
+						<div class="btn-group">
+							<button class="btn btn-warning btnEditarFeriado" data-toggle="modal" data-target="#modalEditarFeriado" data-id="{{$feriado->id}}"><i class="fa fa-pencil"></i></button>
+							<button class="btn btn-danger btnEliminarFeriado" data-id="{{$feriado->id}}"><i class="fa fa-times"></i></button>
+						</div>
+						</td>
+					@endif
+				</tr>
+			@endforeach
         </tbody>
 
        </table>

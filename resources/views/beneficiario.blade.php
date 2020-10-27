@@ -72,20 +72,33 @@
   </div>
 
     <div class="box">
+		<div class="box-header with-border">
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="row">
+						<div class="col-sm-12 col-md-2">
+							<button class="btn btn-primary mb-2" style="{{Auth::user()->mes != date('m') || Auth::user()->anio != date('Y') ? 'display:none' : ''}}" data-toggle="modal" data-target="#modalAgregarBeneficiario">Agregar Beneficiario</button>
+						</div>
 
-      <div class="box-header with-border">
-
-		<button class="btn btn-primary" style="margin-right: 15px; {{Auth::user()->mes != date('m') || Auth::user()->anio != date('Y') ? 'display:none' : ''}}" data-toggle="modal" data-target="#modalAgregarBeneficiario">
-
-			Agregar Beneficiario
-
-		</button>
-
-		Buscar: <input type="text" id="searchbox" value="{{ Session::has('BeneficiarioNombre') ? Session::get('BeneficiarioNombre') : ''}}"><button type="button" class="btn btn-sm btn-danger" id="btnClearSearchbox" style="margin-left: 5px; margin-bottom: 6px;"><i class="fa fa-times"></i></button>
-
-		<a target="_BLANK" href="{{ route('beneficiario-planilla-facturacion', ['prestador_id' => Auth::user()->id, 'os' => $data['obrasocial'][0]->id, 'mes' => Auth::user()->mes, 'anio' => Auth::user()->anio]) }}" class="btn btn-success" style="float: right;">Planilla de Facturacion</a>
-
-      </div>
+						<div class="col-sm-12 col-md-4 col-lg-3 mb-2">
+							<div class="form-search">
+								<div class="input-group">
+									<div class="input-group">
+										<input type="text" id="searchbox" class="form-control" value="{{ Session::has('BeneficiarioNombre') ? Session::get('BeneficiarioNombre') : ''}}" placeholder="Buscar Beneficiario">
+										<span class="input-group-btn">
+											<button type="button" class="btn btn-danger btn-search" id="btnClearSearchbox"><b>X</b></button>
+										</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="float-left float-lg-right pl-4 pl-lg-0 pr-0 pr-lg-4">
+							<a target="_BLANK" href="{{ route('beneficiario-planilla-facturacion', ['prestador_id' => Auth::user()->id, 'os' => $data['obrasocial'][0]->id, 'mes' => Auth::user()->mes, 'anio' => Auth::user()->anio]) }}" class="btn btn-success" >Planilla de Facturacion</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 
       <div class="box-body">
 
@@ -279,336 +292,200 @@ MODAL AGREGAR BENEFICIARIO
         ======================================-->
 
         <div class="modal-body">
-
           <div class="box-body">
-
             <!-- Entrada para Obra Social-->
-            <div class="form-group col-lg-12">
-
-              <div class="input-group col-lg-12">
-
-                <div class="col-lg-12">
-
+            <div class="form-group col-sm-12">
+              <div class="input-group w-100">
+                <div class="col-sm-12">
                     <label for="obraSocial">Obra Social</label>
-
                     <select type="text" class="form-control input-lg" name="obraSocial" readonly>
-
                       @foreach($data['obrasocial'] as $key=>$os)
-
                           <option value="{{ $os->id }}">{{ $os->nombre }}</option>
-
                       @endforeach
-
                     </select>
-
                 </div>
-
               </div>
-
             </div>
 
               <!-- ENTRADA PARA NOMBRE Y APELLIDO -->
-
-              <div class="form-group col-lg-12">
-
-                  <div class="input-group col-lg-12">
-
-                      <div class="col-lg-12">
-
+              <div class="form-group col-sm-12">
+                  <div class="input-group w-100">
+                      <div class="col-sm-12">
                           <label for="nombre">Nombre y Apellido</label>
-
                           <input type="text" class="form-control input-lg" name="nombre" placeholder="Ingresar nombre y Apellido">
-
                       </div>
-
-
                   </div>
-
               </div>
 
-              <div class="form-group col-lg-12">
-
-                  <div class="input-group col-lg-12">
-
-                      <div class="col-lg-6">
-
+              <div class="form-group col-lg-12 mb-0">
+                  <div class="input-group w-100">
+                      <div class="col-sm-12 col-lg-6">
                           <label for="numero_afiliado">Numero de Beneficiario</label>
-
-                          <input type="text" class="form-control input-lg" name="numero_afiliado" placeholder="Ingresar N° de Beneficiario">
-
+                          <input type="text" class="form-control input-lg mb-4" name="numero_afiliado" placeholder="Ingresar N° de Beneficiario">
                       </div>
 
-                      <div class="col-lg-6">
-
+                      <div class="col-sm-12 col-lg-6">
                           <label for="codigo_seguridad">Código de Seguridad</label>
-
-                          <input type="text" class="form-control input-lg" name="codigo_seguridad" placeholder="Ingresar Código de Seguridad">
-
+                          <input type="text" class="form-control input-lg mb-4" name="codigo_seguridad" placeholder="Ingresar Código de Seguridad">
                       </div>
-
                   </div>
-
               </div>
 
 
             <!-- Entrada para Prestación -->
-            <div class="form-group col-lg-12">
+            <div class="form-group col-lg-12 mb-0">
+				<div class="input-group w-100">
+					<div class="col-sm-12 col-lg-6">
+						<label for="obraSocial">Prestación</label>
+						<select type="text" class="form-control input-lg mb-4" name="prestacion" required>
+							<option value="">Seleccionar...</option>
+							@foreach ($data['prestacion'] as $presta)
+							<option value="{{ $presta->id }}">{{ $presta->prestacion[0]->codigo_modulo . ' - ' . $presta->prestacion[0]->nombre }}</option>
+							@endforeach
+						</select>
+					</div>
 
-              <div class="input-group col-lg-12">
-
-                <div class="col-lg-6">
-
-                    <label for="obraSocial">Prestación</label>
-
-                    <select type="text" class="form-control input-lg" name="prestacion" required>
-
-                      <option value="">Seleccionar...</option>
-
-                      @foreach ($data['prestacion'] as $presta)
-                        <option value="{{ $presta->id }}">{{ $presta->prestacion[0]->codigo_modulo . ' - ' . $presta->prestacion[0]->nombre }}</option>
-                      @endforeach
-
-                    </select>
-
-                </div>
-
-                    <div class="col-lg-6">
-
-                        <label for="cantidad_solicitada">Cantidad Solicitada</label>
-
-                        <input type="text" class="form-control input-lg" name="cantidad_solicitada">                    
-                    </div>
-
-              </div>
-
+					<div class="col-sm-12 col-lg-6">
+						<label for="cantidad_solicitada">Cantidad Solicitada</label>
+						<input type="text" class="form-control input-lg mb-4" name="cantidad_solicitada" placeholder="Ingresar Cantidad Solicitada">                    
+					</div>
+				</div>
             </div>
 
-              <!--Entrada para DNI y CUIT -->
+			<!--Entrada para DNI y CUIT -->
+			<div class="form-group col-lg-12 mb-0">
+				<div class="input-group w-100">
+					<div class="col-sm-12 col-lg-6">
+						<label for="dni">DNI</label>
+						<input type="text" class="form-control input-lg mb-4" name="dni" placeholder="Ingresar DNI">
+					</div>
 
-              <div class="form-group col-lg-12">
+					<div class="col-sm-12 col-lg-6">
+						<label for="cuit">CUIT</label>
+						<input type="text" class="form-control input-lg mb-4" name="cuit" placeholder="Ingresar CUIT">
+					</div>
+				</div>
+			</div>
 
-                <div class="input-group col-lg-12">
 
-                  <div class="col-lg-6">
+			<!--Entrada para correo y telefono -->
+			<div class="form-group col-lg-12 mb-0">
+				<div class="input-group w-100">
+					<div class="col-sm-12 col-lg-6">
+						<label for="telefono">Telefono</label>
+						<input type="text" class="form-control input-lg mb-4" name="telefono" placeholder="Ingresar Telefono">
+					</div>
 
-                        <label for="dni">DNI</label>
+					<div class="col-sm-12 col-lg-6">
+						<label for="correo">Correo</label>
+						<input type="email" class="form-control input-lg mb-4" name="correo" placeholder="Ingresar correo">
+					</div>
+				</div>
+			</div>
 
-                        <input type="text" class="form-control input-lg" name="dni" placeholder="Ingresar DNI">
+			<!--Entrada para direccion y localidad -->
+			<div class="form-group col-lg-12 mb-0">
+				<div class="input-group w-100">
+					<div class="col-sm-12 col-lg-6">
+						<label for="direccion">Dirección del Beneficiario</label>
+						<input type="text" class="form-control input-lg mb-4" name="direccion" placeholder="Ingresar Dirección">
+					</div>
 
-                  </div>
+					<div class="col-sm-12 col-lg-6">
+						<label for="localidad">Localidad del Beneficiario</label>
+						<input type="text" class="form-control input-lg mb-4" name="localidad" placeholder="Ingresar Localidad">
+					</div>
+				</div>
+			</div>
 
-                  <div class="col-lg-6">
+            <!--Entrada para Dir. Prestacion y Localidad Prestacion -->
+			<div class="form-group col-lg-12 mb-0">
+				<div class="input-group w-100">
+					<div class="col-sm-12 col-lg-6">
+						<label for="codigoPostal">Dirección de Prestación</label>
+						<input type="text" class="form-control input-lg mb-4" name="direccionPrestacion" placeholder="Ingresar Dirección de Prestación">
+					</div>
 
-                        <label for="cuit">CUIT</label>
+					<div class="col-sm-12 col-lg-6">
+						<label for="codigoPostal">Localidad de Prestación</label>
+						<input type="text" class="form-control input-lg mb-4" name="localidadPrestacion" placeholder="Ingresar Localidad de Prestación">
+					</div>
+				</div>
+			</div>
 
-                        <input type="text" class="form-control input-lg" name="cuit" placeholder="Ingresar CUIT">
 
-                  </div>
+			@if(Auth::user()->role == 'Traslado')
+				<!--Entrada para KM ida y vuelta -->
+				<div class="form-group col-lg-12 mb-0">
+					<div class="input-group w-100">
+						<div class="col-sm-12 col-lg-6">
+							<label for="kmIda">KM de ida</label>
+							<input type="number" class="form-control input-lg mb-4" name="kmIda" placeholder="Ingresar KM de ida">
+						</div>
 
+						<div class="col-sm-12 col-lg-6">
+							<label for="kmVuelta">KM de vuelta</label>
+							<input type="text" class="form-control input-lg mb-4" name="kmVuelta" placeholder="Ingresar KM de Vuelta">
+						</div>
+					</div>
+				</div>
+
+				<!--Entrada para Viajes de ida y vuelta -->
+				<div class="form-group col-lg-12 mb-0">
+					<div class="input-group w-100">
+						<div class="col-sm-12 col-lg-6">
+							<label for="viajesIda">Viajes de ida</label>
+							<input type="text" class="form-control input-lg mb-4" name="viajesIda" placeholder="Ingresar Viajes de ida">
+						</div>
+
+						<div class="col-sm-12 col-lg-6">
+							<label for="viajesVuelta">Viajes de vuelta</label>
+							<input type="number" class="form-control input-lg mb-4" name="viajesVuelta" placeholder="Ingresar Viajes de vuelta">
+						</div>
+					</div>
+				</div>
+			@endif
+
+			<!-- Entrada para Turno y Dependencia -->
+			<div class="form-group col-lg-12 mb-0">
+				<div class="input-group w-100">
+					<div class="col-sm-6">
+						<label for="turno">Turno</label>
+						<select type="text" class="form-control input-lg mb-4" name="turno">
+								<option value="Mañana">Mañana</option>
+								<option value="Tarde">Tarde</option>
+								<option value="Noche">Noche</option>
+						</select>
+					</div>
+				</div>
+			</div>
+
+			@if(Auth::user()->role == 'Traslado')
+				<div class="form-group col-lg-12 mb-0">
+					<div class="input-group w-100">
+							<div class="col-sm-6">
+								<label for="dependencia">Dependencia</label>
+								<select type="text" class="form-control input-lg" name="dependencia" placeholder="Ingresar Dependencia">
+									<option>Seleccionar...</option>
+									<option value="Si">Si</option>
+									<option value="No">No</option>
+								</select>
+							</div>
+					</div>
+				</div>
+			@endif
+
+			<!-- Entrada para notas -->
+			<div class="form-group col-sm-12">
+                <div class="input-group w-100">
+					<div class="col-sm-12">
+						<textarea class="form-control" type="text" name="notas" maxlength="255" rows="5" cols="130" placeholder="Notas..">
+
+						</textarea>
+					</div>
                 </div>
-
-              </div>
-
-
-              <!--Entrada para correo y telefono -->
-
-                <div class="form-group col-lg-12">
-
-                <div class="input-group col-lg-12">
-
-                  <div class="col-lg-6">
-
-                        <label for="telefono">Telefono</label>
-
-                        <input type="text" class="form-control input-lg" name="telefono" placeholder="Ingresar Telefono">
-
-                  </div>
-
-                  <div class="col-lg-6">
-
-                        <label for="correo">Correo</label>
-
-                        <input type="email" class="form-control input-lg" name="correo" placeholder="Ingresar correo">
-
-                  </div>
-
-                </div>
-
-              </div>
-
-              <!--Entrada para direccion y localidad -->
-
-              <div class="form-group col-lg-12">
-
-                <div class="input-group col-lg-12">
-
-                  <div class="col-lg-6">
-
-                        <label for="direccion">Dirección del Beneficiario</label>
-
-                        <input type="text" class="form-control input-lg" name="direccion" placeholder="Ingresar Dirección">
-
-                  </div>
-
-                  <div class="col-lg-6">
-
-                        <label for="localidad">Localidad del Beneficiario</label>
-
-                        <input type="text" class="form-control input-lg" name="localidad" placeholder="Ingresar Localidad">
-
-                  </div>
-
-                </div>
-
-              </div>
-
-               <!--Entrada para Dir. Prestacion y Localidad Prestacion -->
-
-              <div class="form-group col-lg-12">
-
-                <div class="input-group col-lg-12">
-
-                  <div class="col-lg-6">
-
-                        <label for="codigoPostal">Dirección de Prestación</label>
-
-                        <input type="text" class="form-control input-lg" name="direccionPrestacion" placeholder="Ingresar Dirección de Prestación">
-
-                  </div>
-
-                  <div class="col-lg-6">
-
-                        <label for="codigoPostal">Localidad de Prestación</label>
-
-                        <input type="text" class="form-control input-lg" name="localidadPrestacion" placeholder="Ingresar Localidad de Prestación">
-
-                  </div>
-
-
-                </div>
-
-              </div>
-
-
-              @if(Auth::user()->role == 'Traslado')
-
-              <!--Entrada para KM ida y vuelta -->
-
-              <div class="form-group col-lg-12">
-
-                <div class="input-group col-lg-12">
-
-                  <div class="col-lg-6">
-
-                        <label for="kmIda">KM de ida</label>
-
-                        <input type="number" class="form-control input-lg" name="kmIda" placeholder="Ingresar KM de ida">
-
-                  </div>
-
-                  <div class="col-lg-6">
-
-                        <label for="kmVuelta">KM de vuelta</label>
-
-                        <input type="text" class="form-control input-lg" name="kmVuelta" placeholder="Ingresar KM de Vuelta">
-
-                  </div>
-
-                </div>
-
-              </div>
-
-              <!--Entrada para Viajes de ida y vuelta -->
-
-              <div class="form-group col-lg-12">
-
-                <div class="input-group col-lg-12">
-
-                  <div class="col-lg-6">
-
-                        <label for="viajesIda">Viajes de ida</label>
-
-                        <input type="text" class="form-control input-lg" name="viajesIda" placeholder="Ingresar Viajes de ida">
-
-                  </div>
-
-                  <div class="col-lg-6">
-
-                        <label for="viajesVuelta">Viajes de vuelta</label>
-
-                        <input type="number" class="form-control input-lg" name="viajesVuelta" placeholder="Ingresar Viajes de vuelta">
-
-                  </div>
-
-                </div>
-
-              </div>
-
-              @endif
-
-              <!-- Entrada para Turno y Dependencia -->
-
-              <div class="form-group col-lg-12">
-
-                <div class="input-group col-lg-12">
-
-                  <div class="col-lg-6">
-
-                        <label for="turno">Turno</label>
-
-                        <select type="text" class="form-control input-lg" name="turno">
-                              <option value="Mañana">Mañana</option>
-                              <option value="Tarde">Tarde</option>
-                              <option value="Noche">Noche</option>
-                        </select>
-
-                  </div>
-
-                </div>
-
-              </div>
-
-
-
-                @if(Auth::user()->role == 'Traslado')
-
-                <div class="form-group col-lg-12">
-
-                    <div class="input-group col-lg-12">
-
-                          <div class="col-lg-6">
-
-                                <label for="dependencia">Dependencia</label>
-
-                                <select type="text" class="form-control input-lg" name="dependencia" placeholder="Ingresar Dependencia">
-                                    <option>Seleccionar...</option>
-                                    <option value="Si">Si</option>
-                                    <option value="No">No</option>
-                                </select>
-
-                          </div>
-
-                    </div>
-
-                </div>
-
-                @endif
-
-              <!-- Entrada para notas -->
-               <div class="form-group col-lg-12">
-
-                <div class="input-group col-lg-12">
-
-                    <textarea type="text" name="notas" maxlength="255" rows="5" cols="130" placeholder="Notas..">
-
-                    </textarea>
-
-                </div>
-
-              </div>
-
-          </div>
-
+			</div>
+		  
         </div>
 
         <!--=====================================
@@ -1393,58 +1270,36 @@ MODAL CLONAR BENEFICIARIO
                 ======================================-->
 
                 <div class="modal-body">
-
                     <div class="box-body">
-
                         <!-- Entrada para Obra Social-->
-                        <div class="form-group col-lg-12">
-
-                            <div class="input-group col-lg-12">
-
-                                <div class="col-lg-12">
-
+                        <div class="form-group col-sm-12">
+                            <div class="input-group w-100">
+                                <div class="col-sm-12">
                                     <label for="obraSocial">Obra Social</label>
-
                                     <select type="text" class="form-control input-lg" name="obraSocial" readonly>
-
                                         @foreach($data['obrasocial'] as $key=>$os)
-
                                             <option value="{{ $os->id }}">{{ $os->nombre }}</option>
-
                                         @endforeach
-
                                     </select>
-
                                 </div>
-
                             </div>
-
                         </div>
 
                         <!-- ENTRADA PARA NOMBRE Y APELLIDO -->
-
-                        <div class="form-group col-lg-12">
-
-                            <div class="input-group col-lg-12">
-
-                                <div class="col-lg-12">
-
+                        <div class="form-group col-sm-12">
+                            <div class="input-group w-100">
+                                <div class="col-sm-12">
                                     <label for="nombre">Nombre</label>
-
                                     <input type="text" class="form-control input-lg" id="nombre_clon" name="nombre" placeholder="Ingresar nombre">
-
                                 </div>
-
-
                             </div>
-
                         </div>
 
                         <div class="form-group col-lg-12">
 
-                            <div class="input-group col-lg-12">
+                            <div class="input-group w-100">
 
-                                <div class="col-lg-6">
+                                <div class="col-sm-12 col-lg-6">
 
                                     <label for="numero_afiliado">Numero de Beneficiario</label>
 
@@ -1452,7 +1307,7 @@ MODAL CLONAR BENEFICIARIO
 
                                 </div>
 
-                                <div class="col-lg-6">
+                                <div class="col-sm-12 col-lg-6">
 
                                     <label for="codigo_seguridad">Código de Seguridad</label>
 

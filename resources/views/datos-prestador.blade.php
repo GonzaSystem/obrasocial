@@ -275,38 +275,24 @@ MODAL AGREGAR PRESTACION
 
                 @endif
 
+
+				<div class="col-lg-6" style="margin-top: 15px">			
+					<label for="quitar_feriado">Quitar feriados por defecto?</label>
+					<select type="text" class="form-control" id="quitar_feriado" name="quitar_feriado">
+						<option value="">Seleccionar...</option>
+						<option value="Si">Si</option>
+						<option value="No">No</option>
+					</select>
+				</div>
                     
-                  <div class="col-lg-6" style="margin-top: 15px">
-
-                      <label for="mover_dias">Mover Dias?</label>
-
-                      <select type="text" class="form-control" id="mover_dias" name="mover_dias">
-
-                        <option value="">Seleccionar...</option>
-
-                        <option value="Individual">Individual</option>
-
-                        <option value="Todos">Todos</option>
-
-                      </select>
-
-                    </div>
-
-                    <div class="col-lg-6" style="margin-top: 15px">
-                      
-                      <label for="quitar_feriado">Quitar feriados por defecto?</label>
-
-                      <select type="text" class="form-control" id="quitar_feriado" name="quitar_feriado">
-
-                        <option value="">Seleccionar...</option>
-
-                        <option value="Si">Si</option>
-
-                        <option value="No">No</option>
-
-                      </select>
-
-                    </div>
+				<div class="col-lg-6" style="margin-top: 15px">
+					<label for="mover_dias">Mover Dias?</label>
+					<select type="text" class="form-control" id="mover_dias" name="mover_dias">
+						<option value="">Seleccionar...</option>
+						<option value="Si">Si</option>
+						<option value="No">No</option>
+					</select>
+				</div>
 
               </div>
 
@@ -395,39 +381,25 @@ MODAL AGREGAR PRESTACION
 
                 <div class="col-lg-12" style="margin-top: 15px" id="editar_valor_profesion_personalizado">
 
-                 </div>
+				 </div>
+				 
+				<div class="col-lg-6" style="margin-top: 15px">    
+					<label for="editar_quitar_feriado">Quitar feriados por defecto?</label>
+					<select type="text" class="form-control" id="editar_quitar_feriado" name="editar_quitar_feriado">
+						<option value="">Seleccionar...</option>
+						<option value="Si">Si</option>
+						<option value="No">No</option>
+					</select>
+				</div>
 
-                  <div class="col-lg-6" style="margin-top: 15px">
-
-                      <label for="editar_mover_dias">Mover Dias?</label>
-
-                      <select type="text" class="form-control" id="editar_mover_dias" name="editar_mover_dias">
-
-                        <option value="">Seleccionar...</option>
-
-                        <option value="Individual">Individual</option>
-
-                        <option value="Todos">Todos</option>
-
-                      </select>
-
-                    </div>
-
-                    <div class="col-lg-6" style="margin-top: 15px">
-                      
-                      <label for="editar_quitar_feriado">Quitar feriados por defecto?</label>
-
-                      <select type="text" class="form-control" id="editar_quitar_feriado" name="editar_quitar_feriado">
-
-                        <option value="">Seleccionar...</option>
-
-                        <option value="Si">Si</option>
-
-                        <option value="No">No</option>
-
-                      </select>
-
-                    </div>
+				<div class="col-lg-6" style="margin-top: 15px">
+					<label for="editar_mover_dias">Mover Dias?</label>
+					<select type="text" class="form-control" id="editar_mover_dias" name="editar_mover_dias">
+						<option value="">Seleccionar...</option>
+						<option value="Si">Si</option>
+						<option value="No">No</option>
+					</select>
+				</div>
 
               </div>
 

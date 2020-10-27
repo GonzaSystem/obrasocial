@@ -2,7 +2,7 @@
 <head>
 <html lang="es">
 <meta charset="utf-8">
-<title>Plantilla</title>
+<title>PLANILLA DE FACTURACIÓN</title>
 <link rel="stylesheet" href="{{ asset('css/estilos.css') }}" media="all">
 <link rel="stylesheet" href="{{ asset('css/estilosi.css') }}" media="print" />
 </head>

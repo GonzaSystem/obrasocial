@@ -402,7 +402,9 @@ class BeneficiarioController extends Controller
 						foreach($fch3 as $k4 => $fch4){
 							if($k4 == $k2){
 								unset($fechas['total'][$k3][$k4]);
-								$fechas['total'][$k3][$k4] = $fch2;
+								if($prestador[0]->mover_dias == "Si"){
+									$fechas['total'][$k3][$k4] = $fch2;
+								}
 							}
 						}
 					}
