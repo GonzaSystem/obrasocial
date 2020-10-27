@@ -485,9 +485,9 @@ MODAL AGREGAR BENEFICIARIO
 					</div>
 				</div>
 			</div>
-			</div>
+		</div>
 		  
-        </div>
+		</div>
 
         <!--=====================================
         PIE DEL MODAL
