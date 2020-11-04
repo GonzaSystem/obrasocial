@@ -4,7 +4,7 @@ $(document).ready(function(){
     var table = $('.tablaBeneficiario').DataTable({
       "deferRender": true,
       "retrieve": true,
-      "order": [1, 'asc'],
+      "order": [2, 'asc'],
       "pageLength": 50,
       "processing": true,
          "language": {

@@ -92,9 +92,14 @@
 								</div>
 							</div>
 						</div>
-						<div class="float-left float-lg-right pl-4 pl-lg-0 pr-0 pr-lg-4">
-							<a target="_BLANK" href="{{ route('beneficiario-planilla-facturacion', ['prestador_id' => Auth::user()->id, 'os' => $data['obrasocial'][0]->id, 'mes' => Auth::user()->mes, 'anio' => Auth::user()->anio]) }}" class="btn btn-success" >Planilla de Facturacion</a>
-						</div>
+						@if($data['obrasocial'][0]->nombre == "APROSS")
+							<div class="float-left float-lg-right pl-4 pl-lg-0 pr-0 pr-lg-4">
+								@if(Auth::user()->role == 'Traslado')
+									<a target="_BLANK" href="{{ route('beneficiario-planilla-asistencia', ['prestador_id' => Auth::user()->id, 'os' => $data['obrasocial'][0]->id, 'mes' => Auth::user()->mes, 'anio' => Auth::user()->anio]) }}" class="btn btn-primary" >Planilla de Asistencia</a>
+								@endif
+								<a target="_BLANK" href="{{ route('beneficiario-planilla-facturacion', ['prestador_id' => Auth::user()->id, 'os' => $data['obrasocial'][0]->id, 'mes' => Auth::user()->mes, 'anio' => Auth::user()->anio]) }}" class="btn btn-success" >Planilla de Facturacion</a>
+							</div>
+						@endif
 					</div>
 				</div>
 			</div>
@@ -103,77 +108,71 @@
       <div class="box-body">
 
       @if($data['obrasocial'][0]->nombre == "APROSS")
+			<table class="table table-bordered table-striped dt-responsive tablaBeneficiario text-center" style="width: 100% !important;">
+				<thead>
+					<tr>
+						@if(Auth::user()->role == 'Traslado')
+							<th>Cons.</th>
+						@endif
+						<th style="text-align: center">Clonar</th>
+						<th>Apellido y Nombre</th>
+						<th style="text-align: center">N° de Beneficiario</th>
+						<th style="text-align: center">Cod. Seguridad</th>
+						<th style="text-align: center">Cod. Modulo</th>
+						<th style="text-align: center; width: 30px">Cant. Solicitada</th>
+						<th>Observaciones</th>
+						<th style="text-align: center">Cod. Traditum</th>
+						<th>Acciones</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach($data['beneficiarios'] as $beneficiario)
+						<?php 
+							$codigo_prestacion = $beneficiario->prestacion[0]->codigo_modulo;
+							$planilla = $beneficiario->prestacion[0]->planilla;
+							$os_id = $beneficiario->os_id;
+							$prestador_id = $beneficiario->id;
+						?>
+						@foreach($beneficiario->beneficiario as $key => $benefval)
+							<tr class="beneficiarioBold" idBenef="{{$benefval->id}}" style="{{ (Session::has('ModificacionBeneficiario') && Session::get('ModificacionBeneficiario') == $benefval->id) ? 'font-weight:bold;' : ''}}">
+								@if(Auth::user()->role == 'Traslado')
+									<td>											
+										<a target="_BLANK" href="{{ route('formulario-beneficiario', ['id' => $benefval->id, 'prestador_id' => $prestador_id ,'planilla' => $planilla, 'mes' => Auth::user()->mes, 'anio' => Auth::user()->anio]) }}" class="btn btn-primary" style="color: white; background-color: #605CA8"><i class="fa fa-address-card"></i></a>
+									</td>
+								@endif
+								<td style="text-align: center"> <button class="btn btn-success btnClonarBeneficiario" data-toggle="modal" data-target="#modalClonarBeneficiario" idBenef="{{ $benefval->id }}"><i class="fa fa-users"></i></button></td>
+									@if($data['obrasocial'][0]->nombre == "OSECAC")
+										<td style="text-align: center"><a href="{{ route('beneficiario-presupuesto', ['prestador_id' => $benefval->prestador_id, 'beneficiario_id' => $benefval->id]) }}" target="_BLANK"><button class="btn btn-success">8.4</button></a></td>
+									@endif
+								<td>{{ $benefval->nombre . ' ' . $benefval->apellido }}</td>
+								<td style="text-align: center">{{ $benefval->numero_afiliado }}</td>
+								<td style="text-align: center">{{ $benefval->codigo_seguridad }}</td>
+								<td style="text-align: center">{{ $codigo_prestacion }}</td>
+								<td style="text-align: center">{{ $benefval->cantidad_solicitada }}</td>
+								<td>{{ substr($benefval->notas,0,10).'...' }}</td>
+								<td style="text-align: center;">
+									<input {{Auth::user()->mes != date('m') || Auth::user()->anio != date('Y') ? 'disabled' : ''}} type="text" name="traditum" id="traditum" beneficiario-id="{{$benefval->id}}" traditum-id="{{ $data['traditums'][$benefval->id][0]['id'] }}" value="{{ $data['traditums'][$benefval->id][0]['codigo']}}" style="border: none; text-align: center; background: transparent;">
+								</td>
+								<td style="width: 200px">
+									<div class="btn-group">		
+										@if(Auth::user()->role != 'Traslado')
+											<a target="_BLANK" href="{{ route('formulario-beneficiario', ['id' => $benefval->id, 'prestador_id' => $prestador_id ,'planilla' => $planilla, 'mes' => Auth::user()->mes, 'anio' => Auth::user()->anio]) }}" class="btn btn-primary" style="color: white; background-color: #605CA8"><i class="fa fa-address-card"></i></a>
+										@endif
 
-         <table class="table table-bordered table-striped dt-responsive tablaBeneficiario" style="width: 100% !important;">
+										<button class="btn btn-primary btnHorarioBeneficiario" data-toggle="modal" data-target="#modalHorarioBeneficiario" idBenef="{{ $benefval->id }}" cuenta-tope="{{ $data['fechas']['tope'][$benefval->id][$benefval->id] }}" cuenta-original="{{ count($data['fechas']['total'][$benefval->id])}}" cuenta-agregados="{{ $data['fechas']['total_agregado'][$benefval->id] }}"><i class="fa fa-clock-o"></i></button>
 
-          <thead>
+										<button class="btn btn-warning btnEditarBeneficiario" data-toggle="modal" data-target="#modalEditarBeneficiario" style="{{Auth::user()->mes != date('m') || Auth::user()->anio != date('Y') ? 'display:none' : ''}}" idBenef="{{ $benefval->id }}"><i class="fa fa-pencil"></i></button>
 
-           <tr>
+										<button class="btn btn-danger btnEliminarBeneficiario" idOs="{{ $os_id }}" idBenef="{{ $benefval->id }}"><i class="fa fa-trash"></i></button>
 
-             <th style="text-align: center">Clonar</th>
-             <th>Apellido y Nombre</th>
-             <th style="text-align: center">N° de Beneficiario</th>
-             <th style="text-align: center">Cod. Seguridad</th>
-             <th style="text-align: center">Cod. Modulo</th>
-             <th style="text-align: center; width: 30px">Cant. Solicitada</th>
-             <th>Observaciones</th>
-             <th style="text-align: center">Cod. Traditum</th>
-             <th>Acciones</th>
-
-           </tr>
-
-          </thead>
-
-          <tbody>
-
-          @foreach($data['beneficiarios'] as $beneficiario)
-
-              <?php 
-                  $codigo_prestacion = $beneficiario->prestacion[0]->codigo_modulo;
-                  $planilla = $beneficiario->prestacion[0]->planilla;
-                  $os_id = $beneficiario->os_id;
-                  $prestador_id = $beneficiario->id;
-              ?>
-
-			@foreach($beneficiario->beneficiario as $key => $benefval)
-			
-            <tr class="beneficiarioBold" idBenef="{{$benefval->id}}" style="{{ (Session::has('ModificacionBeneficiario') && Session::get('ModificacionBeneficiario') == $benefval->id) ? 'font-weight:bold;' : ''}}">
-				<td style="text-align: center"> <button class="btn btn-success btnClonarBeneficiario" data-toggle="modal" data-target="#modalClonarBeneficiario" idBenef="{{ $benefval->id }}"><i class="fa fa-users"></i></button></td>
-					@if($data['obrasocial'][0]->nombre == "OSECAC")
-						<td style="text-align: center"><a href="{{ route('beneficiario-presupuesto', ['prestador_id' => $benefval->prestador_id, 'beneficiario_id' => $benefval->id]) }}" target="_BLANK"><button class="btn btn-success">8.4</button></a></td>
-					@endif
-				<td>{{ $benefval->nombre . ' ' . $benefval->apellido }}</td>
-				<td style="text-align: center">{{ $benefval->numero_afiliado }}</td>
-				<td style="text-align: center">{{ $benefval->codigo_seguridad }}</td>
-				<td style="text-align: center">{{ $codigo_prestacion }}</td>
-				<td style="text-align: center">{{ $benefval->cantidad_solicitada }}</td>
-				<td>{{ substr($benefval->notas,0,10).'...' }}</td>
-				<td style="text-align: center;">
-					<input {{Auth::user()->mes != date('m') || Auth::user()->anio != date('Y') ? 'disabled' : ''}} type="text" name="traditum" id="traditum" beneficiario-id="{{$benefval->id}}" traditum-id="{{ $data['traditums'][$benefval->id][0]['id'] }}" value="{{ $data['traditums'][$benefval->id][0]['codigo']}}" style="border: none; text-align: center; background: transparent;">
-				</td>
-				<td style="width: 200px">
-					<div class="btn-group">		
-						<a target="_BLANK" href="{{ route('formulario-beneficiario', ['id' => $benefval->id, 'prestador_id' => $prestador_id ,'planilla' => $planilla, 'mes' => Auth::user()->mes, 'anio' => Auth::user()->anio]) }}" class="btn btn-primary" style="color: white; background-color: #605CA8"><i class="fa fa-address-card"></i></a>
-						
-						<button class="btn btn-primary btnHorarioBeneficiario" data-toggle="modal" data-target="#modalHorarioBeneficiario" idBenef="{{ $benefval->id }}" cuenta-tope="{{ $data['fechas']['tope'][$benefval->id][$benefval->id] }}" cuenta-original="{{ count($data['fechas']['total'][$benefval->id])}}" cuenta-agregados="{{ $data['fechas']['total_agregado'][$benefval->id] }}"><i class="fa fa-clock-o"></i></button>
-
-						<button class="btn btn-warning btnEditarBeneficiario" data-toggle="modal" data-target="#modalEditarBeneficiario" style="{{Auth::user()->mes != date('m') || Auth::user()->anio != date('Y') ? 'display:none' : ''}}" idBenef="{{ $benefval->id }}"><i class="fa fa-pencil"></i></button>
-
-						<button class="btn btn-danger btnEliminarBeneficiario" idOs="{{ $os_id }}" idBenef="{{ $benefval->id }}"><i class="fa fa-trash"></i></button>
-
-						<button type="button" class="btn {{ $benefval->activo == 1 ? 'btn-success' : 'btn-secondary' }}"><input type="checkbox" class="btnEstadoBeneficiario" name="btnActivarUsuario" {{ $benefval->activo == 1 ? 'checked' : '' }} value="{{ $benefval->activo }}" idBenef="{{ $benefval->id }}" idOs={{ $os_id }} style="margin-top: 1px"></button>
-					</div>
-				</td>
-            </tr>
-
-            @endforeach
-
-          @endforeach
-
-          </tbody>
-
+										<button type="button" class="btn {{ $benefval->activo == 1 ? 'btn-success' : 'btn-secondary' }}"><input type="checkbox" class="btnEstadoBeneficiario" name="btnActivarUsuario" {{ $benefval->activo == 1 ? 'checked' : '' }} value="{{ $benefval->activo }}" idBenef="{{ $benefval->id }}" idOs={{ $os_id }} style="margin-top: 1px"></button>
+									</div>
+								</td>
+							</tr>
+						@endforeach
+					@endforeach
+				</tbody>
          </table>
-
 
        @else
 
