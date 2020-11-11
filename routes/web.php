@@ -55,7 +55,8 @@ Route::post('/beneficiario/inasistenciasBeneficiario', 'InasistenciaController@s
 Route::post('/beneficiario/inasistencias/delete', 'InasistenciaController@destroy')->name('beneficiario-inasistencias-destroy');
 Route::post('/beneficiario/tope', 'BeneficiarioController@tope')->name('beneficiario-tope');
 Route::get('/beneficiario/planilla/{prestador_id}/{os}/{mes?}/{anio?}', 'BeneficiarioController@planillaFacturacion')->name('beneficiario-planilla-facturacion');
-Route::get('/beneficiario/planilla/asistencia/{prestador_id}/{os}/{mes?}/{anio?}', 'BeneficiarioController@planillaAsistencia')->name('beneficiario-planilla-asistencia');
+Route::get('/beneficiario/planilla/traslado/{prestador_id}/{os}/{mes?}/{anio?}', 'BeneficiarioController@planillaFacturacionTraslado')->name('beneficiario-planilla-facturacion-traslado');
+Route::get('/beneficiario/planilla/asistencia/{prestador_id}/{os}/{mes?}/{anio?}', 'BeneficiarioController@planillaAsistenciaTraslado')->name('beneficiario-planilla-asistencia');
 
 //Prestaciones
 Route::get('/prestaciones', 'ObraSocialController@lista_prestaciones')->name('prestaciones');

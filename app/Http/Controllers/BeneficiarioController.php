@@ -11,6 +11,7 @@ use App\ObraSocial;
 use App\Sesion;
 use App\Traditum;
 use App\Feriado;
+use App\Prestacion;
 use App\Helpers\OSUtil;
 use Auth;
 
@@ -351,27 +352,6 @@ class BeneficiarioController extends Controller
         if($anio == null){
             $anio = date('Y');           
         }
-
-        // $beneficiario = Beneficiario::where('id', $beneficiario_id)->with('prestador')->get();
-        // $prestador = Prestador::where('id', $prestador_id)->with('prestacion')->get();
-        // $sesiones = Sesion::where('beneficiario_id', $beneficiario_id)->get();
-        // $fechas = array();
-        // $fecha_fin = array();
-        // foreach ($sesiones as $key => $sesion) {
-        //     $cant_solicitada = $beneficiario[0]->tope;
-        //     $totalDias = count($sesiones);
-        //     if($cant_solicitada == null){
-        //         $avgSesion = 99999;
-        //     }else{
-        //         $avgSesion = $cant_solicitada / $totalDias; 
-        //     }
-
-
-        //     //Ver de pasar el horario a la funcion
-        //      $fechas[] = $this->cuenta_dias($mes, $anio, $sesion['dia'], $sesion['hora'], $avgSesion, $sesion['tiempo']);
-        // }
-
-
 		
 		// Fechas V2
 		$beneficiario = Beneficiario::where('id', $beneficiario_id)->with(['prestador', 'sesion', 'inasistencia'])->get();
@@ -569,5 +549,209 @@ class BeneficiarioController extends Controller
 			$indice++;
 		}
 		return view('beneficiarios-facturacion', ['informacion' => $beneficiariosAgrupados]);
+	}
+
+	public function planillaFacturacionTraslado($prestador_id, $os, $mes, $anio){
+		$user = Auth::user();
+		$prestador = Prestador::select('id', 'prestacion_id', 'valor_default', 'valor_prestacion', 'numero_prestador')->with(['prestacion', 'beneficiario'])
+		->where('os_id', $os)
+		->where('user_id', $user->id)->get();
+		// Agrupando beneficiarios
+		$beneficiarios = array();
+		foreach($prestador as $k => $v){
+			$codigo_modulo = $v->prestacion[0]->codigo_modulo;
+			foreach($v->beneficiario as $k2 => $v2){
+				$v2->codigo_prestador = $v->numero_prestador;
+				$v2->codigo_modulo = $codigo_modulo;
+				$v2->traditum = Traditum::select('codigo')->where('beneficiario_id', $v2->id)->where('mes', $mes)->where('anio', $anio)->first();		
+				$beneficiarios[] = $v2;
+				if($v->valor_default == 'T'){
+					$v2->importe_unitario = $v->prestacion[0]->valor_modulo;
+				}else{
+					$v2->importe_unitario = $v->valor_prestacion;
+				}
+				$v2->importe_dependencia = Prestacion::select('valor_modulo')->where('codigo_modulo', '6501024')->first();
+			}
+		}
+
+		// Paginando de a 17
+		$grupo = 0;
+		$indice = 0;
+		$beneficiariosAgrupados = array();
+		$sortBenefs = usort($beneficiarios, function($a, $b){
+			return strcmp($a->nombre, $b->nombre);
+		});
+		foreach($beneficiarios as $benef){	
+			if($indice > 18){
+				$grupo++;
+				$indice = 0;
+			}
+
+			// Fechas
+			$inasistencias = $benef->inasistencia;
+			$adicionales = $benef->agregado;
+			$sesiones = $benef->sesion;
+			$cant_solicitada = $benef->tope;
+			$totalDias = count($sesiones);
+			if($prestador[0]->quitar_feriado == 'Si'){
+				$feriados = Feriado::get();
+				$fechas['feriados'][$benef->id] = OSUtil::cuenta_feriados($mes, $anio, $sesiones, $feriados);
+			}
+			$fechas['total'][$benef->id] = OSUtil::cuenta_dias($mes, $anio, $sesiones, $cant_solicitada, $inasistencias);
+			$fechas['inasistencias'][$benef->id] = OSUtil::cuenta_inasistencias($mes, $anio, $sesiones, $inasistencias);
+			$fechas['agregado'][$benef->id] = OSUtil::cuenta_agregado($mes, $anio, $sesiones, $adicionales);
+			$fechas['total_agregado'][$benef->id] = count($benef->agregado);
+			
+
+			// Sumario de fechas
+			if($prestador[0]->quitar_feriado == 'Si'){
+				foreach($fechas['feriados'] ?? [] as $k => $fch){
+					foreach($fch as $k2 => $fch2){
+						foreach($fechas['total'] as $k3 => $fch3){
+							foreach($fch3 as $k4 => $fch4){
+								if($k4 == $k2){
+									unset($fechas['total'][$k3][$k4]);
+									if($prestador[0]->mover_dias == "Si"){
+										$fechas['total'][$k3][$k4] = $fch2;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+
+			$cuenta = array();
+			$fechasParaBorrar = array();
+			foreach ($fechas['total'] ?? [] as $key => $fecha) {
+				$cuenta[$key] = 0;
+				foreach($fecha as $k => $v){
+					$cuenta[$key]++;
+					$fecha_individual = explode('/', $v);
+					foreach($fechas['inasistencias'][$key] as $inasistencia){
+						$inasistencia_individual = explode('/', $inasistencia);	
+						if($fecha_individual[0].'/'.$fecha_individual[1].'/'.$fecha_individual[2] == $inasistencia_individual[0].'/'.$inasistencia_individual[1].'/'.$inasistencia_individual[2]){
+							$cuenta[$key]--;
+							$fechasParaBorrar[$k] = $key; 
+						}
+					}	
+					foreach ($fechas['agregado'] as $keyAgregado => $fechaAgregado) {
+						foreach($fechaAgregado as $diaAgregado => $fechaAgr){
+							$fechas['total'][$keyAgregado][$diaAgregado] = $fechaAgr;
+						}
+					}		
+				}
+				$fechas['tope'][$key] = $cuenta;
+			}
+			foreach ($fechasParaBorrar as $ind => $benefId) {
+				unset($fechas['total'][$benefId][$ind]);
+				ksort($fechas['total'][$benefId]);
+			}
+			$benef->total_fechas = count($fechas['total'][$benef->id]);
+			$benef->km_dia = (($benef->km_ida ?? 0) + ($benef->km_vuelta ?? 0));
+			$benef->km_mes = (($benef->km_ida ?? 0) + ($benef->km_vuelta ?? 0)) * count($benef->sesion);
+			$benef->importe_total = str_replace('.',',', str_replace(',','.',(floatval(str_replace(',', '.', str_replace('.', '', ($benef->importe_dependencia['valor_modulo'] ?? 0)))) + floatval(str_replace(',', '.', str_replace('.', '', ($benef->importe_unitario ?? 0))))) * $benef->total_fechas));
+			$beneficiariosAgrupados[$grupo][] = $benef;
+			$indice++;
+		}
+		return view('beneficiarios-facturacion-traslado', ['informacion' => $beneficiariosAgrupados]);
+	}
+
+	public function planillaAsistenciaTraslado($prestador_id, $os, $mes, $anio){
+		$user = Auth::user();
+		$prestador = Prestador::select('id', 'prestacion_id')->with(['prestacion', 'beneficiario'])
+		->where('os_id', $os)
+		->where('user_id', $user->id)->get();
+
+		// Agrupando beneficiarios
+		$beneficiarios = array();
+		foreach($prestador as $k => $v){
+			$codigo_modulo = $v->prestacion[0]->codigo_modulo;
+			foreach($v->beneficiario as $k2 => $v2){
+				$v2->codigo_modulo = $codigo_modulo;
+				$v2->traditum = Traditum::select('codigo')->where('beneficiario_id', $v2->id)->where('mes', $mes)->where('anio', $anio)->first();		
+				$beneficiarios[] = $v2;
+			}
+		}
+
+		// Paginando de a 6
+		$grupo = 0;
+		$indice = 0;
+		$beneficiariosAgrupados = array();
+		$sortBenefs = usort($beneficiarios, function($a, $b){
+			return strcmp($a->nombre, $b->nombre);
+		});
+		foreach($beneficiarios as $benef){	
+			if($indice > 6){
+				$grupo++;
+				$indice = 0;
+			}
+
+			// Fechas
+			$inasistencias = $benef->inasistencia;
+			$adicionales = $benef->agregado;
+			$sesiones = $benef->sesion;
+			$cant_solicitada = $benef->tope;
+			$totalDias = count($sesiones);
+			if($prestador[0]->quitar_feriado == 'Si'){
+				$feriados = Feriado::get();
+				$fechas['feriados'][$benef->id] = OSUtil::cuenta_feriados($mes, $anio, $sesiones, $feriados);
+			}
+			$fechas['total'][$benef->id] = OSUtil::cuenta_dias($mes, $anio, $sesiones, $cant_solicitada, $inasistencias);
+			$fechas['inasistencias'][$benef->id] = OSUtil::cuenta_inasistencias($mes, $anio, $sesiones, $inasistencias);
+			$fechas['agregado'][$benef->id] = OSUtil::cuenta_agregado($mes, $anio, $sesiones, $adicionales);
+			$fechas['total_agregado'][$benef->id] = count($benef->agregado);
+			
+
+			// Sumario de fechas
+			if($prestador[0]->quitar_feriado == 'Si'){
+				foreach($fechas['feriados'] ?? [] as $k => $fch){
+					foreach($fch as $k2 => $fch2){
+						foreach($fechas['total'] as $k3 => $fch3){
+							foreach($fch3 as $k4 => $fch4){
+								if($k4 == $k2){
+									unset($fechas['total'][$k3][$k4]);
+									if($prestador[0]->mover_dias == "Si"){
+										$fechas['total'][$k3][$k4] = $fch2;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+
+			$cuenta = array();
+			$fechasParaBorrar = array();
+			foreach ($fechas['total'] ?? [] as $key => $fecha) {
+				$cuenta[$key] = 0;
+				foreach($fecha as $k => $v){
+					$cuenta[$key]++;
+					$fecha_individual = explode('/', $v);
+					foreach($fechas['inasistencias'][$key] as $inasistencia){
+						$inasistencia_individual = explode('/', $inasistencia);	
+						if($fecha_individual[0].'/'.$fecha_individual[1].'/'.$fecha_individual[2] == $inasistencia_individual[0].'/'.$inasistencia_individual[1].'/'.$inasistencia_individual[2]){
+							$cuenta[$key]--;
+							$fechasParaBorrar[$k] = $key; 
+						}
+					}	
+					foreach ($fechas['agregado'] as $keyAgregado => $fechaAgregado) {
+						foreach($fechaAgregado as $diaAgregado => $fechaAgr){
+							$fechas['total'][$keyAgregado][$diaAgregado] = $fechaAgr;
+						}
+					}		
+				}
+				$fechas['tope'][$key] = $cuenta;
+			}
+			foreach ($fechasParaBorrar as $ind => $benefId) {
+				unset($fechas['total'][$benefId][$ind]);
+				ksort($fechas['total'][$benefId]);
+			}
+			$benef->total_fechas = count($fechas['total'][$benef->id]);
+			$beneficiariosAgrupados[$grupo][] = $benef;
+			$indice++;
+		}
+		return view('beneficiarios-traslado-asistencia', ['informacion' => $beneficiariosAgrupados]);
+		// return view('beneficiarios-facturacion', ['informacion' => $beneficiariosAgrupados]);
 	}
 }
