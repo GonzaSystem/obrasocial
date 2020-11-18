@@ -8,6 +8,7 @@ use App\User;
 use App\ObraSocial;
 use App\Prestador;
 use Illuminate\Support\Facades\DB;
+use Auth;
 
 class PrestadorController extends Controller
 {
@@ -118,5 +119,26 @@ class PrestadorController extends Controller
     	$prestador->save();
 
     	return redirect()->route('datos-prestador')->with(['message' => 'Los datos de prestador han sido editados correctamente']);
-    }
+	}
+	
+	public function destroy($id)
+	{
+		$prestador = Prestador::where('id', $id)->with('beneficiario')->first();
+		if($prestador->user_id != Auth::user()->id){
+			return back();
+		}else{
+			try {
+				DB::beginTransaction();
+				// Busco beneficiarios para eliminar con sus registros
+				foreach($prestador->beneficiario as $benef){
+					$benef->delete();
+				}
+				$prestador->delete();
+				DB::commit();
+				return redirect()->route('datos-prestador')->with(['message' => 'El prestador ha sido eliminado correctamente'])	;	
+			} catch (\Throwable $th) {
+				return back();
+			}
+		}
+	}
 }

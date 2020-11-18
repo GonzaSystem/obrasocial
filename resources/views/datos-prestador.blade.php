@@ -77,8 +77,9 @@
               <td>
                 <div class="btn-group">
 
-                  <button class="btn btn-warning btnEditarPrestacion" data-toggle="modal" data-target="#modalEditarPrestacion" idPrest="{{ $prestacion->id }}"><i class="fa fa-pencil"></i></button>
-
+				  <button class="btn btn-warning btnEditarPrestacion" data-toggle="modal" data-target="#modalEditarPrestacion" idPrest="{{ $prestacion->id }}"><i class="fa fa-pencil"></i></button>
+				  
+				  <button class="btn btn-danger btnEliminarDatosPrestador" idPrest="{{ $prestacion->id }}"><i class="fa fa-trash"></i></button>
                 </div>
 
               </td>

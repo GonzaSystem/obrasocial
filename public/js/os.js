@@ -208,6 +208,31 @@ $.ajax({
 	});
 });
 
+// Eliminar datos de prestador
+$(document).on("click", ".btnEliminarDatosPrestador", function(){
+  var id = $(this).attr("idPrest");
+
+  swal({
+    title: '¿Está seguro de borrar los datos de prestador?',
+    text: "¡Una vez eliminados, la acción no se podrá deshacer!",
+    type: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      cancelButtonText: 'Cancelar',
+      confirmButtonText: 'Si, borrar prestador!'
+  }).then(function(result){
+
+    if(result.value){
+
+      window.location = "http://localhost/os/public/prestador/destroy/"+id;
+
+    }
+
+  });
+
+});
+
 //Editar Beneficiario
 $(document).on('click', '.btnEditarBeneficiario', function(){
 

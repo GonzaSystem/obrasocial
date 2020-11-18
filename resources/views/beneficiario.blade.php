@@ -148,7 +148,7 @@
 								<td>{{ $benefval->nombre . ' ' . $benefval->apellido }}</td>
 								<td style="text-align: center">{{ $benefval->numero_afiliado }}</td>
 								<td style="text-align: center">{{ $benefval->codigo_seguridad }}</td>
-								<td style="text-align: center">{{ $codigo_prestacion }}</td>
+								<td style="text-align: center">{{ $codigo_prestacion }} {!! $benefval->dependencia == 'Si' ? '<br>6501024' : '' !!}</td>
 								<td style="text-align: center">{{ $benefval->cantidad_solicitada }}</td>
 								<td>{{ substr($benefval->notas,0,10).'...' }}</td>
 								<td style="text-align: center;">

@@ -27,6 +27,7 @@ Route::get('/datos-prestador', 'PrestadorController@data')->name('datos-prestado
 Route::post('/prestador/create', 'PrestadorController@create')->name('prestador-create');
 Route::post('/prestador/update', 'PrestadorController@update')->name('prestador-update');
 Route::post('/prestador/list', 'PrestadorController@list')->name('prestador-list');
+Route::get('/prestador/destroy/{id}', 'PrestadorController@destroy')->name('prestador-destroy');
 
 // Usuario
 Route::post('/usuario/update', 'UserController@update')->name('update-usuario');
