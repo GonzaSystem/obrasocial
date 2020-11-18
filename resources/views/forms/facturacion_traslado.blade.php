@@ -107,9 +107,9 @@
 					<input type="text" name="text3" class="c3" value="{{$benef->km_dia}}">
 					<input type="text" name="text4" class="c4" value="{{$benef->km_mes}}">
 					<input type="text" name="text5" class="c5" value="{{$benef->total_fechas}}">
-					<input type="text" name="text6" class="c6" value="{{$benef->importe_unitario}}">
-					<input type="text" name="text7" class="c7" value="{{$benef->importe_dependencia['valor_modulo']}}">
-					<input type="text" name="text8" class="c8" value="{{$benef->importe_total}}">
+					<input type="text" name="text6" class="c6" value="$ {{$benef->importe_unitario}}">
+					<input type="text" name="text7" class="c7" value="$ {{$benef->importe_dependencia['valor_modulo']}}">
+					<input type="text" name="text8" class="c8" value="$ {{$benef->importe_total}}">
 					<input type="text" name="text9" class="c9" value="{{($benef->traditum['codigo'] ?? '')}}">
 				</div>
 				@php

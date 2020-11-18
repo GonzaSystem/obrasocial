@@ -570,7 +570,12 @@ class BeneficiarioController extends Controller
 				}else{
 					$v2->importe_unitario = $v->valor_prestacion;
 				}
-				$v2->importe_dependencia = Prestacion::select('valor_modulo')->where('codigo_modulo', '6501024')->first();
+				if($v2->dependencia == 'Si'){
+					$v2->importe_dependencia = Prestacion::select('valor_modulo')->where('codigo_modulo', '6501024')->first();
+				}else{
+					$v2->importe_dependencia = array('valor_modulo' => 0);
+				}
+				
 			}
 		}
 
@@ -649,8 +654,8 @@ class BeneficiarioController extends Controller
 			}
 			$benef->total_fechas = count($fechas['total'][$benef->id]);
 			$benef->km_dia = (($benef->km_ida ?? 0) + ($benef->km_vuelta ?? 0));
-			$benef->km_mes = (($benef->km_ida ?? 0) + ($benef->km_vuelta ?? 0)) * count($benef->sesion);
-			$benef->importe_total = str_replace('.',',', str_replace(',','.',(floatval(str_replace(',', '.', str_replace('.', '', ($benef->importe_dependencia['valor_modulo'] ?? 0)))) + floatval(str_replace(',', '.', str_replace('.', '', ($benef->importe_unitario ?? 0))))) * $benef->total_fechas));
+			$benef->km_mes = (($benef->km_ida ?? 0) + ($benef->km_vuelta ?? 0)) * ($benef->total_fechas ?? 0);
+			$benef->importe_total = str_replace('.',',', str_replace(',','.',(floatval(str_replace(',', '.', str_replace('.', '', ($benef->importe_dependencia['valor_modulo'] ?? 0)))) + floatval(str_replace(',', '.', str_replace('.', '', ($benef->importe_unitario ?? 0))))) * $benef->km_mes));
 			$beneficiariosAgrupados[$grupo][] = $benef;
 			$indice++;
 		}
