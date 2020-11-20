@@ -98,6 +98,7 @@
 <div id="datos">
 			@php
 				$indice = 0;
+				$importe_total = 0;
 			@endphp
 			@foreach($beneficiarios as $k => $benef)
 				<div class="fila f{{$k}}">
@@ -114,10 +115,11 @@
 				</div>
 				@php
 					$indice++;
+					$importe_total += $benef->importe_total;
 				@endphp
 			@endforeach
 
-			@for ($i = $indice; $i < 18; $i++)
+			@for ($i = $indice; $i < 19; $i++)
 				<div class="fila f{{$i}}">
 					<input type="text" name="text0" class="c0">
 					<input type="text" name="text1" class="c1">
@@ -131,7 +133,7 @@
 					<input type="text" name="text9" class="c9">
 				</div>
 			@endfor
-		<div id="importe"><input type="text" name="importe" id="importe1">
+		<div id="importe"><input type="text" name="importe" id="importe1" value="$ {{number_format($importe_total, 2, ',', '.')}}">
 		<div id="firma"><input type="text" name="firma" id="firma1">
 	</div>
 </div>
