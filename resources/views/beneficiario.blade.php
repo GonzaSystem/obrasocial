@@ -152,7 +152,7 @@
 								<td style="text-align: center">{{ $benefval->cantidad_solicitada }}</td>
 								<td>{{ substr($benefval->notas,0,10).'...' }}</td>
 								<td style="text-align: center;">
-									<input {{Auth::user()->mes != date('m') || Auth::user()->anio != date('Y') ? 'disabled' : ''}} type="text" name="traditum" id="traditum" beneficiario-id="{{$benefval->id}}" traditum-id="{{ $data['traditums'][$benefval->id][0]['id'] }}" value="{{ $data['traditums'][$benefval->id][0]['codigo']}}" style="border: none; text-align: center; background: transparent;">
+									<input {{Auth::user()->mes != date('m') || Auth::user()->anio != date('Y') ? 'disabled' : ''}} type="text" name="traditum" class="traditum" beneficiario-id="{{$benefval->id}}" traditum-id="{{ $data['traditums'][$benefval->id][0]['id'] }}" value="{{ $data['traditums'][$benefval->id][0]['codigo']}}" style="border: none; text-align: center; background: transparent;">
 								</td>
 								<td style="width: 200px">
 									<div class="btn-group">		
@@ -545,309 +545,177 @@ MODAL EDITAR BENEFICIARIO
 
           <div class="box-body">
 
-            <!-- Entrada para Obra Social-->
-            <div class="form-group col-lg-12">
+				<!-- Entrada para Obra Social-->
+				<div class="form-group col-lg-12">
+					<div class="input-group w-100">
+						<div class="col-sm-12">
+							<label for="editarObraSocial">Obra Social</label>
+							<select type="text" class="form-control input-lg" id="editarObraSocial" name="editarObraSocial" readonly>
+								@foreach($data['obrasocial'] as $key=>$os)
+									<option value="{{ $os->id }}">{{ $os->nombre }}</option>
+								@endforeach
+							</select>
+						</div>
+					</div>
+				</div>
 
-              <div class="input-group col-lg-12">
+				<!-- ENTRADA PARA NOMBRE Y APELLIDO -->
+				<div class="form-group col-lg-12">
+					<div class="input-group w-100">
+						<div class="col-sm-12 mb-4">
+							<label for="editarNombre">Editar Nombre y Apellido</label>
+							<input type="text" class="form-control input-lg" id="editarNombre" name="editarNombre" placeholder="Ingresar nombre">
+						</div>
+					</div>
+				</div>
 
-                <div class="col-lg-12">
+				<!-- Entrada para Num. Beneficiario y Cod. Seguridad -->
+				<div class="form-group col-lg-12">
+					<div class="input-group w-100">
+						<div class="col-sm-12 col-lg-6 mb-4">
+							<label for="numero_afiliado">Numero de Beneficiario</label>
+							<input type="text" class="form-control input-lg" id="editar_numero_afiliado" name="editar_numero_afiliado">
+						</div>                    
+						<div class="col-sm-12 col-lg-6">
+							<label for="codigo_seguridad">Codigo de Seguridad</label>
+							<input type="text" class="form-control input-lg" id="editar_codigo_seguridad" name="editar_codigo_seguridad">
+						</div>
+					</div>
+				</div>
 
-                    <label for="editarObraSocial">Obra Social</label>
-
-                    <select type="text" class="form-control input-lg" id="editarObraSocial" name="editarObraSocial" readonly>
-
-                      @foreach($data['obrasocial'] as $key=>$os)
-
-                          <option value="{{ $os->id }}">{{ $os->nombre }}</option>
-
-                      @endforeach
-
-                    </select>
-
-                </div>
-
-              </div>
-
-            </div>
-
-           <!-- ENTRADA PARA NOMBRE Y APELLIDO -->
-
-            <div class="form-group col-lg-12">
-
-                <div class="input-group col-lg-12">
-
-                  <div class="col-lg-12">
-
-                        <label for="editarNombre">Editar Nombre y Apellido</label>
-
-                        <input type="text" class="form-control input-lg" id="editarNombre" name="editarNombre" placeholder="Ingresar nombre">
-
-                  </div>
-
-                </div>
-
-              </div>
-
-              <!-- Entrada para Num. Beneficiario y Cod. Seguridad -->
-
-                <div class="form-group col-lg-12">
-
-                  <div class="input-group col-lg-12">
-
-                    <div class="col-lg-6">
-
-                        <label for="numero_afiliado">Numero de Beneficiario</label>
-
-                        <input type="text" class="form-control input-lg" id="editar_numero_afiliado" name="editar_numero_afiliado">
-
-                    </div>                    
-
-                      <div class="col-lg-6">
-
-                          <label for="codigo_seguridad">Codigo de Seguridad</label>
-
-                          <input type="text" class="form-control input-lg" id="editar_codigo_seguridad" name="editar_codigo_seguridad">
-
-                      </div>
-
-                  </div>
-
-              </div>
-
-              <!-- Entrada para cant. prestacion solicitada -->
-
-               <div class="form-group col-lg-12">
-
-                  <div class="input-group col-lg-12">
-
-                        <div class="col-lg-6">
-
-                          <label for="cantidad_solicitada">Cantidad de Prestacion Solicitada</label>
-
-                          <input type="text" class="form-control input-lg" id="editar_cantidad_solicitada" name="editar_cantidad_solicitada">
-
-                      </div>
-
-					  <div class="col-lg-6">
-
-                        <label for="editarDni">Editar DNI</label>
-
-                        <input type="text" class="form-control input-lg" id="editarDni" name="editarDni" placeholder="Ingresar DNI">
-
-					  </div>   
-
-                  </div>
-
-              </div>
+				<!-- Entrada para cant. prestacion solicitada -->
+				<div class="form-group col-lg-12">
+					<div class="input-group w-100">
+						<div class="col-sm-12 col-lg-6 mb-4">
+							<label for="cantidad_solicitada">Cantidad de Prestacion Solicitada</label>
+							<input type="text" class="form-control input-lg" id="editar_cantidad_solicitada" name="editar_cantidad_solicitada">
+						</div>
+						<div class="col-sm-12 col-lg-6">
+							<label for="editarDni">Editar DNI</label>
+							<input type="text" class="form-control input-lg" id="editarDni" name="editarDni" placeholder="Ingresar DNI">
+						</div>   
+					</div>
+				</div>
 
               <!--Entrada para CUIT y DNI -->
-
-              <div class="form-group col-lg-12">
-
-                <div class="input-group col-lg-12">       
-
-                  <div class="col-lg-6">
-
-                        <label for="editarCuit">Editar CUIT</label>
-
-                        <input type="text" class="form-control input-lg" id="editarCuit" name="editarCuit" placeholder="Ingresar CUIT">
-
-				  </div>
-				  
-				  <div class="col-lg-6">
-
-					<label for="editarTelefono">Editar Telefono</label>
-
-					<input type="text" class="form-control input-lg" id="editarTelefono" name="editarTelefono" placeholder="Ingresar Telefono">
-
-			  		</div>  
-
-                </div>
-
-              </div>
-
-
-              <!--Entrada para correo y telefono -->
-
-                <div class="form-group col-lg-12">
-
-                <div class="input-group col-lg-12">
-
-                  <div class="col-lg-6">
-
-                        <label for="editarCorreo">Editar Correo</label>
-
-                        <input type="email" class="form-control input-lg" id="editarCorreo" name="editarCorreo" placeholder="Ingresar correo">
-
-				  </div>
-				  
-                  <div class="col-lg-6">
-
-					<label for="editarDireccion">Editar Dirección del Beneficiario</label>
-
-					<input type="text" class="form-control input-lg" id="editarDireccion" name="editarDireccion" placeholder="Ingresar Dirección">
-
-			  		</div>
-
-                </div>
-
-              </div>
-
-              <!--Entrada para direccion y localidad -->
-
-              <div class="form-group col-lg-12">
-
-                <div class="input-group col-lg-12">
-
-                  <div class="col-lg-6">
-
-                        <label for="editarLocalidad">Editar Localidad del Beneficiario</label>
-
-                        <input type="text" class="form-control input-lg" id="editarLocalidad" name="editarLocalidad" placeholder="Ingresar Localidad">
-
-				  </div>
-				  
-				  <div class="col-lg-6">
-
-					<label for="editarDireccionPrestacion">Editar Dirección de Prestación</label>
-
-					<input type="text" class="form-control input-lg" id="editarDireccionPrestacion" name="editarDireccionPrestacion" placeholder="Ingresar Dirección de Prestación">
-
+				<div class="form-group col-lg-12">
+					<div class="input-group w-100">
+						<div class="col-sm-12 col-lg-6 mb-4">
+							<label for="editarCuit">Editar CUIT</label>
+							<input type="text" class="form-control input-lg" id="editarCuit" name="editarCuit" placeholder="Ingresar CUIT">
+						</div>	  
+						<div class="col-sm-12 col-lg-6">
+							<label for="editarTelefono">Editar Telefono</label>
+							<input type="text" class="form-control input-lg" id="editarTelefono" name="editarTelefono" placeholder="Ingresar Telefono">
+						</div>  
 					</div>
+				</div>
 
-                </div>
 
-              </div>
+            	<!--Entrada para correo y telefono -->
+				<div class="form-group col-lg-12">
+					<div class="input-group w-100">
+						<div class="col-sm-12 col-lg-6 mb-4">
+							<label for="editarCorreo">Editar Correo</label>
+							<input type="email" class="form-control input-lg" id="editarCorreo" name="editarCorreo" placeholder="Ingresar correo">
+						</div>  
+						<div class="col-sm-12 col-lg-6">
+							<label for="editarDireccion">Editar Dirección del Beneficiario</label>
+							<input type="text" class="form-control input-lg" id="editarDireccion" name="editarDireccion" placeholder="Ingresar Dirección">
+						</div>
+					</div>
+				</div>
+
+				<!--Entrada para direccion y localidad -->
+				<div class="form-group col-lg-12">
+					<div class="input-group w-100">
+						<div class="col-sm-12 col-lg-6 mb-4">
+							<label for="editarLocalidad">Editar Localidad del Beneficiario</label>
+							<input type="text" class="form-control input-lg" id="editarLocalidad" name="editarLocalidad" placeholder="Ingresar Localidad">
+						</div>	  
+						<div class="col-sm-12 col-lg-6">
+							<label for="editarDireccionPrestacion">Editar Dirección de Prestación</label>
+							<input type="text" class="form-control input-lg" id="editarDireccionPrestacion" name="editarDireccionPrestacion" placeholder="Ingresar Dirección de Prestación">
+						</div>
+					</div>
+				</div>
 
                <!--Entrada para Codigo Postal y DNI -->
+				<div class="form-group col-lg-12">
+					<div class="input-group w-100">
+						<div class="col-sm-12 col-lg-6 mb-4">
+							<label for="editarLocalidadPrestacion">Editar Localidad de Prestación</label>
+							<input type="text" class="form-control input-lg" id="editarLocalidadPrestacion" name="editarLocalidadPrestacion" placeholder="Ingresar Localidad de Prestación">
+                  		</div>
+						<div class="col-sm-12 col-lg-6">
+							<label for="editarTurno">Turno</label>
+							<select type="text" class="form-control input-lg" id="editarTurno" name="editarTurno">
+								<option value="Mañana">Mañana</option>
+								<option value="Tarde">Tarde</option>
+								<option value="Noche">Noche</option>
+							</select>
+						</div>
+					</div>
+				</div>
 
-              <div class="form-group col-lg-12">
+				<!--Entrada para KM ida y vuelta -->
 
-                <div class="input-group col-lg-12">
+				@if(Auth::user()->role == 'Traslado')
+					<div class="form-group col-lg-12">
+							<div class="input-group w-100">
+								<div class="col-sm-12 col-lg-6 mb-4">
+									<label for="editarKmIda">Editar KM de ida</label>
+									<input type="text" class="form-control input-lg" id="editarKmIda" name="editarKmIda" placeholder="Ingresar KM de ida">
+								</div>
+							<div class="col-sm-12 col-lg-6">
+									<label for="editarKmVuelta">Editar KM de vuelta</label>
+									<input type="text" class="form-control input-lg" id="editarKmVuelta" name="editarKmVuelta" placeholder="Ingresar KM de Vuelta">
+							</div>
+						</div>
+					</div>
 
-                  <div class="col-lg-6">
-
-                        <label for="editarLocalidadPrestacion">Editar Localidad de Prestación</label>
-
-                        <input type="text" class="form-control input-lg" id="editarLocalidadPrestacion" name="editarLocalidadPrestacion" placeholder="Ingresar Localidad de Prestación">
-
-                  </div>
-
-
-				  <div class="col-lg-6">
-
-					<label for="editarTurno">Turno</label>
-
-					<select type="text" class="form-control input-lg" id="editarTurno" name="editarTurno">
-						  <option value="Mañana">Mañana</option>
-						  <option value="Tarde">Tarde</option>
-						  <option value="Noche">Noche</option>
-					</select>
-
-			  		</div>
-
-                </div>
-
-              </div>
-
-
-
-              <!--Entrada para KM ida y vuelta -->
-
-              @if(Auth::user()->role == 'Traslado')
-
-                  <div class="form-group col-lg-12">
-
-                    <div class="input-group col-lg-12">
-
-                      <div class="col-lg-6">
-
-                            <label for="editarKmIda">Editar KM de ida</label>
-
-                            <input type="text" class="form-control input-lg" id="editarKmIda" name="editarKmIda" placeholder="Ingresar KM de ida">
-
-                      </div>
-
-                      <div class="col-lg-6">
-
-                            <label for="editarKmVuelta">Editar KM de vuelta</label>
-
-                            <input type="text" class="form-control input-lg" id="editarKmVuelta" name="editarKmVuelta" placeholder="Ingresar KM de Vuelta">
-
-                      </div>
-
-                    </div>
-
-                  </div>
-
-                  <!--Entrada para Viajes de ida y vuelta -->
-
-                  <div class="form-group col-lg-12">
-
-                    <div class="input-group col-lg-12">
-
-                      <div class="col-lg-6">
-
-                            <label for="editarViajesIda">Editar Viajes de ida</label>
-
-                            <input type="text" class="form-control input-lg" id="editarViajesIda" name="editarViajesIda" placeholder="Ingresar Viajes de ida">
-
-                      </div>
-
-                      <div class="col-lg-6">
-
-                            <label for="editarViajesVuelta">Editar Viajes de vuelta</label>
-
-                            <input type="text" class="form-control input-lg" id="editarViajesVuelta" name="editarViajesVuelta" placeholder="Ingresar Viajes de vuelta">
-
-                      </div>
-
-                    </div>
-
-                  </div>
-
-              @endif
+					<!--Entrada para Viajes de ida y vuelta -->
+					<div class="form-group col-lg-12">
+						<div class="input-group w-100">
+							<div class="col-sm-12 col-lg-6 mb-4">
+								<label for="editarViajesIda">Editar Viajes de ida</label>
+								<input type="text" class="form-control input-lg" id="editarViajesIda" name="editarViajesIda" placeholder="Ingresar Viajes de ida">
+							</div>
+							<div class="col-sm-12 col-lg-6">
+								<label for="editarViajesVuelta">Editar Viajes de vuelta</label>
+								<input type="text" class="form-control input-lg" id="editarViajesVuelta" name="editarViajesVuelta" placeholder="Ingresar Viajes de vuelta">
+							</div>
+						</div>
+					</div>
+              	@endif
 
 
               @if(Auth::user()->role == 'Traslado')
-
-                  <div class="form-group col-lg-12">
-
-                      <div class="input-group col-lg-12">
-
-                      <div class="col-lg-6">
-
-                            <label for="editarDependencia">Dependencia</label>
-
-                            <select type="text" class="form-control input-lg" id="editarDependencia" name="editarDependencia" placeholder="Ingresar Dependencia">
-                                <option>Seleccionar...</option>
-                                <option value="Si">Si</option>
-                                <option value="No">No</option>
-                            </select>
-
-                      </div>
-
-                    </div>
-
-                  </div>
-
+				<div class="form-group col-lg-12">
+					<div class="input-group w-100">
+						<div class="col-sm-12 col-lg-6 mb-4">
+							<label for="editarDependencia">Dependencia</label>
+							<select type="text" class="form-control input-lg" id="editarDependencia" name="editarDependencia" placeholder="Ingresar Dependencia">
+								<option>Seleccionar...</option>
+								<option value="Si">Si</option>
+								<option value="No">No</option>
+							</select>
+						</div>
+					</div>
+				</div>
               @endif
 
-              <!-- Entrada para notas -->
-               <div class="form-group col-lg-12">
+				<!-- Entrada para notas -->
+				<div class="form-group col-lg-12">
+					<div class="input-group w-100">
+						<div class="col-sm-12">
+							<textarea class="form-control" type="text" id="editarNotas" name="editarNotas" maxlength="255" rows="5" cols="130" placeholder="Notas..">
 
-                <div class="input-group col-lg-12">
-
-                    <textarea type="text" id="editarNotas" name="editarNotas" maxlength="255" rows="5" cols="130" placeholder="Notas..">
-
-                    </textarea>
-
-                </div>
-
-              </div>
-
+							</textarea>
+						</div>
+					</div>
+				</div>
           </div>
-
         </div>
 
         <!--=====================================

@@ -212,7 +212,7 @@ class BeneficiarioController extends Controller
     public function list(Request $request)
     {
         // Busco objeto segun ID
-        $beneficiario = Beneficiario::where('id', '=', $request->id)->with('prestador')->get();
+        $beneficiario = Beneficiario::where('id', '=', $request->id)->with('prestador')->withTrashed()->get();
 
         // Obtengo prestacion
         $prestacion = Prestador::where('id', $beneficiario[0]->prestador->id)->with(['prestacion', 'obrasocial'])->get();
@@ -654,7 +654,7 @@ class BeneficiarioController extends Controller
 			}
 			$benef->total_fechas = count($fechas['total'][$benef->id]);
 			$benef->km_dia = (($benef->km_ida ?? 0) + ($benef->km_vuelta ?? 0));
-			$benef->km_mes = (($benef->km_ida ?? 0) + ($benef->km_vuelta ?? 0)) * ($benef->total_fechas ?? 0);
+			$benef->km_mes = ($benef->km_dia ?? 0) * ($benef->total_fechas ?? 0);
 			$benef->importe_total = str_replace('.',',', str_replace(',','.',(floatval(str_replace(',', '.', str_replace('.', '', ($benef->importe_dependencia['valor_modulo'] ?? 0)))) + floatval(str_replace(',', '.', str_replace('.', '', ($benef->importe_unitario ?? 0))))) * $benef->km_mes));
 			$beneficiariosAgrupados[$grupo][] = $benef;
 			$indice++;

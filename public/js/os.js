@@ -822,11 +822,10 @@ $(document).on('change', '.selectMes', function(){
   });
 });
 
-$(document).on('change', '#traditum', function(){
+$(document).on('change', '.traditum', function(){
     var benef_id = $(this).attr('beneficiario-id');
     var tradit_id = $(this).attr('traditum-id');
     var val = $(this).val();
-    console.log("val", val);
 
     $.ajaxSetup({
       headers: {

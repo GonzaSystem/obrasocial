@@ -115,7 +115,7 @@
 				</div>
 				@php
 					$indice++;
-					$importe_total += $benef->importe_total;
+					$importe_total += str_replace(',','.', str_replace('.',',',$benef->importe_total));
 				@endphp
 			@endforeach
 
