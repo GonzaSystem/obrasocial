@@ -422,14 +422,20 @@ MODAL AGREGAR BENEFICIARIO
 				<div class="form-group col-lg-12 mb-0">
 					<div class="input-group w-100">
 						<div class="col-sm-12 col-lg-6">
-							<label for="kmIda">KM de ida</label>
+							<label for="kmIda">KM por Día</label>
 							<input type="number" class="form-control input-lg mb-4" name="kmIda" placeholder="Ingresar KM de ida">
 						</div>
 
-						<div class="col-sm-12 col-lg-6">
-							<label for="kmVuelta">KM de vuelta</label>
-							<input type="text" class="form-control input-lg mb-4" name="kmVuelta" placeholder="Ingresar KM de Vuelta">
-						</div>
+						@if(Auth::user()->role == 'Traslado')
+							<div class="col-sm-12 col-lg-6">
+								<label for="dependencia">Dependencia (Cod. 6501024)</label>
+								<select type="text" class="form-control input-lg" name="dependencia" placeholder="Ingresar Dependencia">
+									<option value="">Seleccionar...</option>
+									<option value="Si">Si</option>
+									<option value="No">No</option>
+								</select>
+							</div>
+						@endif
 					</div>
 				</div>
 
@@ -462,21 +468,6 @@ MODAL AGREGAR BENEFICIARIO
 					</div>
 				</div>
 			</div>
-
-			@if(Auth::user()->role == 'Traslado')
-				<div class="form-group col-lg-12 mb-0">
-					<div class="input-group w-100">
-							<div class="col-sm-6">
-								<label for="dependencia">Dependencia</label>
-								<select type="text" class="form-control input-lg" name="dependencia" placeholder="Ingresar Dependencia">
-									<option>Seleccionar...</option>
-									<option value="Si">Si</option>
-									<option value="No">No</option>
-								</select>
-							</div>
-					</div>
-				</div>
-			@endif
 
 			<!-- Entrada para notas -->
 			<div class="form-group col-sm-12">
@@ -664,13 +655,20 @@ MODAL EDITAR BENEFICIARIO
 					<div class="form-group col-lg-12">
 							<div class="input-group w-100">
 								<div class="col-sm-12 col-lg-6 mb-4">
-									<label for="editarKmIda">Editar KM de ida</label>
+									<label for="editarKmIda">Editar KM por Dia</label>
 									<input type="text" class="form-control input-lg" id="editarKmIda" name="editarKmIda" placeholder="Ingresar KM de ida">
 								</div>
-							<div class="col-sm-12 col-lg-6">
-									<label for="editarKmVuelta">Editar KM de vuelta</label>
-									<input type="text" class="form-control input-lg" id="editarKmVuelta" name="editarKmVuelta" placeholder="Ingresar KM de Vuelta">
-							</div>
+
+								@if(Auth::user()->role == 'Traslado')
+									<div class="col-sm-12 col-lg-6 mb-4">
+										<label for="editarDependencia">Dependencia (Cod. 6501024)</label>
+										<select type="text" class="form-control input-lg" id="editarDependencia" name="editarDependencia" placeholder="Ingresar Dependencia">
+											<option value="">Seleccionar...</option>
+											<option value="Si">Si</option>
+											<option value="No">No</option>
+										</select>
+									</div>
+							  @endif
 						</div>
 					</div>
 
@@ -688,22 +686,6 @@ MODAL EDITAR BENEFICIARIO
 						</div>
 					</div>
               	@endif
-
-
-              @if(Auth::user()->role == 'Traslado')
-				<div class="form-group col-lg-12">
-					<div class="input-group w-100">
-						<div class="col-sm-12 col-lg-6 mb-4">
-							<label for="editarDependencia">Dependencia</label>
-							<select type="text" class="form-control input-lg" id="editarDependencia" name="editarDependencia" placeholder="Ingresar Dependencia">
-								<option>Seleccionar...</option>
-								<option value="Si">Si</option>
-								<option value="No">No</option>
-							</select>
-						</div>
-					</div>
-				</div>
-              @endif
 
 				<!-- Entrada para notas -->
 				<div class="form-group col-lg-12">
@@ -1336,25 +1318,22 @@ MODAL CLONAR BENEFICIARIO
                         <!--Entrada para KM ida y vuelta -->
 
                             <div class="form-group col-lg-12">
-
                                 <div class="input-group col-lg-12">
-
                                     <div class="col-lg-6">
-
-                                        <label for="kmIda">KM de ida</label>
-
+                                        <label for="kmIda">KM Por Dia</label>
                                         <input type="number" class="form-control input-lg" id="kmIda_clon" name="kmIda" placeholder="Ingresar KM de ida">
-
                                     </div>
 
-                                    <div class="col-lg-6">
-
-                                        <label for="kmVuelta">KM de vuelta</label>
-
-                                        <input type="text" class="form-control input-lg" id="kmVuelta_clon" name="kmVuelta" placeholder="Ingresar KM de Vuelta">
-
-                                    </div>
-
+									@if(Auth::user()->role == 'Traslado')
+										<div class="col-lg-6">
+											<label for="dependencia">Dependencia (Cod. 6501024)</label>
+											<select type="text" class="form-control input-lg" id="dependencia_clon" name="dependencia" placeholder="Ingresar Dependencia">
+												<option value="">Seleccionar...</option>
+												<option value="Si">Si</option>
+												<option value="No">No</option>
+											</select>
+										</div>
+									@endif
                                 </div>
 
                             </div>
@@ -1388,52 +1367,19 @@ MODAL CLONAR BENEFICIARIO
                     @endif
 
                     <!-- Entrada para Turno y Dependencia -->
-
                         <div class="form-group col-lg-12">
-
                             <div class="input-group col-lg-12">
-
                                 <div class="col-lg-6">
-
                                     <label for="turno">Turno</label>
-
                                     <select type="text" class="form-control input-lg" id="turno_clon" name="turno">
                                         <option value="Mañana">Mañana</option>
                                         <option value="Tarde">Tarde</option>
                                         <option value="Noche">Noche</option>
                                     </select>
-
                                 </div>
-
                             </div>
-
                         </div>
 
-
-
-                        @if(Auth::user()->role == 'Traslado')
-
-                            <div class="form-group col-lg-12">
-
-                                <div class="input-group col-lg-12">
-
-                                    <div class="col-lg-6">
-
-                                        <label for="dependencia">Dependencia</label>
-
-                                        <select type="text" class="form-control input-lg" id="dependencia_clon" name="dependencia" placeholder="Ingresar Dependencia">
-                                            <option>Seleccionar...</option>
-                                            <option value="Si">Si</option>
-                                            <option value="No">No</option>
-                                        </select>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                    @endif
 
                         <!-- Entrada para notas -->
                         <div class="form-group col-lg-12">
