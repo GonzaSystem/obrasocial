@@ -277,6 +277,49 @@ $.ajax({
 	});
 });
 
+//Editar Beneficiario
+$(document).on('click', '.btnEditarBeneficiarioOsecac', function(){
+
+var id = $(this).attr("idbenef");
+
+$.ajaxSetup({
+	headers: {
+		'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+	}
+});
+
+$.ajax({
+	url: "http://localhost/os/public/beneficiario/list",
+	data: {id:id},
+	dataType: "json",
+	type: "POST",
+	success: function(respuesta){
+		$("#idOsecac").val(respuesta['beneficiario'][0]["id"]);
+		$("#editarNombreOsecac").val(respuesta['beneficiario'][0]["nombre"]);
+		$("#editarApellidoOsecac").val(respuesta['beneficiario'][0]["apellido"]);
+		$("#editarCorreoOsecac").val(respuesta['beneficiario'][0]["email"]);
+		$("#editarTelefonoOsecac").val(respuesta['beneficiario'][0]["telefono"]);
+		$("#editarDireccionOsecac").val(respuesta['beneficiario'][0]["direccion"]);
+		$("#editarLocalidadOsecac").val(respuesta['beneficiario'][0]["localidad"]);
+		$("#editarDireccionPrestacionOsecac").val(respuesta['beneficiario'][0]["direccion_prestacion"]);
+		$("#editarLocalidadPrestacionOsecac").val(respuesta['beneficiario'][0]["localidad_prestacion"]);
+		$("#editarCuitOsecac").val(respuesta['beneficiario'][0]["cuit"]);
+		$("#editarDniOsecac").val(respuesta['beneficiario'][0]["dni"]);
+		$("#editarKmIdaOsecac").val(respuesta['beneficiario'][0]["km_ida"]);
+		$("#editarKmVueltaOsecac").val(respuesta['beneficiario'][0]["km_vuelta"]);
+		$("#editarViajesIdaOsecac").val(respuesta['beneficiario'][0]["viajes_ida"]);
+		$("#editarViajesVueltaOsecac").val(respuesta['beneficiario'][0]["viajes_vuelta"]);
+		$("#editarTurnoOsecac").val(respuesta['beneficiario'][0]["turno"]);
+		$("#editarDependenciaOsecac").val(respuesta['beneficiario'][0]["dependencia"]);
+		$("#editarNotasOsecac").val(respuesta['beneficiario'][0]["notas"]);
+		$("#editar_numero_afiliado_osecac").val(respuesta['beneficiario'][0]['numero_afiliado']);
+		$("#editar_codigo_seguridad_osecac").val(respuesta['beneficiario'][0]['codigo_seguridad']);
+		$("#editar_cantidad_solicitada_osecac").val(respuesta['beneficiario'][0]['cantidad_solicitada']);
+		$("#tituloEditarBeneficiarioOsecac").empty().html('Editar Beneficiario - ' + respuesta['beneficiario'][0]["nombre"] + ' - ' + respuesta['prestacion'] +' - ' +respuesta['prestacion_completa'][0]['obrasocial'][0]['nombre']);
+		}
+	});
+});
+
 // Eliminar beneficiario
 $(document).on("click", ".btnEliminarBeneficiario", function(){
 

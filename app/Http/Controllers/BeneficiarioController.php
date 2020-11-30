@@ -336,13 +336,27 @@ class BeneficiarioController extends Controller
 
     public function formulario($bene_id, $prestador_id, $planilla, $mes = null, $anio = null)
     {
-        if( $planilla == 1 ){
-            $view = 'forms.rehabilitacion';
-        }elseif( $planilla == 2 ){
-            $view = 'forms.integracion';
-        }elseif( $planilla == 3){
-            $view = 'forms.traslado';
-        }
+		switch ($planilla) {
+			case 1:
+				$view = 'forms.rehabilitacion';
+				break;
+
+			case 2:
+				$view = 'forms.integracion';
+				break;
+
+			case 3:
+				$view = 'forms.traslado';
+				break;
+
+			case 4:
+				$view = 'forms.3_2';
+				break;
+
+			case 5:
+				$view = 'forms.3_5';
+				break;
+		}
 
         $beneficiario_id = $bene_id;
         if($mes == null){

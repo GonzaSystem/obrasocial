@@ -63,14 +63,30 @@
 
           @foreach ($prestaciones as $key => $prestacion)
 
-              @if($prestacion->planilla == 1)
-                  <?php $planilla = 'REHABILITACION' ?>
-              @elseif($prestacion->planilla == 2)
-                  <?php $planilla = 'INTEGRACION' ?>
-              @else
-                  <?php $planilla = 'TRASLADO' ?>
-              @endif
+			@php
+				switch ($prestacion->planilla) {
+					case 1:
+						$planilla = 'REHABILITACION';
+						break;
 
+					case 2:
+						$planilla = 'INTEGRACION';
+						break;
+
+					case 3:
+						$planilla = 'TRASLADO';
+						break;
+
+					case 4:
+						$planilla = '3.2';
+						break;
+
+					case 5:
+						$planilla = '3.5';
+						break;
+				}
+			@endphp
+			
           <tr>
             <td>{{ ($key+1) }}</td>
             <td>{{ $prestacion->nombre }}</td>
@@ -225,7 +241,9 @@ MODAL AGREGAR PRESTACION
                           <option value="0">Seleccionar...</option>
                           <option value="1">REHABILITACION</option>
                           <option value="2">INTEGRACION</option>
-                          <option value="3">TRASLADO</option>
+						  <option value="3">TRASLADO</option>
+						  <option value="4">3.2</option>
+						  <option value="5">3.5</option>
                       </select>
 
                   </div>
@@ -375,7 +393,9 @@ MODAL EDITAR PRESTACION
                           <option value="0">Seleccionar...</option>
                           <option value="1">REHABILITACION</option>
                           <option value="2">INTEGRACION</option>
-                          <option value="3">TRASLADO</option>
+						  <option value="3">TRASLADO</option>
+						  <option value="4">3.2</option>
+						  <option value="5">3.5</option>
                       </select>
 
                   </div>

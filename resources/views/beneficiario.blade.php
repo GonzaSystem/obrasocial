@@ -77,7 +77,11 @@
 				<div class="col-sm-12">
 					<div class="row">
 						<div class="col-sm-12 col-md-2">
-							<button class="btn btn-primary mb-2" style="{{Auth::user()->mes != date('m') || Auth::user()->anio != date('Y') ? 'display:none' : ''}}" data-toggle="modal" data-target="#modalAgregarBeneficiario">Agregar Beneficiario</button>
+							@if($data['obrasocial'][0]->nombre == "APROSS")
+								<button class="btn btn-primary mb-2" style="{{Auth::user()->mes != date('m') || Auth::user()->anio != date('Y') ? 'display:none' : ''}}" data-toggle="modal" data-target="#modalAgregarBeneficiario">Agregar Beneficiario</button>
+							@else
+								<button class="btn btn-primary mb-2" style="{{Auth::user()->mes != date('m') || Auth::user()->anio != date('Y') ? 'display:none' : ''}}" data-toggle="modal" data-target="#modalAgregarBeneficiarioOsecac">Agregar Beneficiario</button>
+							@endif
 						</div>
 
 						<div class="col-sm-12 col-md-4 col-lg-3 mb-2">
@@ -175,14 +179,11 @@
 				</tbody>
          </table>
 
-       @else
-
+	   @else
+	   
         <table class="table table-bordered table-striped tablaBeneficiario">
-
           <thead>
-
            <tr>
-
 				<th style="text-align: center">Clonar</th>
 				@if($data['obrasocial'][0]->nombre == "OSECAC")
 					<th style="width: 20px">Presupuesto</th>
@@ -196,25 +197,26 @@
 				<th>Cod. Traditum</th>
 				<th>Acciones</th>
            </tr>
-
           </thead>
-
           <tbody>
-
 			@foreach($data['beneficiarios'] as $beneficiario)
 				<?php 
 					$codigo_prestacion = $beneficiario->prestacion[0]->codigo_modulo;
 					$planilla = $beneficiario->prestacion[0]->planilla;
+					switch ($planilla) {
+						case 4:
+							$nombre_planilla = '3.2';
+							break;
+						
+						case 5:
+							$nombre_planilla = '3.5';
+							break;
+					}
 					$os_id = $beneficiario->os_id;
 					$prestador_id = $beneficiario->id;
 				?>
 				@foreach($beneficiario->beneficiario as $key => $benefval)
 					<tr class="beneficiarioBold" idBenef="{{$benefval->id}}" style="{{ (Session::has('ModificacionBeneficiario') && Session::get('ModificacionBeneficiario') == $benefval->id) ? 'font-weight:bold;' : ''}}">
-						@if(Auth::user()->role == 'Traslado')
-							<td>											
-								<a target="_BLANK" href="{{ route('formulario-beneficiario', ['id' => $benefval->id, 'prestador_id' => $prestador_id ,'planilla' => $planilla, 'mes' => Auth::user()->mes, 'anio' => Auth::user()->anio]) }}" class="btn btn-primary" style="color: white; background-color: #605CA8"><i class="fa fa-address-card"></i></a>
-							</td>
-						@endif
 						<td style="text-align: center"> <button class="btn btn-success btnClonarBeneficiario" data-toggle="modal" data-target="#modalClonarBeneficiario" idBenef="{{ $benefval->id }}"><i class="fa fa-users"></i></button></td>
 							@if($data['obrasocial'][0]->nombre == "OSECAC")
 								<td style="text-align: center"><a href="{{ route('beneficiario-presupuesto', ['prestador_id' => $benefval->prestador_id, 'beneficiario_id' => $benefval->id]) }}" target="_BLANK"><button class="btn btn-success">8.4</button></a></td>
@@ -229,32 +231,21 @@
 							<input {{Auth::user()->mes != date('m') || Auth::user()->anio != date('Y') ? 'disabled' : ''}} type="text" name="traditum" id="traditum" beneficiario-id="{{$benefval->id}}" traditum-id="{{ $data['traditums'][$benefval->id][0]['id'] }}" value="{{ $data['traditums'][$benefval->id][0]['codigo']}}" style="border: none; text-align: center; background: transparent;">
 						</td>
 						<td style="width: 200px">
-							<div class="btn-group">		
-								@if(Auth::user()->role != 'Traslado')
-									@if($codigo_prestacion != '6501024')
-										<a target="_BLANK" href="{{ route('formulario-beneficiario', ['id' => $benefval->id, 'prestador_id' => $prestador_id ,'planilla' => $planilla, 'mes' => Auth::user()->mes, 'anio' => Auth::user()->anio]) }}" class="btn btn-primary" style="color: white; background-color: #605CA8"><i class="fa fa-address-card"></i></a>
-									@endif
-								@endif
-
+							<div class="btn-group">	
+								<a target="_BLANK" href="{{ route('formulario-beneficiario', ['id' => $benefval->id, 'prestador_id' => $prestador_id ,'planilla' => $planilla, 'mes' => Auth::user()->mes, 'anio' => Auth::user()->anio]) }}" class="btn btn-primary" style="color: white; background-color: #605CA8; padding: 3px 12px 3px;"><span>{{ $nombre_planilla }}<span></a>
 								@if($codigo_prestacion != '6501024')
 									<button class="btn btn-primary btnHorarioBeneficiario" data-toggle="modal" data-target="#modalHorarioBeneficiario" idBenef="{{ $benefval->id }}" cuenta-tope="{{ $data['fechas']['tope'][$benefval->id][$benefval->id] }}" cuenta-original="{{ count($data['fechas']['total'][$benefval->id])}}" cuenta-agregados="{{ $data['fechas']['total_agregado'][$benefval->id] }}"><i class="fa fa-clock-o"></i></button>
 								@endif
-
-								<button class="btn btn-warning btnEditarBeneficiario" data-toggle="modal" data-target="#modalEditarBeneficiario" style="{{Auth::user()->mes != date('m') || Auth::user()->anio != date('Y') ? 'display:none' : ''}}" idBenef="{{ $benefval->id }}"><i class="fa fa-pencil"></i></button>
-
+								<button class="btn btn-warning btnEditarBeneficiarioOsecac" data-toggle="modal" data-target="#modalEditarBeneficiarioOsecac" style="{{Auth::user()->mes != date('m') || Auth::user()->anio != date('Y') ? 'display:none' : ''}}" idBenef="{{ $benefval->id }}"><i class="fa fa-pencil"></i></button>
 								<button class="btn btn-danger btnEliminarBeneficiario" idOs="{{ $os_id }}" idBenef="{{ $benefval->id }}"><i class="fa fa-trash"></i></button>
-
 								<button type="button" class="btn {{ $benefval->activo == 1 ? 'btn-success' : 'btn-secondary' }}"><input type="checkbox" class="btnEstadoBeneficiario" name="btnActivarUsuario" {{ $benefval->activo == 1 ? 'checked' : '' }} value="{{ $benefval->activo }}" idBenef="{{ $benefval->id }}" idOs={{ $os_id }} style="margin-top: 1px"></button>
 							</div>
 						</td>
 					</tr>
 					@endforeach
 				@endforeach
-
           </tbody>
-
          </table>
-
        @endif
 
       </div>
@@ -504,6 +495,216 @@ MODAL AGREGAR BENEFICIARIO
 </div>
 
 <!--=====================================
+MODAL AGREGAR BENEFICIARIO OSECAC
+======================================-->
+
+<div id="modalAgregarBeneficiarioOsecac" class="modal fade" role="dialog">
+	<div class="modal-dialog modal-lg">
+	  <div class="modal-content">
+		<form role="form" method="POST" action="{{ route('beneficiario-create') }}">
+		  @csrf
+		  <!--=====================================
+		  CABEZA DEL MODAL
+		  ======================================-->
+		  <div class="modal-header" style="background:#3c8dbc; color:white">
+			<button type="button" class="close" data-dismiss="modal">&times;</button>
+			<h4 class="modal-title">Agregar beneficiario</h4>
+		  </div>
+  
+		  <!--=====================================
+		  CUERPO DEL MODAL
+		  ======================================-->
+  
+		  <div class="modal-body">
+			<div class="box-body">
+			  <!-- Entrada para Obra Social-->
+			  <div class="form-group col-sm-12">
+				<div class="input-group w-100">
+				  <div class="col-sm-12">
+					  <label for="obraSocial">Obra Social</label>
+					  <select type="text" class="form-control input-lg" name="obraSocial" readonly>
+						@foreach($data['obrasocial'] as $key=>$os)
+							<option value="{{ $os->id }}">{{ $os->nombre }}</option>
+						@endforeach
+					  </select>
+				  </div>
+				</div>
+			  </div>
+  
+				<!-- ENTRADA PARA NOMBRE Y APELLIDO -->
+				<div class="form-group col-sm-12">
+					<div class="input-group w-100">
+						<div class="col-sm-12">
+							<label for="nombre">Nombre y Apellido</label>
+							<input type="text" class="form-control input-lg" name="nombre" placeholder="Ingresar nombre y Apellido">
+						</div>
+					</div>
+				</div>
+  
+				<div class="form-group col-lg-12 mb-0">
+					<div class="input-group w-100">
+						<div class="col-sm-12 col-lg-6">
+							<label for="numero_afiliado">Numero de Beneficiario</label>
+							<input type="text" class="form-control input-lg mb-4" name="numero_afiliado" placeholder="Ingresar N° de Beneficiario">
+						</div>
+  
+						<div class="col-sm-12 col-lg-6">
+							<label for="obraSocial">Prestación</label>
+							<select type="text" class="form-control input-lg mb-4" name="prestacion" required>
+								<option value="">Seleccionar...</option>
+								@foreach ($data['prestacion'] as $presta)
+								<option value="{{ $presta->id }}">{{ $presta->prestacion[0]->codigo_modulo . ' - ' . $presta->prestacion[0]->nombre }}</option>
+								@endforeach
+							</select>
+						</div>
+					</div>
+				</div>
+  
+  
+			  <!-- Entrada para Prestación -->
+			  <div class="form-group col-lg-12 mb-0">
+				  <div class="input-group w-100">
+						<div class="col-sm-12 col-lg-6">
+							<label for="cantidad_solicitada">Cantidad Solicitada</label>
+							<input type="text" class="form-control input-lg mb-4" name="cantidad_solicitada" placeholder="Ingresar Cantidad Solicitada">                    
+						</div>
+
+						<div class="col-sm-12 col-lg-6">
+							<label for="dni">DNI</label>
+							<input type="text" class="form-control input-lg mb-4" name="dni" placeholder="Ingresar DNI">
+						</div>
+				  </div>
+			  </div>
+  
+			  <!--Entrada para DNI y CUIT -->
+			  <div class="form-group col-lg-12 mb-0">
+				  <div class="input-group w-100">
+					  <div class="col-sm-12 col-lg-6">
+						  <label for="cuit">CUIT</label>
+						  <input type="text" class="form-control input-lg mb-4" name="cuit" placeholder="Ingresar CUIT">
+					  </div>
+
+						<div class="col-sm-12 col-lg-6">
+							<label for="telefono">Telefono</label>
+							<input type="text" class="form-control input-lg mb-4" name="telefono" placeholder="Ingresar Telefono">
+						</div>
+				  </div>
+			  </div>
+  
+  
+			  <!--Entrada para correo y telefono -->
+			  <div class="form-group col-lg-12 mb-0">
+				  <div class="input-group w-100">
+						<div class="col-sm-12 col-lg-6">
+							<label for="correo">Correo</label>
+							<input type="email" class="form-control input-lg mb-4" name="correo" placeholder="Ingresar correo">
+						</div>
+
+						<div class="col-sm-12 col-lg-6">
+							<label for="turno">Turno</label>
+							<select type="text" class="form-control input-lg mb-4" name="turno">
+									<option value="Mañana">Mañana</option>
+									<option value="Tarde">Tarde</option>
+									<option value="Noche">Noche</option>
+							</select>
+						</div>
+				  </div>
+			  </div>
+  
+			  <!--Entrada para direccion y localidad -->
+			  <div class="form-group col-lg-12 mb-0">
+				  <div class="input-group w-100">
+						<div class="col-sm-12 col-lg-6">
+							<label for="codigoPostal">Dirección de Prestación</label>
+							<input type="text" class="form-control input-lg mb-4" name="direccionPrestacion" placeholder="Ingresar Dirección de Prestación">
+						</div>
+
+						<div class="col-sm-12 col-lg-6">
+							<label for="direccion">Dirección del Beneficiario</label>
+							<input type="text" class="form-control input-lg mb-4" name="direccion" placeholder="Ingresar Dirección">
+						</div>
+				  </div>
+			  </div>
+  
+			  <!--Entrada para Dir. Prestacion y Localidad Prestacion -->
+			  <div class="form-group col-lg-12 mb-0">
+				  <div class="input-group w-100">
+					  <div class="col-sm-12 col-lg-6">
+						  <label for="codigoPostal">Localidad de Prestación</label>
+						  <input type="text" class="form-control input-lg mb-4" name="localidadPrestacion" placeholder="Ingresar Localidad de Prestación">
+					  </div>
+
+						<div class="col-sm-12 col-lg-6">
+							<label for="localidad">Localidad del Beneficiario</label>
+							<input type="text" class="form-control input-lg mb-4" name="localidad" placeholder="Ingresar Localidad">
+						</div>
+				  </div>
+			  </div>
+  
+  
+			  @if(Auth::user()->role == 'Traslado')
+				  <!--Entrada para KM ida y vuelta -->
+				  <div class="form-group col-lg-12 mb-0">
+					  <div class="input-group w-100">
+						  <div class="col-sm-12 col-lg-6">
+							  <label for="kmIda">KM por Día</label>
+							  <input type="number" class="form-control input-lg mb-4" name="kmIda" placeholder="Ingresar KM de ida">
+						  </div>
+					  </div>
+				  </div>
+  
+				  <!--Entrada para Viajes de ida y vuelta -->
+				  <div class="form-group col-lg-12 mb-0">
+					  <div class="input-group w-100">
+						  <div class="col-sm-12 col-lg-6">
+							  <label for="viajesIda">Viajes de ida</label>
+							  <input type="text" class="form-control input-lg mb-4" name="viajesIda" placeholder="Ingresar Viajes de ida">
+						  </div>
+  
+						  <div class="col-sm-12 col-lg-6">
+							  <label for="viajesVuelta">Viajes de vuelta</label>
+							  <input type="number" class="form-control input-lg mb-4" name="viajesVuelta" placeholder="Ingresar Viajes de vuelta">
+						  </div>
+					  </div>
+				  </div>
+			  @endif
+
+  
+			  <!-- Entrada para notas -->
+			  <div class="form-group col-sm-12">
+				  <div class="input-group w-100">
+					  <div class="col-sm-12">
+						  <textarea class="form-control" type="text" name="notas" maxlength="255" rows="5" cols="130" placeholder="Notas..">
+  
+						  </textarea>
+					  </div>
+				  </div>
+			  </div>
+		  </div>
+			
+		  </div>
+  
+		  <!--=====================================
+		  PIE DEL MODAL
+		  ======================================-->
+  
+		  <div class="modal-footer">
+  
+			<button type="button" class="btn btn-default pull-left" data-dismiss="modal">Salir</button>
+  
+			<button type="submit" class="btn btn-primary">Guardar beneficiario</button>
+  
+		  </div>
+  
+		</form>
+  
+	  </div>
+  
+	</div>
+  
+  </div>
+
+<!--=====================================
 MODAL EDITAR BENEFICIARIO
 ======================================-->
 
@@ -721,6 +922,205 @@ MODAL EDITAR BENEFICIARIO
   </div>
 
 </div>
+
+<!-- Editar Beneficiario Osecac -->
+<div id="modalEditarBeneficiarioOsecac" class="modal fade" role="dialog">
+	<div class="modal-dialog modal-lg">
+	  <div class="modal-content">
+		<form role="form" method="POST" action="{{ route('beneficiario-update') }}">
+		  @csrf
+		  <!--=====================================
+		  CABEZA DEL MODAL
+		  ======================================-->
+		  <div class="modal-header" style="background:#3c8dbc; color:white">
+			<button type="button" class="close" data-dismiss="modal">&times;</button>
+			<h4 class="modal-title">Agregar beneficiario</h4>
+		  </div>
+  
+		  <!--=====================================
+		  CUERPO DEL MODAL
+		  ======================================-->
+  
+		  <div class="modal-body">
+			<div class="box-body">
+			  <!-- Entrada para Obra Social-->
+			  <div class="form-group col-sm-12">
+				<div class="input-group w-100">
+				  <div class="col-sm-12">
+					  <label for="obraSocial">Obra Social</label>
+					  <select type="text" class="form-control input-lg" name="editarObraSocial" id="editarObraSocialOsecac" readonly>
+						@foreach($data['obrasocial'] as $key=>$os)
+							<option value="{{ $os->id }}">{{ $os->nombre }}</option>
+						@endforeach
+					  </select>
+				  </div>
+				</div>
+			  </div>
+  
+				<!-- ENTRADA PARA NOMBRE Y APELLIDO -->
+				<div class="form-group col-sm-12">
+					<div class="input-group w-100">
+						<div class="col-sm-12">
+							<label for="nombre">Nombre y Apellido</label>
+							<input type="text" class="form-control input-lg" name="editarNombre" id="editarNombreOsecac" placeholder="Ingresar nombre y Apellido">
+						</div>
+					</div>
+				</div>
+  
+				<div class="form-group col-lg-12 mb-0">
+					<div class="input-group w-100">
+						<div class="col-sm-12 col-lg-6">
+							<label for="numero_afiliado">Numero de Beneficiario</label>
+							<input type="text" class="form-control input-lg mb-4" name="editar_numero_afiliado" id="editar_numero_afiliado_osecac" placeholder="Ingresar N° de Beneficiario">
+						</div>
+					</div>
+				</div>
+  
+  
+			  <!-- Entrada para Prestación -->
+			  <div class="form-group col-lg-12 mb-0">
+				  <div class="input-group w-100">
+						<div class="col-sm-12 col-lg-6">
+							<label for="cantidad_solicitada">Cantidad Solicitada</label>
+							<input type="text" class="form-control input-lg mb-4" name="editar_cantidad_solicitada" id="editar_cantidad_solicitada_osecac" placeholder="Ingresar Cantidad Solicitada">                    
+						</div>
+
+						<div class="col-sm-12 col-lg-6">
+							<label for="dni">DNI</label>
+							<input type="text" class="form-control input-lg mb-4" name="editarDni" id="editarDniOsecac" placeholder="Ingresar DNI">
+						</div>
+				  </div>
+			  </div>
+  
+			  <!--Entrada para DNI y CUIT -->
+			  <div class="form-group col-lg-12 mb-0">
+				  <div class="input-group w-100">
+					  <div class="col-sm-12 col-lg-6">
+						  <label for="cuit">CUIT</label>
+						  <input type="text" class="form-control input-lg mb-4" name="editarCuit" id="editarCuitOsecac" placeholder="Ingresar CUIT">
+					  </div>
+
+						<div class="col-sm-12 col-lg-6">
+							<label for="telefono">Telefono</label>
+							<input type="text" class="form-control input-lg mb-4" name="editarTelefono" id="editarTelefonoOsecac" placeholder="Ingresar Telefono">
+						</div>
+				  </div>
+			  </div>
+  
+  
+			  <!--Entrada para correo y telefono -->
+			  <div class="form-group col-lg-12 mb-0">
+				  <div class="input-group w-100">
+						<div class="col-sm-12 col-lg-6">
+							<label for="correo">Correo</label>
+							<input type="email" class="form-control input-lg mb-4" name="editarCorreo" id="editarCorreoOsecac" placeholder="Ingresar correo">
+						</div>
+
+						<div class="col-sm-12 col-lg-6">
+							<label for="turno">Turno</label>
+							<select type="text" class="form-control input-lg mb-4" name="editarTurno" id="editarTurnoOsecac">
+									<option value="Mañana">Mañana</option>
+									<option value="Tarde">Tarde</option>
+									<option value="Noche">Noche</option>
+							</select>
+						</div>
+				  </div>
+			  </div>
+  
+			  <!--Entrada para direccion y localidad -->
+			  <div class="form-group col-lg-12 mb-0">
+				  <div class="input-group w-100">
+						<div class="col-sm-12 col-lg-6">
+							<label for="codigoPostal">Dirección de Prestación</label>
+							<input type="text" class="form-control input-lg mb-4" name="editarDireccionPrestacion" id="editarDireccionPrestacionOsecac" placeholder="Ingresar Dirección de Prestación">
+						</div>
+
+						<div class="col-sm-12 col-lg-6">
+							<label for="direccion">Dirección del Beneficiario</label>
+							<input type="text" class="form-control input-lg mb-4" name="editarDireccion" id="editarDireccionOsecac" placeholder="Ingresar Dirección">
+						</div>
+				  </div>
+			  </div>
+  
+			  <!--Entrada para Dir. Prestacion y Localidad Prestacion -->
+			  <div class="form-group col-lg-12 mb-0">
+				  <div class="input-group w-100">
+					  <div class="col-sm-12 col-lg-6">
+						  <label for="codigoPostal">Localidad de Prestación</label>
+						  <input type="text" class="form-control input-lg mb-4" name="editarLocalidadPrestacion" id="editarLocalidadPrestacionOsecac" placeholder="Ingresar Localidad de Prestación">
+					  </div>
+
+						<div class="col-sm-12 col-lg-6">
+							<label for="localidad">Localidad del Beneficiario</label>
+							<input type="text" class="form-control input-lg mb-4" name="editarLocalidad" id="editarLocalidadOsecac" placeholder="Ingresar Localidad">
+						</div>
+				  </div>
+			  </div>
+  
+  
+			  @if(Auth::user()->role == 'Traslado')
+				  <!--Entrada para KM ida y vuelta -->
+				  <div class="form-group col-lg-12 mb-0">
+					  <div class="input-group w-100">
+						  <div class="col-sm-12 col-lg-6">
+							  <label for="kmIda">KM por Día</label>
+							  <input type="number" class="form-control input-lg mb-4" name="editarKmIda" id="editarKmIdaOsecac" placeholder="Ingresar KM de ida">
+						  </div>
+					  </div>
+				  </div>
+  
+				  <!--Entrada para Viajes de ida y vuelta -->
+				  <div class="form-group col-lg-12 mb-0">
+					  <div class="input-group w-100">
+						  <div class="col-sm-12 col-lg-6">
+							  <label for="viajesIda">Viajes de ida</label>
+							  <input type="text" class="form-control input-lg mb-4" name="editarViajesIda" id="editarViajesIdaOsecac" placeholder="Ingresar Viajes de ida">
+						  </div>
+  
+						  <div class="col-sm-12 col-lg-6">
+							  <label for="viajesVuelta">Viajes de vuelta</label>
+							  <input type="number" class="form-control input-lg mb-4" name="editarViajesVuelta" id="editarViajesVueltaOsecac" placeholder="Ingresar Viajes de vuelta">
+						  </div>
+					  </div>
+				  </div>
+			  @endif
+
+  
+			  <!-- Entrada para notas -->
+			  <div class="form-group col-sm-12">
+				  <div class="input-group w-100">
+					  <div class="col-sm-12">
+						  <textarea class="form-control" type="text" name="editarNotas" id="editarNotasOsecac" maxlength="255" rows="5" cols="130" placeholder="Notas..">
+  
+						  </textarea>
+					  </div>
+				  </div>
+			  </div>
+		  </div>
+			
+		  </div>
+  
+		  <!--=====================================
+		  PIE DEL MODAL
+		  ======================================-->
+  
+		  <div class="modal-footer">
+  
+			<button type="button" class="btn btn-default pull-left" data-dismiss="modal">Salir</button>
+  
+			<button type="submit" class="btn btn-primary">Guardar beneficiario</button>
+  
+		  </div>
+
+		  <input type="hidden" name="id" id="idOsecac">
+  
+		</form>
+  
+	  </div>
+  
+	</div>
+  
+  </div>
 
 <!--=====================================
 MODAL HORARIO BENEFICIARIO
