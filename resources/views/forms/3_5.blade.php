@@ -68,9 +68,9 @@
 						style="padding-left: 0.5rem; width: 60%;"
 					>
 						<span class="form-prepend text"
-							>Tel({{substr(Auth::user()->telefono, 0, 3)}})</span
+							>Tel</span
 						>
-						<input id="phone" type="text" class="form-input" value="{{substr(Auth::user()->telefono, 3)}}"/>
+						<input id="phone" type="text" class="form-input" value="{{Auth::user()->telefono}}"/>
 					</div>
 				</div>
 				<div class="form-group" style="margin-top: 0.8rem;">
@@ -133,12 +133,11 @@
 								// Add the seconds to total 
 								$total+= (int) $temp[2]; 	
 							}
-
+								
 								// Format the seconds back into HH:MM:SS 
 								$formatted = sprintf('%02d:%02d',  
 												($total / 3600), 
-												($total / 60 % 60), 
-												$total % 60); 
+												($total / 60 % 60)); 
 						@endphp
 						<input id="workload" type="text" class="form-input" value="{{$formatted ?? ''}}"/>
 					</div>

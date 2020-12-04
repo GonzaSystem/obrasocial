@@ -5,7 +5,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
 		<title>3.2 Planilla de Asistencia Mensual</title>
-		<link rel="stylesheet" href="../../app.css" />
+		<link rel="stylesheet" href="{{asset('css/osecac/app.css')}}" />
 	</head>
 	<body>
 		<header>
@@ -49,17 +49,17 @@
 			<div class="form" style="margin-top: 1.5rem;">
 				<div class="form-group" style="margin-top: 0.8rem;">
 					<span class="form-prepend text">Prestador:</span>
-					<input id="lender-number" type="text" class="form-input" />
+					<input id="lender-number" type="text" class="form-input" value="{{Auth::user()->name . ' ' . Auth::user()->surname}}"/>
 				</div>
 				<div class="form-group" style="margin-top: 0.8rem;">
 					<span class="form-prepend text">Domicilio:</span>
-					<input id="address" type="text" class="form-input" />
+					<input id="address" type="text" class="form-input" value="{{Auth::user()->direccion . ' - ' . Auth::user()->provincia}}"/>
 				</div>
 
 				<div class="row">
 					<div class="form-group" style="margin-top: 0.8rem;">
 						<span class="form-prepend text">Correo Electrónico</span>
-						<input id="email" type="text" class="form-input" />
+						<input id="email" type="text" class="form-input" value="{{Auth::user()->email}}"/>
 					</div>
 					<div
 						class="form-group"
@@ -67,16 +67,16 @@
 						style="padding-left: 0.5rem; width: 60%;"
 					>
 						<span class="form-prepend text"
-							>Tel(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)</span
+							>Tel</span
 						>
-						<input id="phone" type="text" class="form-input" />
+						<input id="phone" type="text" class="form-input" value="{{Auth::user()->telefono}}"/>
 					</div>
 				</div>
 				<div class="form-group" style="margin-top: 0.8rem;">
 					<span class="form-prepend text"
 						>Apellido y Nombre del beneficiario:</span
 					>
-					<input id="names" type="text" class="form-input" />
+					<input id="names" type="text" class="form-input" value="{{$beneficiario[0]->nombre}}"/>
 				</div>
 				<div class="form-group" style="margin-top: 0.8rem;">
 					<span class="form-prepend text">DNI:</span>
@@ -85,11 +85,12 @@
 						type="text"
 						class="form-input"
 						style="flex-basis: 25%; width: 25%;"
+						value="{{$beneficiario[0]->dni}}"
 					/>
 				</div>
 				<div class="form-group" style="margin-top: 0.8rem;">
 					<span class="form-prepend text">Prestación:</span>
-					<input id="benefit" type="text" class="form-input" />
+					<input id="benefit" type="text" class="form-input" value="{{$prestador[0]->prestacion[0]->nombre}}"/>
 				</div>
 				<div class="form-group" style="margin-top: 0.8rem;">
 					<span class="form-prepend text">Periodo (mes y año):</span>
@@ -98,6 +99,7 @@
 						type="text"
 						class="form-input"
 						style="flex-basis: 45%; width: 45%;"
+						value="{{Auth::user()->mes . ' / ' . Auth::user()->anio}}"
 					/>
 				</div>
 			</div>
@@ -115,6 +117,56 @@
 							</th>
 						</tr>
 					</thead>
+					<tbody>
+						@php
+							$indice = 0;
+						@endphp
+						@foreach($fechas['total'][$beneficiario[0]->id] as  $k => $sesion)
+							@php
+								$fechaExploded = explode('/', $sesion);
+							@endphp
+							<tr>
+								<td style="height:17px">
+									<input type="text" id="table-input-1" class="table-input" value="{{$fechaExploded[0].'/'.$fechaExploded[1].'/'.$fechaExploded[2]}}">
+								</td>
+								<td style="height:17px">
+									<input type="text" id="table-input-2" class="table-input" value="{{$fechaExploded[3] . ' - ' . $fechaExploded[4]}}">
+								</td>
+								<td style="height:17px">
+									<input type="text" id="table-input-3" class="table-input" value="1">
+								</td>
+								<td style="height:17px">
+									<input type="text" id="table-input-4" class="table-input">
+								</td>
+								<td style="height:17px">
+									<input type="text" id="table-input-5" class="table-input">
+								</td>
+							</tr>
+							@php
+								$indice++;
+							@endphp
+						@endforeach
+
+						@for ($i = $indice; $i < 20; $i++)
+							<tr>
+								<td style="height:17px">
+									<input type="text" id="table-input-1" class="table-input">
+								</td>
+								<td style="height:17px">
+									<input type="text" id="table-input-2" class="table-input">
+								</td>
+								<td style="height:17px">
+									<input type="text" id="table-input-3" class="table-input">
+								</td>
+								<td style="height:17px">
+									<input type="text" id="table-input-4" class="table-input">
+								</td>
+								<td style="height:17px">
+									<input type="text" id="table-input-5" class="table-input">
+								</td>
+							</tr>
+						@endfor
+					</tbody>
 				</table>
 			</div>
 
@@ -186,8 +238,8 @@
 			</footer>
 		</main>
 
-		<script src="../../app.js"></script>
-		<script>
+		<script src="{{asset('js/osecac/app.js')}}"></script>
+		{{-- <script>
 			AppClass.createTableRows(
 				'3.2-form-table-1',
 				20,
@@ -195,6 +247,6 @@
 				[15, 15, 20, 20, 25],
 				17
 			);
-		</script>
+		</script> --}}
 	</body>
 </html>
