@@ -33,7 +33,7 @@
 
         <button class="btn btn-primary" data-toggle="modal" data-target="#modalAgregarPrestacion">
 
-          Agregar datos de prestador
+          Agregar Obra Social / Prestación
 
         </button>
 

@@ -233,7 +233,7 @@
 					style="height: 1px; margin-top: 0.05rem;"
 				></div>
 				<p class="text" style="margin-top: 0.2rem">
-					Subsidios por Discapacidad 2019
+					Subsidios por Discapacidad {{date('Y')}}
 				</p>
 			</footer>
 		</main>

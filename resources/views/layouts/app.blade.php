@@ -159,7 +159,7 @@
                         <li class="active">
                             <a href="{{ route('home') }}">
                                 <i class="fa fa-home"></i>
-                                <span>Inicio</span>
+                                <span>Prestador</span>
                             </a>
                         </li>
 
@@ -167,7 +167,7 @@
                             <li>
                                 <a href="{{ route('datos-prestador') }}">
                                     <i class="fa fa-user"></i>
-                                    <span>Datos de prestador</span>
+                                    <span>Añadir O. Social/Prestación</span>
                                 </a>
                             </li>
                         <li class="treeview">
@@ -245,7 +245,7 @@
     @auth
         {{-- Footer --}}
         <footer class="main-footer">
-            <strong>Copyright &copy; 2020 Porcal Adrian Martin</strong> .
+            <strong>Copyright &copy; {{date('Y')}} Porcal Adrian Martin</strong> .
 
             Todos los derechos reservados.
         </footer>

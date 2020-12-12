@@ -356,6 +356,10 @@ class BeneficiarioController extends Controller
 			case 5:
 				$view = 'forms.3_5';
 				break;
+
+			case 6:
+				$view = 'forms.3_3';
+				break;
 		}
 
         $beneficiario_id = $bene_id;

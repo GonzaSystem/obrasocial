@@ -211,6 +211,10 @@
 						case 5:
 							$nombre_planilla = '3.5';
 							break;
+
+						case 6:
+							$nombre_planilla = '3.3';
+							break;
 					}
 					$os_id = $beneficiario->os_id;
 					$prestador_id = $beneficiario->id;
