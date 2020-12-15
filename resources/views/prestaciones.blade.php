@@ -87,7 +87,11 @@
 					
 					case 6:
 						$planilla = '3.3';
-					break;
+						break;
+					
+					case 7:
+						$planilla = '3.6';
+						break;
 				}
 			@endphp
 			
@@ -249,6 +253,7 @@ MODAL AGREGAR PRESTACION
 						  <option value="4">3.2</option>
 						  <option value="6">3.3</option>
 						  <option value="5">3.5</option>
+						  <option value="7">3.6</option>
                       </select>
 
                   </div>
