@@ -128,7 +128,7 @@
 						style="margin-top: 0.8rem; padding-left: 0.5rem; width: 130%;"
 					>
 						<span class="form-prepend text">Cantidad de viajes mensuales</span>
-						<input id="trips-by-month-1" type="text" class="form-input" value="{{(($beneficiario[0]->viajes_ida ?? 0) * (count($fechas['total'][$beneficiario[0]->id] ?? 0)))}}"/>
+						<input id="trips-by-month-1" type="text" class="form-input" value="{{count($fechas['total'][$beneficiario[0]->id] ?? 0)}}"/>
 					</div>
 				</div>
 			</div>
@@ -153,7 +153,7 @@
 						style="margin-top: 0.8rem; padding-left: 0.5rem; width: 130%;"
 					>
 						<span class="form-prepend text">Cantidad de viajes mensuales</span>
-						<input id="trips-by-month-2" type="text" class="form-input" value="{{(($beneficiario[0]->viajes_vuelta ?? 0) * (count($fechas['total'][$beneficiario[0]->id] ?? 0)))}}"/>
+						<input id="trips-by-month-2" type="text" class="form-input" value="{{count($fechas['total'][$beneficiario[0]->id] ?? 0)}}"/>
 					</div>
 				</div>
 			</div>

@@ -1,75 +1,84 @@
 <!DOCTYPE html>
 <!-- saved from url=(0038)http://localhost/adrian/formulario.php -->
-<html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<html lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>PLANILLA DE FACTURACIÓN</title>
-<link rel="stylesheet" href="{{asset('css/estilosi_facturacion_traslado.css')}}" media="print">
+<link rel="stylesheet" href="{{asset('css/estilosi_corregida.css')}}" media="print">
 <style type="text/css">
 	body {
-		text-align: center;
-		background: #4e5255;
+		
+		background: #e3e6db;
+		margin: 0px;
+		padding: 0px;
 	}
 	input{ background: none;border: none;}
 	#cabecera {
 		position: absolute;
-		margin-top: 148px;
+		margin-top: 123px;
 		text-align: left;
 	}
 	#cabecera * {
 		position: relative;
 	}
-	#contenedor {
-		width:1131px;
-		height:800px;
+	#contenedor {text-align: center;
+		width:1350px;
+		height:928px;
 		margin:auto;
+		background: url('{{asset("img/imagen_corregida.jpg")}}') #e3e6db no-repeat;
+
+
 	}
 	#transporte {
-		left: 123px;
+		left: 143px;
+		margin-top:30px;
 		display: block;
-		width:970px;
+		width:1200px;
 	}
-	#transporte1 {width: 320px; float: left}
+	#transporte1 {width: 393px; float: left}
 	#periodo {
-		margin-top: 10px;
+		margin-top: 16px;
 	}
-	#codigo { margin-left: 155px;
-		width: 467px;
+	#codigo { margin-left: 178px;
+		width: 550px;
 	}
 	.clear {
 		clear: both;
 	}
-	#periodo{margin-left: 100px;}
+	#periodo{margin-left: 127px;}
 	#periodo1{width: 35px;}
 	#periodo2{width: 45px;}
 	#periodo2{margin-left: 10px;}
 	#datos { position: absolute;
-		margin-top: 232px;
-		margin-left: 21px;
+		margin-top: 252px;
+		margin-left: 18px;
 		width:1095px;
 		text-align: left;
 	}
 	.fila {
-		width:1195px;
+		width:1340px;
 	}
 
-	.fila input { height: 16.3px; margin-top: 2px;
+	.fila input { height: 17.19px; margin-top: 2px;
 		border-bottom: 1px solid black;
 	}
+	.f19 {border-bottom:none !important;}
 .c3,.c4,.c5,.c6,.c7,.c9{ text-align: center; }
-	.c0{width: 245px}
-	.c1{width: 146px;margin-left: 7px;}
-	.c2{width: 146px;margin-left: 2px;}
-	.c3{width: 53px;margin-left: 2px;}
-	.c4{width: 53px}
-	.c5{width: 52px}
-	.c6{width: 78px;margin-left:0px;}
-	.c7{width: 78px}
-	.c8{width: 79px;margin-left: 1px;text-align: center;}
-	.c9{width: 78px}
-	#importe1 {margin-left:929px;width: 75px;margin-top: 4px}
+	.c0{width: 296px}
+	.c1{width: 177px;margin-left: 10px;}
+	.c2{width: 179px;margin-left: 1px;}
+	.c3{width: 65px;margin-left: 2px;}
+	.c4{width: 65px}
+	.c5{width: 65px}
+	.c6{width: 95px;margin-left:0px;}
+	.c7{width: 96px}
+	.c8{width: 96px;margin-left: 1px;text-align: center;}
+	.c9{width: 96px}
+	#importe1 {margin-left:1120px;width: 87px;margin-top: 8px}
 	#importe input {text-align: center;}
-	#firma {margin-left:768px;margin-top: 62px}
+	#firma {margin-left:925px;margin-top: 77px}
 	#firma input {text-align: center}
-	#firma1{width: 305px; }
+	#firma1{width: 375px; }
 	#boton_im {
 	position:absolute;
 	margin-top:20px;
@@ -83,7 +92,8 @@
 	border:none;
 	border-radius: 15px;
 }
-</style></head>
+</style>
+</head>
 
 
 <body>
@@ -96,51 +106,53 @@
 	<div id="periodo"><input type="text" name="periodo" id="periodo1" value="{{Auth::user()->mes}}"><input type="text" name="periodo" id="periodo2" value="{{Auth::user()->anio}}"></div>
 </div>
 <div id="datos">
-			@php
-				$indice = 0;
-				$importe_total = 0;
-			@endphp
-			@foreach($beneficiarios as $k => $benef)
-				<div class="fila f{{$k}}">
-					<input type="text" name="text0" class="c0" value="{{$benef->nombre}}">
-					<input type="text" name="text1" class="c1" value="{{$benef->direccion}}">
-					<input type="text" name="text2" class="c2" value="{{$benef->direccion_prestacion}}">
-					<input type="text" name="text3" class="c3" value="{{$benef->km_dia}}">
-					<input type="text" name="text4" class="c4" value="{{$benef->km_mes}}">
-					<input type="text" name="text5" class="c5" value="{{$benef->total_fechas}}">
-					<input type="text" name="text6" class="c6" value="$ {{$benef->importe_unitario}}">
-					<input type="text" name="text7" class="c7" value="$ {{$benef->importe_dependencia['valor_modulo']}}">
-					<input type="text" name="text8" class="c8" value="$ {{$benef->importe_total}}">
-					<input type="text" name="text9" class="c9" value="{{($benef->traditum['codigo'] ?? '')}}">
-				</div>
-				@php
-					$indice++;
-					$importe_total += str_replace(',','.', str_replace('.',',',$benef->importe_total));
-				@endphp
-			@endforeach
+	@php
+		$indice = 0;
+		$importe_total = 0;
+	@endphp
+	@foreach($beneficiarios as $k => $benef)
+		<div class="fila f{{$k}}">
+			<input type="text" name="text0" class="c0" value="{{$benef->nombre}}">
+			<input type="text" name="text1" class="c1" value="{{$benef->direccion}}">
+			<input type="text" name="text2" class="c2" value="{{$benef->direccion_prestacion}}">
+			<input type="text" name="text3" class="c3" value="{{$benef->km_dia}}">
+			<input type="text" name="text4" class="c4" value="{{$benef->km_mes}}">
+			<input type="text" name="text5" class="c5" value="{{$benef->total_fechas}}">
+			<input type="text" name="text6" class="c6" value="$ {{$benef->importe_unitario}}">
+			<input type="text" name="text7" class="c7" value="$ {{$benef->importe_dependencia['valor_modulo']}}">
+			<input type="text" name="text8" class="c8" value="$ {{$benef->importe_total}}">
+			<input type="text" name="text9" class="c9" value="{{($benef->traditum['codigo'] ?? '')}}">
+		</div>
+		@php
+			$indice++;
+			$importe_total += str_replace(',','.', str_replace('.',',',$benef->importe_total));
+		@endphp
+	@endforeach
 
-			@for ($i = $indice; $i < 19; $i++)
-				<div class="fila f{{$i}}">
-					<input type="text" name="text0" class="c0">
-					<input type="text" name="text1" class="c1">
-					<input type="text" name="text2" class="c2">
-					<input type="text" name="text3" class="c3">
-					<input type="text" name="text4" class="c4">
-					<input type="text" name="text5" class="c5">
-					<input type="text" name="text6" class="c6">
-					<input type="text" name="text7" class="c7">
-					<input type="text" name="text8" class="c8">
-					<input type="text" name="text9" class="c9">
-				</div>
-			@endfor
-		<div id="importe"><input type="text" name="importe" id="importe1" value="$ {{number_format($importe_total, 2, ',', '.')}}">
-		<div id="firma"><input type="text" name="firma" id="firma1">
-	</div>
+	@for ($i = $indice; $i < 22; $i++)
+		<div class="fila f{{$i}}">
+			<input type="text" name="text0" class="c0">
+			<input type="text" name="text1" class="c1">
+			<input type="text" name="text2" class="c2">
+			<input type="text" name="text3" class="c3">
+			<input type="text" name="text4" class="c4">
+			<input type="text" name="text5" class="c5">
+			<input type="text" name="text6" class="c6">
+			<input type="text" name="text7" class="c7">
+			<input type="text" name="text8" class="c8">
+			<input type="text" name="text9" class="c9">
+		</div>
+	@endfor
+
+		<div id="importe">
+			<input type="text" name="importe" id="importe1" value="$ {{number_format($importe_total, 2, ',', '.')}}">
+			<div id="firma">
+				<input type="text" name="firma" id="firma1">
+			</div>
+		</div>
 </div>
 
 </div>
 
-<img src="{{asset('img/imagen_traslado.jpg')}}" width="1131" height="800">
-</div>
-
-</body></html>
+</body>
+</html>

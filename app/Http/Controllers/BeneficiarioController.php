@@ -609,7 +609,7 @@ class BeneficiarioController extends Controller
 			return strcmp($a->nombre, $b->nombre);
 		});
 		foreach($beneficiarios as $benef){	
-			if($indice > 18){
+			if($indice > 21){
 				$grupo++;
 				$indice = 0;
 			}
