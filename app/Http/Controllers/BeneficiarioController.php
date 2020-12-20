@@ -251,6 +251,58 @@ class BeneficiarioController extends Controller
             'prestador' => $prestador,
             'beneficiario' => $beneficiario,
         ]);
+	}
+	
+	public function presupuestoTraslado($prestador_id, $beneficiario_id)
+    {
+        $prestador = Prestador::where('id', '=', $prestador_id)->with('user', 'prestacion')->get();
+		$beneficiario = Beneficiario::with('sesion')->find($beneficiario_id);
+		foreach($beneficiario->sesion as $k => $sesion){
+			switch($sesion->dia){
+				case 1:
+					$dia = 'Lunes';
+					break;
+
+				case 2:
+					$dia = 'Martes';
+					break;
+
+				case 3:
+					$dia = 'Miercoles';
+					break;
+
+				case 4:
+					$dia = 'Jueves';
+					break;
+					
+				case 5:
+					$dia = 'Viernes';
+					break;
+
+				case 6:
+					$dia = 'Sabado';
+					break;
+
+				case 7:
+					$dia = 'Domingo';
+					break;
+
+				default:
+					break;
+			}
+			$horario = $sesion['hora'];
+			$tiempo = $sesion['tiempo'];
+			$hor=new \DateTime($horario);
+			$fin=$hor->add( new \DateInterval( 'PT' . ( (integer) $tiempo ) . 'M' ) );
+			$fecha_fin = $fin->format( 'H:i' );
+			$sesion->fecha_fin = $fecha_fin;
+			$beneficiario->sesion[$dia] = $sesion;
+			unset($beneficiario->sesion[$k]);
+		}
+        return view('forms.8_5', [
+            'prestador' => $prestador,
+            'beneficiario' => $beneficiario,
+        ]);
     }
 
     public function update(Request $request)
@@ -268,14 +320,15 @@ class BeneficiarioController extends Controller
         $direccion_prestacion = $request->input('editarDireccionPrestacion');
         $localidad_prestacion = $request->input('editarLocalidadPrestacion');
         $dni = $request->input('editarDni');
-        $cuit = $request->input('editarCuit');
+		$cuit = $request->input('editarCuit');
 
         if(\Auth::user()->role == 'Traslado'){
             $km_ida = $request->input('editarKmIda');
             $km_vuelta = $request->input('editarKmVuelta');
             $viajes_ida = $request->input('editarViajesIda');
             $viajes_vuelta = $request->input('editarViajesVuelta');
-            $dependencia = $request->input('editarDependencia');
+			$dependencia = $request->input('editarDependencia');
+			$dias_mensuales = $request->input('editarDiasMensuales');
         }
 
         $turno = $request->input('editarTurno');
@@ -301,7 +354,8 @@ class BeneficiarioController extends Controller
             $beneficiario->km_vuelta = $km_vuelta;
             $beneficiario->viajes_ida = $viajes_ida;
             $beneficiario->viajes_vuelta = $viajes_vuelta;
-            $beneficiario->dependencia = $dependencia;
+			$beneficiario->dependencia = $dependencia;
+			$beneficiario->dias_mensuales = $dias_mensuales;
         }
 
         $beneficiario->turno = $turno;

@@ -227,7 +227,12 @@
 					<tr class="beneficiarioBold" idBenef="{{$benefval->id}}" style="{{ (Session::has('ModificacionBeneficiario') && Session::get('ModificacionBeneficiario') == $benefval->id) ? 'font-weight:bold;' : ''}}">
 						<td style="text-align: center"> <button class="btn btn-success btnClonarBeneficiario" data-toggle="modal" data-target="#modalClonarBeneficiario" idBenef="{{ $benefval->id }}"><i class="fa fa-users"></i></button></td>
 							@if($data['obrasocial'][0]->nombre == "OSECAC")
-								<td style="text-align: center"><a href="{{ route('beneficiario-presupuesto', ['prestador_id' => $benefval->prestador_id, 'beneficiario_id' => $benefval->id]) }}" target="_BLANK"><button class="btn btn-success">8.4</button></a></td>
+								@if(Auth::user()->role == "Traslado")
+									<td style="text-align: center"><a href="{{ route('beneficiario-presupuesto-traslado', ['prestador_id' => $benefval->prestador_id, 'beneficiario_id' => $benefval->id]) }}" target="_BLANK"><button class="btn btn-success">8.5</button></a></td>
+								@else
+									<td style="text-align: center"><a href="{{ route('beneficiario-presupuesto', ['prestador_id' => $benefval->prestador_id, 'beneficiario_id' => $benefval->id]) }}" target="_BLANK"><button class="btn btn-success">8.4</button></a></td>
+								@endif
+								
 							@endif
 						<td>{{ $benefval->nombre . ' ' . $benefval->apellido }}</td>
 						<td style="text-align: center">{{ $benefval->numero_afiliado }}</td>
@@ -652,14 +657,20 @@ MODAL AGREGAR BENEFICIARIO OSECAC
   
 			  @if(Auth::user()->role == 'Traslado')
 				  <!--Entrada para KM ida y vuelta -->
-				  <div class="form-group col-lg-12 mb-0">
-					  <div class="input-group w-100">
-						  <div class="col-sm-12 col-lg-6">
-							  <label for="kmIda">KM por Día</label>
-							  <input type="number" class="form-control input-lg mb-4" name="kmIda" placeholder="Ingresar KM de ida">
-						  </div>
-					  </div>
-				  </div>
+				  	<div class="form-group col-lg-12 mb-0">
+						<div class="input-group w-100">
+							<div class="col-sm-12 col-lg-6">
+								<label for="kmIda">Cantidad KM por Día</label>
+								<input type="number" class="form-control input-lg mb-4" name="kmIda" placeholder="Ingresar KM (Ida y Vuelta)">
+							</div>
+						</div>
+						<div class="input-group w-100">
+							<div class="col-sm-12 col-lg-6">
+								<label for="kmIda">Dias Mensuales</label>
+								<input type="number" class="form-control input-lg mb-4" name="diasMensuales" placeholder="Ingresar Dias Mensuales">
+							</div>
+						</div>
+				  	</div>
   
 				  <!--Entrada para Viajes de ida y vuelta -->
 				  <div class="form-group col-lg-12 mb-0">
@@ -1069,12 +1080,16 @@ MODAL EDITAR BENEFICIARIO
 			  @if(Auth::user()->role == 'Traslado')
 				  <!--Entrada para KM ida y vuelta -->
 				  <div class="form-group col-lg-12 mb-0">
-					  <div class="input-group w-100">
-						  <div class="col-sm-12 col-lg-6">
-							  <label for="kmIda">KM por Día</label>
-							  <input type="number" class="form-control input-lg mb-4" name="editarKmIda" id="editarKmIdaOsecac" placeholder="Ingresar KM de ida">
-						  </div>
-					  </div>
+						<div class="input-group w-100">
+							<div class="col-sm-12 col-lg-6">
+								<label for="kmIda">KM por Día</label>
+								<input type="number" class="form-control input-lg mb-4" name="editarKmIda" id="editarKmIdaOsecac" placeholder="Ingresar KM por Dia">
+							</div>
+							<div class="col-sm-12 col-lg-6">
+								<label for="kmIda">Dias Mensuales</label>
+								<input type="number" class="form-control input-lg mb-4" name="editarDiasMensuales" id="editarDiasMensuales" placeholder="Ingresar Dias Mensuales">
+							</div>
+						</div>
 				  </div>
   
 				  <!--Entrada para Viajes de ida y vuelta -->

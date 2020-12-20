@@ -315,6 +315,7 @@ $.ajax({
 		$("#editar_numero_afiliado_osecac").val(respuesta['beneficiario'][0]['numero_afiliado']);
 		$("#editar_codigo_seguridad_osecac").val(respuesta['beneficiario'][0]['codigo_seguridad']);
 		$("#editar_cantidad_solicitada_osecac").val(respuesta['beneficiario'][0]['cantidad_solicitada']);
+		$('#editarDiasMensuales').val(respuesta['beneficiario'][0]['dias_mensuales']);
 		$("#tituloEditarBeneficiarioOsecac").empty().html('Editar Beneficiario - ' + respuesta['beneficiario'][0]["nombre"] + ' - ' + respuesta['prestacion'] +' - ' +respuesta['prestacion_completa'][0]['obrasocial'][0]['nombre']);
 		}
 	});
