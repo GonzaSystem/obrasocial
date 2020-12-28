@@ -245,7 +245,7 @@
 						</td>
 						<td style="width: 200px">
 							<div class="btn-group">	
-								<a target="_BLANK" href="{{ route('formulario-beneficiario', ['id' => $benefval->id, 'prestador_id' => $prestador_id ,'planilla' => $planilla, 'mes' => Auth::user()->mes, 'anio' => Auth::user()->anio]) }}" class="btn btn-primary" style="color: white; background-color: #605CA8; padding: 3px 12px 3px;"><span>{{ $nombre_planilla }}<span></a>
+								<a target="_BLANK" href="{{ route('formulario-beneficiario', ['id' => $benefval->id, 'prestador_id' => $benefval->prestador_id ,'planilla' => $planilla, 'mes' => Auth::user()->mes, 'anio' => Auth::user()->anio]) }}" class="btn btn-primary" style="color: white; background-color: #605CA8; padding: 3px 12px 3px;"><span>{{ $nombre_planilla }}<span></a>
 								@if($codigo_prestacion != '6501024')
 									<button class="btn btn-primary btnHorarioBeneficiario" data-toggle="modal" data-target="#modalHorarioBeneficiario" idBenef="{{ $benefval->id }}" cuenta-tope="{{ $data['fechas']['tope'][$benefval->id][$benefval->id] }}" cuenta-original="{{ count($data['fechas']['total'][$benefval->id])}}" cuenta-agregados="{{ $data['fechas']['total_agregado'][$benefval->id] }}"><i class="fa fa-clock-o"></i></button>
 								@endif
@@ -1107,6 +1107,21 @@ MODAL EDITAR BENEFICIARIO
 					  </div>
 				  </div>
 			  @endif
+
+				@if(Auth::user()->role == 'Traslado')
+					<div class="form-group col-12">
+						<div class="input-group w-100">
+							<div class="col-sm-12 px-5">
+								<label for="dependencia">Dependencia (Cod. 6501024)</label>
+								<select type="text" class="form-control input-lg" id="editarDependenciaOsecac" name="editarDependencia" placeholder="Ingresar Dependencia">
+									<option value="">Seleccionar...</option>
+									<option value="Si">Si</option>
+									<option value="No">No</option>
+								</select>
+							</div>
+						</div>
+					</div>  	
+				@endif
 
   
 			  <!-- Entrada para notas -->

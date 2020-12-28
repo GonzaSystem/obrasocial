@@ -1,3 +1,7 @@
+@php
+	$meses = ['01' => 'Enero', '02' => 'Febrero', '03' => 'Marzo', '04' => 'Abril', '05' => 'Mayo', '06' => 'Junio', '07' => 'Julio', '08' => 'Agosto', '09' => 'Septiembre', '10' => 'Octubre', '11' => 'Noviembre', '12' => 'Diciembre'];
+@endphp
+
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -249,7 +253,7 @@
 						<span class="form-prepend text" style="font-size: 0.8rem;"
 							>Beneficiario Causante:</span
 						>
-						<input id="beneficiary" type="text" class="form-input" value="{{ $beneficiario->nombre }}"/>
+						<input id="beneficiary" type="text" class="form-input" style="width: 800px;" value="{{ $beneficiario->nombre }}"/>
 					</div>
 					<div
 						class="form-group"
@@ -278,7 +282,7 @@
 						<span class="form-prepend text" style="font-size: 0.8rem;"
 							>Período:</span
 						>
-						<input id="period" type="text" class="form-input" value="{{Auth::user()->anio . ' a diciembre'}}"/>
+						<input id="period" type="text" class="form-input" value="{{$meses[Auth::user()->mes] . ' a Diciembre'}}"/>
 					</div>
 					<div
 						class="form-group"
@@ -835,7 +839,7 @@
 							<td>
 								@php
 									if(isset($beneficiario->sesion['Lunes'])){
-										$km_ida = (($beneficiario->km_ida / 2) ?? 0) . ' + ' . (($beneficiario->km_ida / 2) ?? 0);
+										$km_ida = (($beneficiario->km_ida ?? 0));
 									}else{
 										$km_ida = '';
 									}
@@ -845,7 +849,7 @@
 							<td>
 								@php
 									if(isset($beneficiario->sesion['Martes'])){
-										$km_ida = (($beneficiario->km_ida / 2) ?? 0) . ' + ' . (($beneficiario->km_ida / 2) ?? 0);
+										$km_ida = (($beneficiario->km_ida ?? 0));
 									}else{
 										$km_ida = '';
 									}
@@ -855,7 +859,7 @@
 							<td>
 								@php
 									if(isset($beneficiario->sesion['Miercoles'])){
-										$km_ida = (($beneficiario->km_ida / 2) ?? 0) . ' + ' . (($beneficiario->km_ida / 2) ?? 0);
+										$km_ida = (($beneficiario->km_ida ?? 0));
 									}else{
 										$km_ida = '';
 									}
@@ -865,7 +869,7 @@
 							<td>
 								@php
 									if(isset($beneficiario->sesion['Jueves'])){
-										$km_ida = (($beneficiario->km_ida / 2) ?? 0) . ' + ' . (($beneficiario->km_ida / 2) ?? 0);
+										$km_ida = (($beneficiario->km_ida ?? 0));
 									}else{
 										$km_ida = '';
 									}
@@ -875,7 +879,7 @@
 							<td>
 								@php
 									if(isset($beneficiario->sesion['Viernes'])){
-										$km_ida = (($beneficiario->km_ida / 2) ?? 0) . ' + ' . (($beneficiario->km_ida / 2) ?? 0);
+										$km_ida = (($beneficiario->km_ida ?? 0));
 									}else{
 										$km_ida = '';
 									}
@@ -885,7 +889,7 @@
 							<td>
 								@php
 									if(isset($beneficiario->sesion['Sabado'])){
-										$km_ida = (($beneficiario->km_ida / 2) ?? 0) . ' + ' . (($beneficiario->km_ida / 2) ?? 0);
+										$km_ida = (($beneficiario->km_ida ?? 0));
 									}else{
 										$km_ida = '';
 									}
@@ -914,6 +918,7 @@
 									style="display: inline-block; width: 50px; text-align: left;"
 									type="text"
 									class="table-input"
+									value="{{(($beneficiario->km_ida ?? 0) * ($beneficiario->dias_mensuales ?? 0))}}"
 								/>
 							</td>
 						</tr>
@@ -932,6 +937,7 @@
 							type="text"
 							class="form-input"
 							style="flex-basis: 30%; width: 30%;"
+							value="{{($beneficiario->dias_mensuales ?? 0)}}"
 						/>
 					</div>
 					<div
@@ -946,6 +952,7 @@
 							type="text"
 							class="form-input"
 							style="flex-basis: 30%; width: 30%;"
+							value="{{($beneficiario->dias_mensuales ?? 0) * 2}}"
 						/>
 					</div>
 					<div
@@ -955,11 +962,19 @@
 						<span class="form-prepend text" style="font-size: 0.8rem;"
 							>Monto por Km.:</span
 						>
+						@php
+							if($prestador[0]->valor_default == 'T'){
+								$valor_prestacion = $prestador[0]->prestacion[0]->valor_modulo;
+							}else{
+								$valor_prestacion = $prestador[0]->valor_prestacion;
+							}
+						@endphp
 						<input
 							id="cost-per-km"
 							type="text"
 							class="form-input"
 							style="flex-basis: 30%; width: 30%;"
+							value="{{number_format(str_replace(',', '.', $valor_prestacion),2,',','.')}}"
 						/>
 					</div>
 				</div>
@@ -979,22 +994,30 @@
 							<div
 								style="width: 20px; height: 20px; margin: 0 0.4rem; border: 1px solid #212121; text-align: center; font-size: 1.1rem; cursor: pointer;"
 								onclick="AppClass.bindInputCheck(event)"
-								data-checked="0"
-							></div>
+								data-checked="{{$beneficiario->dependencia == 'Si' ? '1' : '0'}}"
+							>{{$beneficiario->dependencia == 'Si' ? 'X' : ''}}</div>
 						</div>
 						<div class="form-group" style="margin-top: 0;">
 							<span class="text" style="font-size: 0.8rem;">No</span>
 							<div
 								style="width: 20px; height: 20px; margin: 0 0.4rem; border: 1px solid #212121; text-align: center; font-size: 1.1rem; cursor: pointer;"
 								onclick="AppClass.bindInputCheck(event)"
-								data-checked="0"
-							></div>
+								data-checked="{{$beneficiario->dependencia != 'Si' ? '1' : '0'}}"
+							>{{$beneficiario->dependencia != 'Si' ? 'X' : ''}}</div>
 						</div>
 					</div>
 					<div
 						class="form-group"
 						style="margin-top: 0.2rem; padding-left: 0.5rem; width: 50%; justify-content: flex-end;"
 					>
+						@php
+							$km_mensual = ($beneficiario->km_ida ?? 0) * ($beneficiario->dias_mensuales ?? 0);
+							if($beneficiario->dependencia == 'Si'){
+								$montoMensual = (($km_mensual ?? 0) * (str_replace(',','.',$valor_prestacion) ?? 0)) * 135 / 100;
+							}else{
+								$montoMensual = (($km_mensual ?? 0) * (str_replace(',','.',$valor_prestacion) ?? 0));
+							}
+						@endphp
 						<span class="form-prepend text" style="font-size: 0.8rem;"
 							>Monto mensual:</span
 						>
@@ -1003,6 +1026,7 @@
 							type="text"
 							class="form-input"
 							style="flex-basis: 30%; width: 30%;"
+							value="{{number_format(str_replace(',', '.', $montoMensual), 2, ',', '.')}}"
 						/>
 					</div>
 				</div>
@@ -1030,7 +1054,7 @@
 						<span class="form-prepend text" style="font-size: 0.8rem;"
 							>beneficiario:</span
 						>
-						<input id="beneficiary" type="text" class="form-input" value="{{$beneficiario->nombre}}"/>
+						<input id="beneficiary" type="text" class="form-input" style="width: 700px;" value="{{$beneficiario->nombre}}"/>
 					</div>
 					<div
 						class="form-group"
@@ -1039,7 +1063,7 @@
 						<span class="form-prepend text" style="font-size: 0.8rem;"
 							>DNI:</span
 						>
-						<input id="dni" type="text" class="form-input" value="{{$beneficiario->dni}}"/>
+						<input id="dni" type="text" class="form-input" style="width: 250px;" value="{{$beneficiario->dni}}"/>
 					</div>
 				</div>
 				<div

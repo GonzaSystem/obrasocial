@@ -400,12 +400,14 @@ MODAL EDITAR PRESTACION
                       <span class="input-group-addon"><i class="fa fa-money"></i></span>
 
                       <select type="text" id="editar_planilla" class="form-control input-lg" name="planilla">
-                          <option value="0">Seleccionar...</option>
-                          <option value="1">REHABILITACION</option>
-                          <option value="2">INTEGRACION</option>
-						  <option value="3">TRASLADO</option>
-						  <option value="4">3.2</option>
-						  <option value="5">3.5</option>
+						<option value="0">Seleccionar...</option>
+						<option value="1">REHABILITACION</option>
+						<option value="2">INTEGRACION</option>
+						<option value="3">TRASLADO</option>
+						<option value="4">3.2</option>
+						<option value="6">3.3</option>
+						<option value="5">3.5</option>
+						<option value="7">3.6</option>
                       </select>
 
                   </div>
