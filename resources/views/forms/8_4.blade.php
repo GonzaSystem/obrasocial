@@ -1,3 +1,6 @@
+@php
+	$meses = ['01' => 'Enero', '02' => 'Febrero', '03' => 'Marzo', '04' => 'Abril', '05' => 'Mayo', '06' => 'Junio', '07' => 'Julio', '08' => 'Agosto', '09' => 'Septiembre', '10' => 'Octubre', '11' => 'Noviembre', '12' => 'Diciembre'];
+@endphp
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -223,19 +226,19 @@
 				</div>
 				<div class="form-group" style="width: 70%; margin-top: 0.5rem;">
 					<span class="form-prepend text">Prestación / Especialidad:</span>
-					<input id="specialty" type="text" class="form-input" value="{{ $prestador[0]->prestacion }}" />
+					<input id="specialty" type="text" class="form-input" value="{{ $prestador[0]->prestacion[0]->nombre }}" />
 				</div>
 				<div class="row">
 					<div class="form-group" style="margin-top: 0.5rem;">
 						<span class="form-prepend text">Período:</span>
-						<input id="period" type="text" class="form-input" />
+						<input id="period" type="text" class="form-input" value="{{$meses[Auth::user()->mes] . ' a Diciembre'}}"/>
 					</div>
 					<div
 						class="form-group"
 						style="margin-top: 0.5rem; padding-left: 1.5rem; width: 50%;"
 					>
 						<span class="form-prepend text">Año:</span>
-						<input id="year" type="text" class="form-input" />
+						<input id="year" type="text" class="form-input" value="{{Auth::user()->anio}}"/>
 					</div>
 					<div
 						class="form-group"
@@ -244,24 +247,35 @@
 						<span class="form-prepend text"
 							>Cantidad de sesiones mensuales:
 						</span>
-						<input id="sessions-quantity" type="text" class="form-input" />
+						<input id="sessions-quantity" type="text" class="form-input" value="{{$beneficiario->cantidad_solicitada}}"/>
 					</div>
 				</div>
+				@php
+					if($prestador[0]->valor_default == 'T'){
+						$valor_prestacion = $prestador[0]->prestacion[0]->valor_modulo;
+					}else{
+						$valor_prestacion = $prestador[0]->valor_prestacion;
+					}
+				@endphp
 				<div class="row" style="justify-content: space-between;">
 					<div class="form-group" style="margin-top: 0.5rem; width: 45%;">
 						<span class="form-prepend text">Monto Sesión:</span>
-						<input id="session-ammount" type="text" class="form-input" />
+						<input id="session-ammount" type="text" class="form-input" value="{{number_format(str_replace(',', '.', $valor_prestacion),2,',','.')}}"/>
 					</div>
 					<div
 						class="form-group"
 						style="margin-top: 0.5rem; width: 50%; justify-content: flex-end;"
 					>
+					@php
+						$montoMensual = (($beneficiario->cantidad_solicitada ?? 0) * (str_replace(',','.',$valor_prestacion) ?? 0));
+					@endphp
 						<span class="form-prepend text">Monto Mensual:</span>
 						<input
 							id="month-ammount"
 							type="text"
 							class="form-input"
 							style="flex-basis: 60%; width: 60%;"
+							value="{{number_format(str_replace(',', '.', $montoMensual), 2, ',', '.')}}"
 						/>
 					</div>
 				</div>
@@ -297,6 +311,15 @@
 								Horario
 							</td>
 							<td>
+								@php
+									if(isset($beneficiario->sesion['Lunes'])){
+										$fecha_inicio = $beneficiario->sesion['Lunes']->hora;
+										$fecha_fin = $beneficiario->sesion['Lunes']->fecha_fin;
+									}else{
+										$fecha_inicio = '';
+										$fecha_fin = '';
+									}
+								@endphp
 								<p
 									style="display: flex; margin: 10px 0 10px 4px;"
 									class="text small"
@@ -308,6 +331,7 @@
 										id="from-1"
 										type="text"
 										class="table-input"
+										value="{{$fecha_inicio}}"
 									/>
 								</p>
 								<p
@@ -321,10 +345,20 @@
 										id="to-1"
 										type="text"
 										class="table-input"
+										value="{{$fecha_fin}}"
 									/>
 								</p>
 							</td>
 							<td>
+								@php
+									if(isset($beneficiario->sesion['Martes'])){
+										$fecha_inicio = $beneficiario->sesion['Martes']->hora;
+										$fecha_fin = $beneficiario->sesion['Martes']->fecha_fin;
+									}else{
+										$fecha_inicio = '';
+										$fecha_fin = '';
+									}
+								@endphp
 								<p
 									style="display: flex; margin: 10px 0 10px 4px;"
 									class="text small"
@@ -336,6 +370,7 @@
 										id="from-2"
 										type="text"
 										class="table-input"
+										value="{{$fecha_inicio}}"
 									/>
 								</p>
 								<p
@@ -349,10 +384,20 @@
 										id="to-2"
 										type="text"
 										class="table-input"
+										value="{{$fecha_fin}}"
 									/>
 								</p>
 							</td>
 							<td>
+								@php
+									if(isset($beneficiario->sesion['Miercoles'])){
+										$fecha_inicio = $beneficiario->sesion['Miercoles']->hora;
+										$fecha_fin = $beneficiario->sesion['Miercoles']->fecha_fin;
+									}else{
+										$fecha_inicio = '';
+										$fecha_fin = '';
+									}
+								@endphp
 								<p
 									style="display: flex; margin: 10px 0 10px 4px;"
 									class="text small"
@@ -364,6 +409,7 @@
 										id="from-3"
 										type="text"
 										class="table-input"
+										value="{{$fecha_inicio}}"
 									/>
 								</p>
 								<p
@@ -377,10 +423,20 @@
 										id="to-3"
 										type="text"
 										class="table-input"
+										value="{{$fecha_fin}}"
 									/>
 								</p>
 							</td>
 							<td>
+								@php
+									if(isset($beneficiario->sesion['Jueves'])){
+										$fecha_inicio = $beneficiario->sesion['Jueves']->hora;
+										$fecha_fin = $beneficiario->sesion['Jueves']->fecha_fin;
+									}else{
+										$fecha_inicio = '';
+										$fecha_fin = '';
+									}
+								@endphp
 								<p
 									style="display: flex; margin: 10px 0 10px 4px;"
 									class="text small"
@@ -392,6 +448,7 @@
 										id="from-4"
 										type="text"
 										class="table-input"
+										value="{{$fecha_inicio}}"
 									/>
 								</p>
 								<p
@@ -405,10 +462,20 @@
 										id="to-4"
 										type="text"
 										class="table-input"
+										value="{{$fecha_fin}}"
 									/>
 								</p>
 							</td>
 							<td>
+								@php
+								if(isset($beneficiario->sesion['Viernes'])){
+										$fecha_inicio = $beneficiario->sesion['Viernes']->hora;
+										$fecha_fin = $beneficiario->sesion['Viernes']->fecha_fin;
+									}else{
+										$fecha_inicio = '';
+										$fecha_fin = '';
+									}
+								@endphp
 								<p
 									style="display: flex; margin: 10px 0 10px 4px;"
 									class="text small"
@@ -420,6 +487,7 @@
 										id="from-5"
 										type="text"
 										class="table-input"
+										value="{{$fecha_inicio}}"
 									/>
 								</p>
 								<p
@@ -433,10 +501,20 @@
 										id="to-5"
 										type="text"
 										class="table-input"
+										value="{{$fecha_fin}}"
 									/>
 								</p>
 							</td>
 							<td>
+								@php
+									if(isset($beneficiario->sesion['Sabado'])){
+										$fecha_inicio = $beneficiario->sesion['Sabado']->hora;
+										$fecha_fin = $beneficiario->sesion['Sabado']->fecha_fin;
+									}else{
+										$fecha_inicio = '';
+										$fecha_fin = '';
+									}
+								@endphp
 								<p
 									style="display: flex; margin: 10px 0 10px 4px;"
 									class="text small"
@@ -448,6 +526,7 @@
 										id="from-6"
 										type="text"
 										class="table-input"
+										value="{{$fecha_inicio}}"
 									/>
 								</p>
 								<p
@@ -461,6 +540,7 @@
 										id="to-6"
 										type="text"
 										class="table-input"
+										value="{{$fecha_fin}}"
 									/>
 								</p>
 							</td>
@@ -576,6 +656,6 @@
 			</footer>
 		</main>
 
-		<script src="../../app.js"></script>
+		<script src="{{asset('js/osecac/app.js')}}"></script>
 	</body>
 </html>

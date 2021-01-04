@@ -245,8 +245,52 @@ class BeneficiarioController extends Controller
 
     public function presupuesto($prestador_id, $beneficiario_id)
     {
-        $prestador = Prestador::where('id', '=', $prestador_id)->with('user')->get();
-        $beneficiario = Beneficiario::find($beneficiario_id);
+        // $prestador = Prestador::where('id', '=', $prestador_id)->with('user')->get();
+		// $beneficiario = Beneficiario::find($beneficiario_id);
+		$prestador = Prestador::where('id', '=', $prestador_id)->with('user', 'prestacion')->get();
+		$beneficiario = Beneficiario::with('sesion')->find($beneficiario_id);
+		foreach($beneficiario->sesion as $k => $sesion){
+			switch($sesion->dia){
+				case 1:
+					$dia = 'Lunes';
+					break;
+
+				case 2:
+					$dia = 'Martes';
+					break;
+
+				case 3:
+					$dia = 'Miercoles';
+					break;
+
+				case 4:
+					$dia = 'Jueves';
+					break;
+					
+				case 5:
+					$dia = 'Viernes';
+					break;
+
+				case 6:
+					$dia = 'Sabado';
+					break;
+
+				case 7:
+					$dia = 'Domingo';
+					break;
+
+				default:
+					break;
+			}
+			$horario = $sesion['hora'];
+			$tiempo = $sesion['tiempo'];
+			$hor=new \DateTime($horario);
+			$fin=$hor->add( new \DateInterval( 'PT' . ( (integer) $tiempo ) . 'M' ) );
+			$fecha_fin = $fin->format( 'H:i' );
+			$sesion->fecha_fin = $fecha_fin;
+			$beneficiario->sesion[$dia] = $sesion;
+			unset($beneficiario->sesion[$k]);
+		}
         return view('forms.8_4', [
             'prestador' => $prestador,
             'beneficiario' => $beneficiario,
