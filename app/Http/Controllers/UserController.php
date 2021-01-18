@@ -95,5 +95,16 @@ class UserController extends Controller
         // ])->with(['message' => 'Mes actualizado correctamente']);  
 
         return true;
+	}
+	
+	public function saveUserYear(Request $request)
+    {
+        // Consulto si el prestador quiere ver algun año en particular y lo asigno a su usuario
+        // De esta forma si cierra la sesion y la vuelve a abrir queda el mes y año grabado
+        $prestador = User::where('id', \Auth::user()->id)->first();
+        $prestador->anio = $request['anio'];
+        $prestador->save(); 
+
+        return true;
     }
 }

@@ -18,6 +18,8 @@
 
 	$meses = ['01' => 'Enero', '02' => 'Febrero', '03' => 'Marzo', '04' => 'Abril', '05' => 'Mayo', '06' => 'Junio', '07' => 'Julio', '08' => 'Agosto', '09' => 'Septiembre', '10' => 'Octubre', '11' => 'Noviembre', '12' => 'Diciembre'];
 
+	$anios = ['2020', '2021', '2022', '2023'];
+
 @endphp
 
 
@@ -61,11 +63,10 @@
 
     <div class="input-group" style="margin-left: 10px">
       <label for="anio">Año</label>
-      <select type="text" name="anio" class="form-control input-md selectAnio">
-          <option value="2019">2019</option>
-          <option value="2020" selected>2020</option>
-          <option value="2021">2021</option>
-          <option value="2022">2022</option>
+      <select type="text" name="anio" class="form-control input-md selectAnio" idOs="{{ $data['obrasocial'][0]->id}}" idPrest="{{ Auth::user()->id }}">
+		  @foreach ($anios as $value)
+			<option value="{{$value}}" {{$value==Auth::user()->anio ? 'selected' : ''}}>{{$value}}</option>  
+		  @endforeach
       </select>
     </div>
     </div>

@@ -76,6 +76,7 @@ Route::post('/sesion/destroy', 'SesionController@destroy')->name('sesion-destroy
 // Users
 Route::get('/admin/users', 'UserController@showSystemUsers')->name('admin-users');
 Route::post('/user/month', 'UserController@saveUserMonth')->name('user-month');
+Route::post('/user/year', 'UserController@saveUserYear')->name('user-year');
 
 // Video tutoriales
 Route::get('/video/tutorials', 'VideoController@index')->name('video-tutorials');

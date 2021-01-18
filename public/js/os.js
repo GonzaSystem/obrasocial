@@ -866,6 +866,33 @@ $(document).on('change', '.selectMes', function(){
   });
 });
 
+$(document).on('change', '.selectAnio', function(){
+   var idOs = $(this).attr('idOs');
+   var idPrest = $(this).attr('idPrest');
+   var mes = $('.selectMes').val();
+   var anio = $(this).val();
+
+  $.ajaxSetup({
+      headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+  });
+
+  $.ajax({
+    url: "http://localhost/os/public/user/year",
+    data: {mes:mes, idOs:idOs, idPrest:idPrest, anio:anio},
+    type: "POST",
+    success: function(respuesta){
+      if(respuesta == 1){
+       window.location = "http://localhost/os/public/beneficiarios/"+idPrest+"/"+idOs+"/"+mes+"/"+anio;
+      }
+    },
+    error: function(respuesta){
+      console.log('error', respuesta);
+    }
+  });
+});
+
 $(document).on('change', '.traditum', function(){
     var benef_id = $(this).attr('beneficiario-id');
     var tradit_id = $(this).attr('traditum-id');
