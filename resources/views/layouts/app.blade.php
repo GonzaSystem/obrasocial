@@ -62,10 +62,10 @@
     <script src="{{ asset('bower_components/jquery-mask/jquery.mask.js') }}"></script>
     <!-- OS -->
 	<script src="{{ asset('js/os.js') }}"></script>
-	
+
 	<!-- Select2 -->
 	<script src="{{ asset('bower_components/select2/dist/js/select2.min.js') }}"></script>
-    
+
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
@@ -96,7 +96,7 @@
 
     <!--Morris chart-->
 	<link rel="stylesheet" href="{{ asset('bower_components/morris.js/morris.css') }}">
-	
+
 	<!-- Select2 -->
 	<link rel="stylesheet" href="{{ asset('bower_components/select2/dist/css/select2.css') }}">
 
@@ -151,7 +151,7 @@
                     </div>
                 </nav>
             </header>
-        
+
             {{-- Sidebar --}}
             <aside class="main-sidebar">
                  <section class="sidebar">
@@ -163,7 +163,13 @@
                             </a>
                         </li>
 
-                        @if(Auth::user()->role != "Administrador")
+						@if(Auth::user()->role != "Administrador")
+							<li>
+								<a href="{{ route('facturacion.electronica') }}">
+									<i class="fa fa-money"></i>
+									<span>Fact. Electrónica</span>
+								</a>
+							</li>
                             <li>
                                 <a href="{{ route('datos-prestador') }}">
                                     <i class="fa fa-user"></i>
@@ -171,7 +177,7 @@
                                 </a>
                             </li>
                         <li class="treeview">
-                            <a href="#">
+                            <a href="Javascript:void(0)">
                                 <i class="fa fa-users"></i>
                                 <span>Adm. beneficiarios</span>
                                 <span class="pull-right-container">
@@ -196,7 +202,7 @@
                             </ul>
                         </li>
                         @endif
-                    
+
                         @if(Auth::user()->role == "Administrador")
                             <li>
                                 <a href="{{ route('obra-social') }}">
@@ -211,7 +217,7 @@
                                     <span>Prestaciones</span>
                                 </a>
 							</li>
-							
+
 							<li>
 								<a href="{{ route('feriados') }}">
 									<i class="fa fa-calendar"></i>
@@ -237,7 +243,7 @@
                  </section>
             </aside>
         @endauth
-            
+
             {{-- Content --}}
             <main>
                 @yield('content')
@@ -252,5 +258,11 @@
     @endauth
     </div>
 </div>
+<script>
+    // Sidebar
+    $(document).ready(function(){
+        $('.sidebar-menu').tree()
+    });
+</script>
 </body>
 </html>

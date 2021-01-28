@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -91,9 +92,16 @@ Route::post('/feriado/create', 'FeriadoController@store')->name('feriado-store')
 Route::post('/feriado/update', 'FeriadoController@update')->name('feriado-update');
 Route::get('/feriado/delete/{id}', 'FeriadoController@destroy')->name('feriado-delete');
 
+// Facturacion Electronica
+Route::get('/facturacion/electronica', 'FacturacionElectronicaCertificadoController@index')->name('facturacion.electronica');
+Route::post('/facturacion/electronica/certificados/store', 'FacturacionElectronicaCertificadoController@store')->name('facturacion.electronica.certificado.store');
+Route::post('/facturacion/electronica/certificados/key/store', 'FacturacionElectronicaCertificadoController@storeKey')->name('facturacion.electronica.key.store');
+Route::post('/facturacion/electronica/certificados/update', 'FacturacionElectronicaCertificadoController@update')->name('facturacion.electronica.update');
+Route::post('/facturacion/electronica/certificados/generate', 'FacturacionElectronicaCertificadoController@generate')->name('facturacion.electronica.cert.generate');
+
 // Sys
 Route::get('/updateapp', function()
 {
-    \Artisan::call('dump-autoload');
+    Artisan::call('dump-autoload');
     echo 'dump-autoload complete';
 });
